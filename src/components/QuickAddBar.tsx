@@ -1,18 +1,23 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { useCreateItem } from "@/hooks/useItems";
+import { useAppStore } from "@/stores/appStore";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 export function QuickAddBar() {
   const [title, setTitle] = useState("");
   const createItem = useCreateItem();
+  const { setEditingItemId } = useAppStore();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim()) return;
-    await createItem.mutateAsync({ title: title.trim() });
+    const item = await createItem.mutateAsync({ title: title.trim() });
     setTitle("");
+    if (item?.id) {
+      setEditingItemId(item.id);
+    }
   };
 
   return (
