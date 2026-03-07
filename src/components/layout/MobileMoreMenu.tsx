@@ -1,9 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import { Calendar, Cloud, BookOpen, Settings, LogOut } from "lucide-react";
+import { Calendar, Cloud, BookOpen, Settings, LogOut, RefreshCw } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Badge } from "@/components/ui/badge";
 import { useAppStore } from "@/stores/appStore";
 import { useAuth } from "@/hooks/useAuth";
 import { useAreas } from "@/hooks/useAreas";
+import { useNeedsReview } from "@/hooks/useUserSettings";
 import {
   Select,
   SelectContent,
