@@ -22,6 +22,7 @@ const queryClient = new QueryClient();
 
 function ProtectedRoutes() {
   const { user, loading } = useAuth();
+  useScheduledActivation();
 
   if (loading) {
     return (
