@@ -70,6 +70,17 @@ export function MobileMoreMenu() {
           ))}
 
           <button
+            onClick={() => { setWeeklyReviewOpen(true); setMoreMenuOpen(false); }}
+            className="flex w-full items-center gap-3 px-4 py-3 text-sm text-foreground hover:bg-accent rounded-md transition-colors"
+          >
+            <RefreshCw className="h-5 w-5 text-muted-foreground" />
+            <span>Weekly Review</span>
+            {needsReview && (
+              <Badge variant="destructive" className="ml-auto text-[10px] h-5">Due</Badge>
+            )}
+          </button>
+
+          <button
             onClick={() => { signOut(); setMoreMenuOpen(false); }}
             className="flex w-full items-center gap-3 px-4 py-3 text-sm text-muted-foreground hover:bg-accent rounded-md transition-colors"
           >
