@@ -1,9 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import { Calendar, Cloud, BookOpen, Settings, LogOut } from "lucide-react";
+import { Calendar, Cloud, BookOpen, Settings, LogOut, RefreshCw } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Badge } from "@/components/ui/badge";
 import { useAppStore } from "@/stores/appStore";
 import { useAuth } from "@/hooks/useAuth";
 import { useAreas } from "@/hooks/useAreas";
+import { useNeedsReview } from "@/hooks/useUserSettings";
 import {
   Select,
   SelectContent,
@@ -21,9 +23,10 @@ const MORE_ITEMS = [
 
 export function MobileMoreMenu() {
   const navigate = useNavigate();
-  const { moreMenuOpen, setMoreMenuOpen, selectedAreaId, setSelectedAreaId } = useAppStore();
+  const { moreMenuOpen, setMoreMenuOpen, selectedAreaId, setSelectedAreaId, setWeeklyReviewOpen } = useAppStore();
   const { signOut } = useAuth();
   const { data: areas } = useAreas();
+  const needsReview = useNeedsReview();
 
   const handleNav = (path: string) => {
     navigate(path);
@@ -65,6 +68,17 @@ export function MobileMoreMenu() {
               <span>{item.label}</span>
             </button>
           ))}
+
+          <button
+            onClick={() => { setWeeklyReviewOpen(true); setMoreMenuOpen(false); }}
+            className="flex w-full items-center gap-3 px-4 py-3 text-sm text-foreground hover:bg-accent rounded-md transition-colors"
+          >
+            <RefreshCw className="h-5 w-5 text-muted-foreground" />
+            <span>Weekly Review</span>
+            {needsReview && (
+              <Badge variant="destructive" className="ml-auto text-[10px] h-5">Due</Badge>
+            )}
+          </button>
 
           <button
             onClick={() => { signOut(); setMoreMenuOpen(false); }}

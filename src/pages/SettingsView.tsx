@@ -1,12 +1,15 @@
 import { useState } from "react";
-import { ArrowLeft, Plus, Trash2 } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, RefreshCw } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { ViewHeader } from "@/components/ViewHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import { useAreas, useCreateArea, useDeleteArea } from "@/hooks/useAreas";
 import { useTags, useCreateTag } from "@/hooks/useTags";
 import { useAuth } from "@/hooks/useAuth";
+import { useNeedsReview } from "@/hooks/useUserSettings";
+import { useAppStore } from "@/stores/appStore";
 
 export default function SettingsView() {
   const navigate = useNavigate();
@@ -16,6 +19,8 @@ export default function SettingsView() {
   const createArea = useCreateArea();
   const deleteArea = useDeleteArea();
   const createTag = useCreateTag();
+  const needsReview = useNeedsReview();
+  const { setWeeklyReviewOpen } = useAppStore();
   const [newArea, setNewArea] = useState("");
   const [newTag, setNewTag] = useState("");
 
@@ -43,6 +48,22 @@ export default function SettingsView() {
       </div>
 
       <div className="flex-1 overflow-y-auto p-4 space-y-8 max-w-lg">
+        {/* Weekly Review */}
+        <section>
+          <h2 className="text-sm font-medium text-foreground mb-3">Weekly Review</h2>
+          <Button
+            variant="outline"
+            className="w-full justify-start gap-2"
+            onClick={() => setWeeklyReviewOpen(true)}
+          >
+            <RefreshCw className="h-4 w-4" />
+            Start Weekly Review
+            {needsReview && (
+              <Badge variant="destructive" className="ml-auto text-[10px] h-5">Due</Badge>
+            )}
+          </Button>
+        </section>
+
         {/* Account */}
         <section>
           <h2 className="text-sm font-medium text-foreground mb-2">Account</h2>
