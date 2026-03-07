@@ -83,14 +83,19 @@ export default function ProjectDetailView() {
 
       {/* Actions list */}
       <div className="flex-1 overflow-y-auto">
-        {items?.map((item, index) => {
-          const isSequentialFuture =
-            project.type === "sequential" &&
-            item.state !== "completed" &&
-            items.filter((i) => i.state !== "completed").indexOf(item) > 0;
+        {items
+          ?.filter((i) => i.state !== "completed")
+          .map((item) => {
+            const activeItems = items.filter((i) => i.state !== "completed");
+            const isSequentialFuture =
+              project.type === "sequential" && activeItems.indexOf(item) > 0;
 
-          return <ItemRow key={item.id} item={item} dimmed={isSequentialFuture} />;
-        })}
+            return <ItemRow key={item.id} item={item} dimmed={isSequentialFuture} />;
+          })}
+        <DoneSection
+          items={items?.filter((i) => i.state === "completed") ?? []}
+          restoreState="next"
+        />
       </div>
 
       {/* Add action */}
