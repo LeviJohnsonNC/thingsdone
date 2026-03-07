@@ -15,6 +15,7 @@ import { useAppStore } from "@/stores/appStore";
 import { toast } from "sonner";
 
 export default function SettingsView() {
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { user, signOut } = useAuth();
