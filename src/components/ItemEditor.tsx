@@ -343,95 +343,95 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
               </div>
             </PropertyRow>
 
-            {/* Due Date */}
-            <PropertyRow icon="🏁" label="DUE">
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className={cn(
-                      "justify-start text-left font-normal text-sm h-8 px-2",
-                      !item.due_date && "text-muted-foreground"
+            {/* Due + Scheduled - side by side */}
+            <div className="flex gap-4">
+              <PropertyRow icon="🏁" label="DUE" className="flex-1">
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className={cn(
+                        "justify-start text-left font-normal text-sm h-8 px-2 w-full",
+                        !item.due_date && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-1.5 h-3.5 w-3.5" />
+                      {item.due_date ? format(new Date(item.due_date), "MMM d, yyyy") : "No due date"}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={item.due_date ? new Date(item.due_date) : undefined}
+                      onSelect={(d) => handleDateChange("due_date", d)}
+                      className="p-3 pointer-events-auto"
+                    />
+                    {item.due_date && (
+                      <div className="border-t p-2">
+                        <Button variant="ghost" size="sm" className="w-full text-xs" onClick={() => handleDateChange("due_date", undefined)}>
+                          Clear date
+                        </Button>
+                      </div>
                     )}
-                  >
-                    <CalendarIcon className="mr-1.5 h-3.5 w-3.5" />
-                    {item.due_date ? format(new Date(item.due_date), "MMM d, yyyy") : "No due date"}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={item.due_date ? new Date(item.due_date) : undefined}
-                    onSelect={(d) => handleDateChange("due_date", d)}
-                    className="p-3 pointer-events-auto"
-                  />
-                  {item.due_date && (
-                    <div className="border-t p-2">
-                      <Button variant="ghost" size="sm" className="w-full text-xs" onClick={() => handleDateChange("due_date", undefined)}>
-                        Clear date
-                      </Button>
-                    </div>
-                  )}
-                </PopoverContent>
-              </Popover>
-            </PropertyRow>
+                  </PopoverContent>
+                </Popover>
+              </PropertyRow>
 
-            {/* Scheduled Date */}
-            <PropertyRow icon="📅" label="SCHEDULED">
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className={cn(
-                      "justify-start text-left font-normal text-sm h-8 px-2",
-                      !item.scheduled_date && "text-muted-foreground"
+              <PropertyRow icon="📅" label="SCHEDULED" className="flex-1">
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className={cn(
+                        "justify-start text-left font-normal text-sm h-8 px-2 w-full",
+                        !item.scheduled_date && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-1.5 h-3.5 w-3.5" />
+                      {item.scheduled_date ? format(new Date(item.scheduled_date), "MMM d, yyyy") : "Not scheduled"}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={item.scheduled_date ? new Date(item.scheduled_date) : undefined}
+                      onSelect={(d) => handleDateChange("scheduled_date", d)}
+                      className="p-3 pointer-events-auto"
+                    />
+                    {item.scheduled_date && (
+                      <div className="border-t p-2">
+                        <Button variant="ghost" size="sm" className="w-full text-xs" onClick={() => handleDateChange("scheduled_date", undefined)}>
+                          Clear date
+                        </Button>
+                      </div>
                     )}
-                  >
-                    <CalendarIcon className="mr-1.5 h-3.5 w-3.5" />
-                    {item.scheduled_date ? format(new Date(item.scheduled_date), "MMM d, yyyy") : "Not scheduled"}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={item.scheduled_date ? new Date(item.scheduled_date) : undefined}
-                    onSelect={(d) => handleDateChange("scheduled_date", d)}
-                    className="p-3 pointer-events-auto"
-                  />
-                  {item.scheduled_date && (
-                    <div className="border-t p-2">
-                      <Button variant="ghost" size="sm" className="w-full text-xs" onClick={() => handleDateChange("scheduled_date", undefined)}>
-                        Clear date
-                      </Button>
-                    </div>
-                  )}
-                </PopoverContent>
-              </Popover>
-            </PropertyRow>
+                  </PopoverContent>
+                </Popover>
+              </PropertyRow>
+            </div>
 
-            {/* Project */}
-            <PropertyRow icon="📂" label="PROJECT">
-              <Select
-                value={item.project_id ?? "none"}
-                onValueChange={(v) => saveField("project_id", v === "none" ? null : v)}
-              >
-                <SelectTrigger className="h-8 text-sm border-0 shadow-none px-2 bg-transparent">
-                  <SelectValue placeholder="No project" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="none">No project</SelectItem>
-                  {projects?.map((p) => (
-                    <SelectItem key={p.id} value={p.id}>{p.title}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </PropertyRow>
+            {/* Project + Area - side by side */}
+            <div className="flex gap-4">
+              <PropertyRow icon="📂" label="PROJECT" className="flex-1">
+                <Select
+                  value={item.project_id ?? "none"}
+                  onValueChange={(v) => saveField("project_id", v === "none" ? null : v)}
+                >
+                  <SelectTrigger className="h-8 text-sm border-0 shadow-none px-2 bg-transparent">
+                    <SelectValue placeholder="No project" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">No project</SelectItem>
+                    {projects?.map((p) => (
+                      <SelectItem key={p.id} value={p.id}>{p.title}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </PropertyRow>
 
-            {/* Area */}
-            {areas && areas.length > 0 && (
-              <PropertyRow icon="🏷" label="AREA">
+              <PropertyRow icon="🏷" label="AREA" className="flex-1">
                 <Select
                   value={item.area_id ?? "none"}
                   onValueChange={(v) => saveField("area_id", v === "none" ? null : v)}
@@ -441,13 +441,13 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="none">No area</SelectItem>
-                    {areas.map((a) => (
+                    {areas?.map((a) => (
                       <SelectItem key={a.id} value={a.id}>{a.name}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </PropertyRow>
-            )}
+            </div>
 
             {/* Google Calendar toggle */}
             {isCalendarConnected && hasDate && (
@@ -517,9 +517,9 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
 }
 
 // Helper: Property row with label
-function PropertyRow({ icon, label, children }: { icon: string; label: string; children: React.ReactNode }) {
+function PropertyRow({ icon, label, children, className }: { icon: string; label: string; children: React.ReactNode; className?: string }) {
   return (
-    <div className="flex items-center gap-3">
+    <div className={cn("flex items-center gap-3", className)}>
       <div className="w-[100px] shrink-0 flex items-center gap-1.5">
         <span className="text-sm">{icon}</span>
         <span className="text-[10px] font-medium tracking-wider text-muted-foreground uppercase">{label}</span>
