@@ -7,6 +7,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Calendar } from "@/components/ui/calendar";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAppStore } from "@/stores/appStore";
@@ -14,9 +16,11 @@ import { useItems, useUpdateItem, useCompleteItem, useDeleteItem } from "@/hooks
 import { useProjects } from "@/hooks/useProjects";
 import { useAreas } from "@/hooks/useAreas";
 import { useTags, useItemTags, useSetItemTags } from "@/hooks/useTags";
+import { useGoogleCalendarStatus, usePushItemToCalendar, useDeleteCalendarEvent } from "@/hooks/useGoogleCalendar";
 import { cn } from "@/lib/utils";
 import { ITEM_STATE_OPTIONS, TIME_ESTIMATE_OPTIONS } from "@/lib/types";
 import type { ItemState } from "@/lib/types";
+import { toast } from "sonner";
 
 export function ClarifySheet() {
   const { clarifyItemId, setClarifyItemId } = useAppStore();
@@ -30,16 +34,24 @@ export function ClarifySheet() {
   const { data: tags } = useTags();
   const { data: itemTagIds } = useItemTags(clarifyItemId ?? "");
   const setItemTags = useSetItemTags();
+  const { data: calendarToken } = useGoogleCalendarStatus();
+  const pushToCalendar = usePushItemToCalendar();
+  const deleteCalendarEvent = useDeleteCalendarEvent();
 
   const [title, setTitle] = useState("");
   const [notes, setNotes] = useState("");
+  const [addToCalendar, setAddToCalendar] = useState(false);
+
+  const isCalendarConnected = !!calendarToken;
+  const hasDate = !!(item?.scheduled_date || item?.due_date);
 
   useEffect(() => {
     if (item) {
       setTitle(item.title);
       setNotes(item.notes ?? "");
+      setAddToCalendar(hasDate && isCalendarConnected);
     }
-  }, [item]);
+  }, [item, hasDate, isCalendarConnected]);
 
   if (!item) return null;
 
@@ -47,16 +59,46 @@ export function ClarifySheet() {
     updateItem.mutate({ id: item.id, [field]: value });
   };
 
+  const handleDateChange = (field: "scheduled_date" | "due_date", d: Date | undefined) => {
+    const value = d ? format(d, "yyyy-MM-dd") : null;
+    saveField(field, value);
+
+    // If calendar toggle is on, push to calendar
+    if (addToCalendar && isCalendarConnected && value) {
+      const date = value;
+      pushToCalendar.mutate(
+        {
+          action: "upsert",
+          item_id: item.id,
+          title: title || item.title,
+          date,
+          notes: notes || item.notes || undefined,
+          google_event_id: item.google_event_id,
+        },
+        {
+          onError: () => toast.error("Failed to sync with Google Calendar"),
+        }
+      );
+    }
+  };
+
   const handleStateChange = (state: ItemState) => {
     updateItem.mutate({ id: item.id, state });
   };
 
   const handleComplete = () => {
+    // Delete calendar event if exists
+    if (item.google_event_id) {
+      deleteCalendarEvent.mutate({ item_id: item.id, google_event_id: item.google_event_id });
+    }
     completeItem.mutate(item.id);
     setClarifyItemId(null);
   };
 
   const handleDelete = () => {
+    if (item.google_event_id) {
+      deleteCalendarEvent.mutate({ item_id: item.id, google_event_id: item.google_event_id });
+    }
     deleteItem.mutate(item.id);
     setClarifyItemId(null);
   };
@@ -71,6 +113,35 @@ export function ClarifySheet() {
       ? current.filter((id) => id !== tagId)
       : [...current, tagId];
     setItemTags.mutate({ itemId: item.id, tagIds: next });
+  };
+
+  const handleCalendarToggle = (checked: boolean) => {
+    setAddToCalendar(checked);
+    const date = item.scheduled_date || item.due_date;
+    if (checked && date && isCalendarConnected) {
+      pushToCalendar.mutate(
+        {
+          action: "upsert",
+          item_id: item.id,
+          title: title || item.title,
+          date,
+          notes: notes || item.notes || undefined,
+          google_event_id: item.google_event_id,
+        },
+        {
+          onSuccess: () => toast.success("Added to Google Calendar"),
+          onError: () => toast.error("Failed to sync with Google Calendar"),
+        }
+      );
+    } else if (!checked && item.google_event_id) {
+      deleteCalendarEvent.mutate(
+        { item_id: item.id, google_event_id: item.google_event_id },
+        {
+          onSuccess: () => toast.success("Removed from Google Calendar"),
+          onError: () => toast.error("Failed to remove from Google Calendar"),
+        }
+      );
+    }
   };
 
   return (
@@ -182,7 +253,7 @@ export function ClarifySheet() {
                   <Calendar
                     mode="single"
                     selected={item.scheduled_date ? new Date(item.scheduled_date) : undefined}
-                    onSelect={(d) => saveField("scheduled_date", d ? format(d, "yyyy-MM-dd") : null)}
+                    onSelect={(d) => handleDateChange("scheduled_date", d)}
                     className="p-3 pointer-events-auto"
                   />
                 </PopoverContent>
@@ -201,13 +272,29 @@ export function ClarifySheet() {
                   <Calendar
                     mode="single"
                     selected={item.due_date ? new Date(item.due_date) : undefined}
-                    onSelect={(d) => saveField("due_date", d ? format(d, "yyyy-MM-dd") : null)}
+                    onSelect={(d) => handleDateChange("due_date", d)}
                     className="p-3 pointer-events-auto"
                   />
                 </PopoverContent>
               </Popover>
             </div>
           </div>
+
+          {/* Google Calendar toggle */}
+          {isCalendarConnected && hasDate && (
+            <div className="flex items-center justify-between rounded-md border border-border px-3 py-2">
+              <Label htmlFor="gcal-toggle" className="text-sm flex items-center gap-2 cursor-pointer">
+                <CalendarIcon className="h-4 w-4 text-primary" />
+                Add to Google Calendar 📅
+              </Label>
+              <Switch
+                id="gcal-toggle"
+                checked={addToCalendar}
+                onCheckedChange={handleCalendarToggle}
+                disabled={pushToCalendar.isPending}
+              />
+            </div>
+          )}
 
           {/* Time estimate */}
           <div>
