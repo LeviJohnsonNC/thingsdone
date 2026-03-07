@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { ItemRow } from "@/components/ItemRow";
 import { EmptyState } from "@/components/EmptyState";
 import { ViewHeader } from "@/components/ViewHeader";
-import { useItems } from "@/hooks/useItems";
+import { useNextItems } from "@/hooks/useItems";
 import { useTags, useItemTags } from "@/hooks/useTags";
 import { useAppStore } from "@/stores/appStore";
 import { Badge } from "@/components/ui/badge";
@@ -12,7 +12,7 @@ import { TIME_ESTIMATE_OPTIONS } from "@/lib/types";
 
 export default function NextView() {
   const { selectedAreaId } = useAppStore();
-  const { data: items, isLoading } = useItems("next", selectedAreaId);
+  const { data: items, isLoading } = useNextItems(selectedAreaId);
   const { data: tags } = useTags();
   const [filterTime, setFilterTime] = useState<string>("all");
   const [filterTags, setFilterTags] = useState<string[]>([]);
