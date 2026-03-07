@@ -12,7 +12,7 @@ import { TIME_ESTIMATE_OPTIONS } from "@/lib/types";
 
 export default function NextView() {
   const { selectedAreaId } = useAppStore();
-  const { data: items, isLoading } =NextItems(t", selectedAreaId);
+  const { data: items, isLoading } = useNextItems(selectedAreaId);
   const { data: tags } = useTags();
   const [filterTime, setFilterTime] = useState<string>("all");
   const [filterTags, setFilterTags] = useState<string[]>([]);
