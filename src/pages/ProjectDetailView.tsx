@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { DoneSection } from "@/components/DoneSection";
 import { cn } from "@/lib/utils";
 
 export default function ProjectDetailView() {
