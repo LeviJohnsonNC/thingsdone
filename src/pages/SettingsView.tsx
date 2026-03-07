@@ -83,6 +83,43 @@ export default function SettingsView() {
           </Button>
         </section>
 
+        {/* Connected Accounts */}
+        <section>
+          <h2 className="text-sm font-medium text-foreground mb-3">Connected Accounts</h2>
+          {calendarToken ? (
+            <div className="flex items-center justify-between bg-card border border-border rounded-md px-3 py-3">
+              <div className="flex items-center gap-2">
+                <Calendar className="h-4 w-4 text-primary" />
+                <span className="text-sm">Google Calendar</span>
+                <Check className="h-4 w-4 text-success-green" />
+              </div>
+              <Button
+                size="sm"
+                variant="ghost"
+                className="text-xs text-muted-foreground"
+                onClick={() => disconnectCalendar.mutate()}
+                disabled={disconnectCalendar.isPending}
+              >
+                Disconnect
+              </Button>
+            </div>
+          ) : (
+            <Button
+              variant="outline"
+              className="w-full justify-start gap-2"
+              onClick={() => connectCalendar.mutate()}
+              disabled={connectCalendar.isPending}
+            >
+              {connectCalendar.isPending ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Calendar className="h-4 w-4" />
+              )}
+              Connect Google Calendar
+            </Button>
+          )}
+        </section>
+
         {/* Account */}
         <section>
           <h2 className="text-sm font-medium text-foreground mb-2">Account</h2>
