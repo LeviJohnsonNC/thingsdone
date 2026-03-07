@@ -10,6 +10,13 @@ export type ItemState = "inbox" | "next" | "scheduled" | "someday" | "waiting" |
 export type ProjectState = "active" | "someday" | "scheduled" | "completed";
 export type ProjectType = "sequential" | "parallel";
 export type TimeEstimate = 5 | 15 | 30 | 60 | 120 | 240;
+export type EnergyLevel = "low" | "medium" | "high";
+
+export const ENERGY_OPTIONS: { value: EnergyLevel; label: string; dot: string }[] = [
+  { value: "low", label: "Low", dot: "bg-success-green" },
+  { value: "medium", label: "Med", dot: "bg-focus-gold" },
+  { value: "high", label: "High", dot: "bg-overdue-red" },
+];
 
 export const TIME_ESTIMATE_OPTIONS: { value: TimeEstimate; label: string }[] = [
   { value: 5, label: "5 min" },

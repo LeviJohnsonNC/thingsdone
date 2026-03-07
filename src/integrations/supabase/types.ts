@@ -107,6 +107,7 @@ export type Database = {
           completed_at: string | null
           created_at: string | null
           due_date: string | null
+          energy: string | null
           google_event_id: string | null
           id: string
           is_focused: boolean | null
@@ -120,12 +121,14 @@ export type Database = {
           title: string
           updated_at: string | null
           user_id: string
+          waiting_on: string | null
         }
         Insert: {
           area_id?: string | null
           completed_at?: string | null
           created_at?: string | null
           due_date?: string | null
+          energy?: string | null
           google_event_id?: string | null
           id?: string
           is_focused?: boolean | null
@@ -139,12 +142,14 @@ export type Database = {
           title: string
           updated_at?: string | null
           user_id: string
+          waiting_on?: string | null
         }
         Update: {
           area_id?: string | null
           completed_at?: string | null
           created_at?: string | null
           due_date?: string | null
+          energy?: string | null
           google_event_id?: string | null
           id?: string
           is_focused?: boolean | null
@@ -158,6 +163,7 @@ export type Database = {
           title?: string
           updated_at?: string | null
           user_id?: string
+          waiting_on?: string | null
         }
         Relationships: [
           {
