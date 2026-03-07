@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { ItemRow } from "@/components/ItemRow";
 import { EmptyState } from "@/components/EmptyState";
 import { ViewHeader } from "@/components/ViewHeader";
-import { useNextNextItems } from "@/hooks/useItems";
+import { useNextItems } from "@/hooks/useItems";
 import { useTags, useItemTags } from "@/hooks/useTags";
 import { useAppStore } from "@/stores/appStore";
 import { Badge } from "@/components/ui/badge";
