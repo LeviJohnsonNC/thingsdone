@@ -1,0 +1,1 @@
+ALTER TABLE public.items ADD COLUMN energy text, ADD COLUMN waiting_on text;
