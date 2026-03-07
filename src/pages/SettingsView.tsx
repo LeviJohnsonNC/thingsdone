@@ -19,6 +19,8 @@ export default function SettingsView() {
   const createArea = useCreateArea();
   const deleteArea = useDeleteArea();
   const createTag = useCreateTag();
+  const needsReview = useNeedsReview();
+  const { setWeeklyReviewOpen } = useAppStore();
   const [newArea, setNewArea] = useState("");
   const [newTag, setNewTag] = useState("");
 
