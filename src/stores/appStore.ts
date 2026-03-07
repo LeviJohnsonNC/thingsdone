@@ -23,8 +23,10 @@ interface AppState {
 export const useAppStore = create<AppState>((set) => ({
   selectedAreaId: null,
   setSelectedAreaId: (id) => set({ selectedAreaId: id }),
+  editingItemId: null,
+  setEditingItemId: (id) => set({ editingItemId: id }),
   clarifyItemId: null,
-  setClarifyItemId: (id) => set({ clarifyItemId: id }),
+  setClarifyItemId: (id) => set({ clarifyItemId: id, editingItemId: id }),
   moreMenuOpen: false,
   setMoreMenuOpen: (open) => set({ moreMenuOpen: open }),
   weeklyReviewOpen: false,
