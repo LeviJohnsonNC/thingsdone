@@ -3,8 +3,9 @@ import { ArrowRight } from "lucide-react";
 import { ItemRow } from "@/components/ItemRow";
 import { EmptyState } from "@/components/EmptyState";
 import { ViewHeader } from "@/components/ViewHeader";
-import { useNextItems } from "@/hooks/useItems";
-import { useTags, useItemTags } from "@/hooks/useTags";
+import { DoneSection } from "@/components/DoneSection";
+import { useNextItems, useCompletedItems } from "@/hooks/useItems";
+import { useTags } from "@/hooks/useTags";
 import { useAppStore } from "@/stores/appStore";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -13,6 +14,7 @@ import { TIME_ESTIMATE_OPTIONS } from "@/lib/types";
 export default function NextView() {
   const { selectedAreaId } = useAppStore();
   const { data: items, isLoading } = useNextItems(selectedAreaId);
+  const { data: completedItems } = useCompletedItems(selectedAreaId);
   const { data: tags } = useTags();
   const [filterTime, setFilterTime] = useState<string>("all");
   const [filterTags, setFilterTags] = useState<string[]>([]);
@@ -71,6 +73,7 @@ export default function NextView() {
         ) : (
           filteredItems?.map((item) => <ItemRow key={item.id} item={item} />)
         )}
+        <DoneSection items={completedItems ?? []} restoreState="next" />
       </div>
     </div>
   );

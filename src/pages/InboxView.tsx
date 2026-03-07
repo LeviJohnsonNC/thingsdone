@@ -3,12 +3,14 @@ import { QuickAddBar } from "@/components/QuickAddBar";
 import { ItemRow } from "@/components/ItemRow";
 import { EmptyState } from "@/components/EmptyState";
 import { ViewHeader } from "@/components/ViewHeader";
-import { useItems } from "@/hooks/useItems";
+import { DoneSection } from "@/components/DoneSection";
+import { useItems, useCompletedItems } from "@/hooks/useItems";
 import { useAppStore } from "@/stores/appStore";
 
 export default function InboxView() {
   const { selectedAreaId } = useAppStore();
   const { data: items, isLoading } = useItems("inbox", selectedAreaId);
+  const { data: completedItems } = useCompletedItems(selectedAreaId);
 
   return (
     <div className="flex flex-col h-full">
@@ -24,6 +26,7 @@ export default function InboxView() {
         ) : (
           items?.map((item) => <ItemRow key={item.id} item={item} />)
         )}
+        <DoneSection items={completedItems ?? []} restoreState="inbox" />
       </div>
     </div>
   );

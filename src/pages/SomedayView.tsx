@@ -2,12 +2,14 @@ import { Cloud } from "lucide-react";
 import { ItemRow } from "@/components/ItemRow";
 import { EmptyState } from "@/components/EmptyState";
 import { ViewHeader } from "@/components/ViewHeader";
-import { useItems } from "@/hooks/useItems";
+import { DoneSection } from "@/components/DoneSection";
+import { useItems, useCompletedItems } from "@/hooks/useItems";
 import { useAppStore } from "@/stores/appStore";
 
 export default function SomedayView() {
   const { selectedAreaId } = useAppStore();
   const { data: items, isLoading } = useItems("someday", selectedAreaId);
+  const { data: completedItems } = useCompletedItems(selectedAreaId);
 
   return (
     <div className="flex flex-col h-full">
@@ -22,6 +24,7 @@ export default function SomedayView() {
         ) : (
           items?.map((item) => <ItemRow key={item.id} item={item} />)
         )}
+        <DoneSection items={completedItems ?? []} restoreState="someday" />
       </div>
     </div>
   );
