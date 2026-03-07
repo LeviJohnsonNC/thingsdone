@@ -49,7 +49,7 @@ export function ClarifySheet() {
     if (item) {
       setTitle(item.title);
       setNotes(item.notes ?? "");
-      setAddToCalendar(hasDate && isCalendarConnected);
+      setAddToCalendar(!!item.google_event_id);
     }
   }, [item, hasDate, isCalendarConnected]);
 
