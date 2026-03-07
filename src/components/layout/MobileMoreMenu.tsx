@@ -23,9 +23,10 @@ const MORE_ITEMS = [
 
 export function MobileMoreMenu() {
   const navigate = useNavigate();
-  const { moreMenuOpen, setMoreMenuOpen, selectedAreaId, setSelectedAreaId } = useAppStore();
+  const { moreMenuOpen, setMoreMenuOpen, selectedAreaId, setSelectedAreaId, setWeeklyReviewOpen } = useAppStore();
   const { signOut } = useAuth();
   const { data: areas } = useAreas();
+  const needsReview = useNeedsReview();
 
   const handleNav = (path: string) => {
     navigate(path);
