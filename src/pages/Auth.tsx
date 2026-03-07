@@ -39,7 +39,7 @@ export default function Auth() {
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
             <Inbox className="h-6 w-6 text-primary" />
           </div>
-          <CardTitle className="text-2xl font-semibold">GTD Flow</CardTitle>
+          <CardTitle className="text-2xl font-semibold">Things Done</CardTitle>
           <CardDescription>
             {isSignUp ? "Create your account" : "Sign in to your account"}
           </CardDescription>
