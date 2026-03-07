@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { ArrowLeft, Plus, Trash2, RefreshCw } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { ArrowLeft, Plus, Trash2, RefreshCw, Calendar, Check, Loader2 } from "lucide-react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { ViewHeader } from "@/components/ViewHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,10 +9,13 @@ import { useAreas, useCreateArea, useDeleteArea } from "@/hooks/useAreas";
 import { useTags, useCreateTag } from "@/hooks/useTags";
 import { useAuth } from "@/hooks/useAuth";
 import { useNeedsReview } from "@/hooks/useUserSettings";
+import { useGoogleCalendarStatus, useConnectGoogleCalendar, useDisconnectGoogleCalendar } from "@/hooks/useGoogleCalendar";
 import { useAppStore } from "@/stores/appStore";
+import { toast } from "sonner";
 
 export default function SettingsView() {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { user, signOut } = useAuth();
   const { data: areas } = useAreas();
   const { data: tags } = useTags();
@@ -21,8 +24,24 @@ export default function SettingsView() {
   const createTag = useCreateTag();
   const needsReview = useNeedsReview();
   const { setWeeklyReviewOpen } = useAppStore();
+  const { data: calendarToken, refetch: refetchCalendar } = useGoogleCalendarStatus();
+  const connectCalendar = useConnectGoogleCalendar();
+  const disconnectCalendar = useDisconnectGoogleCalendar();
   const [newArea, setNewArea] = useState("");
   const [newTag, setNewTag] = useState("");
+
+  // Handle callback from Google OAuth
+  useEffect(() => {
+    const calendarParam = searchParams.get("calendar");
+    if (calendarParam === "connected") {
+      toast.success("Google Calendar connected!");
+      refetchCalendar();
+      setSearchParams({}, { replace: true });
+    } else if (calendarParam === "error") {
+      toast.error("Failed to connect Google Calendar");
+      setSearchParams({}, { replace: true });
+    }
+  }, [searchParams, refetchCalendar, setSearchParams]);
 
   const handleAddArea = async (e: React.FormEvent) => {
     e.preventDefault();
