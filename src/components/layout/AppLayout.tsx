@@ -3,7 +3,6 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { DesktopSidebar } from "./DesktopSidebar";
 import { MobileBottomNav } from "./MobileBottomNav";
 import { QuickAddFAB } from "../QuickAddFAB";
-import { ClarifySheet } from "../ClarifySheet";
 import { WeeklyReviewWizard } from "../WeeklyReviewWizard";
 
 export function AppLayout({ children }: { children: ReactNode }) {
@@ -15,7 +14,6 @@ export function AppLayout({ children }: { children: ReactNode }) {
         <main className="flex-1 overflow-y-auto pb-20">{children}</main>
         <MobileBottomNav />
         <QuickAddFAB />
-        <ClarifySheet />
         <WeeklyReviewWizard />
       </div>
     );
@@ -26,7 +24,6 @@ export function AppLayout({ children }: { children: ReactNode }) {
       <DesktopSidebar />
       <main className="flex-1 overflow-y-auto">{children}</main>
       <QuickAddFAB />
-      <ClarifySheet />
       <WeeklyReviewWizard />
     </div>
   );
