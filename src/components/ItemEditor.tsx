@@ -517,9 +517,9 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
 }
 
 // Helper: Property row with label
-function PropertyRow({ icon, label, children }: { icon: string; label: string; children: React.ReactNode }) {
+function PropertyRow({ icon, label, children, className }: { icon: string; label: string; children: React.ReactNode; className?: string }) {
   return (
-    <div className="flex items-center gap-3">
+    <div className={cn("flex items-center gap-3", className)}>
       <div className="w-[100px] shrink-0 flex items-center gap-1.5">
         <span className="text-sm">{icon}</span>
         <span className="text-[10px] font-medium tracking-wider text-muted-foreground uppercase">{label}</span>
