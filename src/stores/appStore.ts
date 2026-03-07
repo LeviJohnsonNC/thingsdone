@@ -3,6 +3,9 @@ import { create } from "zustand";
 interface AppState {
   selectedAreaId: string | null;
   setSelectedAreaId: (id: string | null) => void;
+  editingItemId: string | null;
+  setEditingItemId: (id: string | null) => void;
+  // Keep backward compat alias
   clarifyItemId: string | null;
   setClarifyItemId: (id: string | null) => void;
   moreMenuOpen: boolean;
