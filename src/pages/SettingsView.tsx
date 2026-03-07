@@ -1,12 +1,15 @@
 import { useState } from "react";
-import { ArrowLeft, Plus, Trash2 } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, RefreshCw } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { ViewHeader } from "@/components/ViewHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import { useAreas, useCreateArea, useDeleteArea } from "@/hooks/useAreas";
 import { useTags, useCreateTag } from "@/hooks/useTags";
 import { useAuth } from "@/hooks/useAuth";
+import { useNeedsReview } from "@/hooks/useUserSettings";
+import { useAppStore } from "@/stores/appStore";
 
 export default function SettingsView() {
   const navigate = useNavigate();
