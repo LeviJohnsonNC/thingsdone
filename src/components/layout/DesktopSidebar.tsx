@@ -59,7 +59,7 @@ export function DesktopSidebar() {
   return (
     <aside className="w-60 border-r border-border bg-card flex flex-col h-screen shrink-0">
       <div className="p-4 border-b border-border">
-        <h1 className="text-lg font-semibold text-foreground tracking-tight">GTD Flow</h1>
+        <h1 className="text-lg font-semibold text-foreground tracking-tight">Things Done</h1>
         <div className="mt-3">
           <Select
             value={selectedAreaId ?? "all"}
