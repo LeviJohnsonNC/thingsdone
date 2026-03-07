@@ -107,6 +107,7 @@ export type Database = {
           completed_at: string | null
           created_at: string | null
           due_date: string | null
+          google_event_id: string | null
           id: string
           is_focused: boolean | null
           notes: string | null
@@ -125,6 +126,7 @@ export type Database = {
           completed_at?: string | null
           created_at?: string | null
           due_date?: string | null
+          google_event_id?: string | null
           id?: string
           is_focused?: boolean | null
           notes?: string | null
@@ -143,6 +145,7 @@ export type Database = {
           completed_at?: string | null
           created_at?: string | null
           due_date?: string | null
+          google_event_id?: string | null
           id?: string
           is_focused?: boolean | null
           notes?: string | null
