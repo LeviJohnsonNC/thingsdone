@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, Plus, Trash2, RefreshCw, Calendar, Check, Loader2 } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ViewHeader } from "@/components/ViewHeader";
@@ -14,6 +15,7 @@ import { useAppStore } from "@/stores/appStore";
 import { toast } from "sonner";
 
 export default function SettingsView() {
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { user, signOut } = useAuth();
@@ -87,20 +89,34 @@ export default function SettingsView() {
         <section>
           <h2 className="text-sm font-medium text-foreground mb-3">Connected Accounts</h2>
           {calendarToken ? (
-            <div className="flex items-center justify-between bg-card border border-border rounded-md px-3 py-3">
-              <div className="flex items-center gap-2">
-                <Calendar className="h-4 w-4 text-primary" />
-                <span className="text-sm">Google Calendar</span>
-                <Check className="h-4 w-4 text-success-green" />
+            <div className="space-y-2">
+              <div className="flex items-center justify-between bg-card border border-border rounded-md px-3 py-3">
+                <div className="flex items-center gap-2">
+                  <Calendar className="h-4 w-4 text-primary" />
+                  <span className="text-sm">Google Calendar</span>
+                  <Check className="h-4 w-4 text-success-green" />
+                </div>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="text-xs text-muted-foreground"
+                  onClick={() => disconnectCalendar.mutate()}
+                  disabled={disconnectCalendar.isPending}
+                >
+                  Disconnect
+                </Button>
               </div>
               <Button
+                variant="outline"
                 size="sm"
-                variant="ghost"
-                className="text-xs text-muted-foreground"
-                onClick={() => disconnectCalendar.mutate()}
-                disabled={disconnectCalendar.isPending}
+                className="w-full gap-2"
+                onClick={() => {
+                  queryClient.invalidateQueries({ queryKey: ["google_calendar_events"] });
+                  toast.success("Calendar synced!");
+                }}
               >
-                Disconnect
+                <RefreshCw className="h-3.5 w-3.5" />
+                Sync now
               </Button>
             </div>
           ) : (
