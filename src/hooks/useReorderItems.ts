@@ -17,27 +17,20 @@ export function useReorderItems() {
 
   return useMutation({
     mutationFn: async ({ updates, field }: ReorderParams) => {
-      const promises = updates.map(({ id, order }) =>
-        supabase
-          .from("items")
-          .update({ [field]: order })
-          .eq("id", id)
-      );
-      const results = await Promise.all(promises);
-      const error = results.find((r) => r.error)?.error;
+      const { error } = await supabase.rpc("batch_reorder_items", {
+        p_ids: updates.map((u) => u.id),
+        p_orders: updates.map((u) => u.order),
+        p_field: field,
+      });
       if (error) throw error;
     },
     onMutate: async ({ updates, field }) => {
-      // Cancel outgoing refetches so they don't overwrite our optimistic update
       await queryClient.cancelQueries({ queryKey: ["items"] });
 
-      // Snapshot all item queries for rollback
       const previousQueries = queryClient.getQueriesData<Item[]>({ queryKey: ["items"] });
 
-      // Build order map
       const orderMap = new Map(updates.map((u) => [u.id, u.order]));
 
-      // Update every cached query that contains items
       queryClient.setQueriesData<Item[]>({ queryKey: ["items"] }, (old) => {
         if (!old) return old;
         return old
@@ -54,17 +47,16 @@ export function useReorderItems() {
       return { previousQueries };
     },
     onError: (_err, _vars, context) => {
-      // Rollback to previous state
       if (context?.previousQueries) {
         for (const [queryKey, data] of context.previousQueries) {
           queryClient.setQueryData(queryKey, data);
         }
       }
     },
-        onSettled: (_data, error) => {
-                if (error) {
-                          queryClient.invalidateQueries({ queryKey: ["items"] });
-                }
-        },
+    onSettled: (_data, error) => {
+      if (error) {
+        queryClient.invalidateQueries({ queryKey: ["items"] });
+      }
+    },
   });
 }
