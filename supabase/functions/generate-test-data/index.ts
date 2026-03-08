@@ -157,21 +157,30 @@ serve(async (req) => {
 Rules:
 - Areas represent life categories (e.g., Work, Health, Home, Finance, Side Projects)
 - Tags are context labels prefixed with @ (e.g., @home, @office, @errands, @computer, @phone, @waiting)
-- Projects have a type: "parallel" (all tasks available) or "sequential" (only first incomplete task shows in Next)
+- Projects have a type: "parallel" or "sequential"
 - Project states: "active", "someday", "scheduled"
 - Item states: "inbox", "next", "scheduled", "someday", "waiting", "completed"
-- Energy levels: "low", "medium", "high" or null
-- Time estimates are in minutes: 5, 10, 15, 30, 45, 60, 90, 120 or null
+- Energy levels: "low", "medium", "high" or empty string for null
+- Time estimates in minutes: 5, 15, 30, 60, 120, 240 or 0 for null
 - Due dates should vary: some past (overdue), some this week, some next week, some next month
 - Scheduled dates should be future dates
 - Some items should have is_focused=true (starred items)
 - Completed items need a completed_at timestamp (ISO format, within last 2 weeks)
 - Items with state "waiting" should have a waiting_on string (e.g., "John to reply", "Client approval")
 - Use sort_order starting from 0, incrementing by 1
-- For sequential projects, items need sort_order_project values to define order
+- For items inside projects, sort_order_project defines the order within that project (0, 1, 2, ...)
 - Make titles realistic and specific, not generic
 - Some items should have notes with actual useful content
 - Create item_tag associations to link items to relevant context tags
+
+CRITICAL REQUIREMENT - Project items:
+- Every project MUST have 3-6 items assigned to it via the project_temp_id field
+- The project_temp_id on an item MUST exactly match the temp_id of one of the projects
+- Items inside active projects should have state "next"
+- Items inside someday projects should have state "someday"  
+- Items inside scheduled projects should have state "scheduled"
+- Some items inside projects can have state "completed" with a completed_at timestamp
+- In addition to project items, generate 5-8 standalone items (project_temp_id = "") in various states like inbox, next, waiting
 
 Generate data for a productivity-focused professional who works in tech, exercises regularly, maintains a home, and has side projects.`;
 
@@ -190,7 +199,7 @@ Generate data for a productivity-focused professional who works in tech, exercis
             {
               role: "user",
               content:
-                "Generate a complete set of GTD test data. Include 5 areas, 7 tags, 8 projects (mix of parallel/sequential, active/someday/scheduled), and 40 items distributed across all states. Also include item-tag associations.",
+                "Generate a complete set of GTD test data. Include 5 areas, 7 tags, 8 projects (mix of parallel/sequential, active/someday/scheduled) where EACH project has 3-6 tasks assigned to it, plus 5-8 standalone items not in any project. Every item in a project must have its project_temp_id set to match the project's temp_id exactly. Also include item-tag associations via tag_temp_ids.",
             },
           ],
           tools: [
@@ -333,7 +342,7 @@ Generate data for a productivity-focused professional who works in tech, exercis
             {
               role: "user",
               content:
-                "Return ONLY a valid JSON object (no markdown, no prose) with keys: areas, tags, projects, items. Include 5 areas, 7 tags, 8 projects, 40 items, and tag_temp_ids on each item.",
+                "Return ONLY a valid JSON object (no markdown, no prose) with keys: areas, tags, projects, items. Include 5 areas, 7 tags, 8 projects each with 3-6 items assigned via project_temp_id matching the project's temp_id, plus 5-8 standalone items. Include tag_temp_ids on each item.",
             },
           ],
           temperature: 0.2,
@@ -359,11 +368,14 @@ Generate data for a productivity-focused professional who works in tech, exercis
     testData.projects = (testData.projects || []).filter((p: any) => p && (p.title || p.name));
     testData.items = (testData.items || []).filter((i: any) => i && (i.title || i.name));
 
+    const projectTempIds = new Set(testData.projects.map((p: any) => p.temp_id || p.id));
+    const itemsWithProjects = testData.items.filter((i: any) => i.project_temp_id && projectTempIds.has(i.project_temp_id));
     console.log("Sanitized data counts:", {
       areas: testData.areas.length,
       tags: testData.tags.length,
       projects: testData.projects.length,
       items: testData.items.length,
+      itemsLinkedToProjects: itemsWithProjects.length,
     });
 
     // Insert using service role client (bypasses RLS)
