@@ -20,6 +20,7 @@ export type Database = {
           id: string
           name: string
           sort_order: number | null
+          theme: string | null
           user_id: string
         }
         Insert: {
@@ -27,6 +28,7 @@ export type Database = {
           id?: string
           name: string
           sort_order?: number | null
+          theme?: string | null
           user_id: string
         }
         Update: {
@@ -34,6 +36,7 @@ export type Database = {
           id?: string
           name?: string
           sort_order?: number | null
+          theme?: string | null
           user_id?: string
         }
         Relationships: []
@@ -375,6 +378,7 @@ export type Database = {
           created_at: string | null
           id: string
           last_review_at: string | null
+          theme: string | null
           updated_at: string | null
           user_id: string
         }
@@ -382,6 +386,7 @@ export type Database = {
           created_at?: string | null
           id?: string
           last_review_at?: string | null
+          theme?: string | null
           updated_at?: string | null
           user_id: string
         }
@@ -389,6 +394,7 @@ export type Database = {
           created_at?: string | null
           id?: string
           last_review_at?: string | null
+          theme?: string | null
           updated_at?: string | null
           user_id?: string
         }
