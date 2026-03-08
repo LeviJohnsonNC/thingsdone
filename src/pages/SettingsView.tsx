@@ -14,6 +14,7 @@ import { useNeedsReview } from "@/hooks/useUserSettings";
 import { useGoogleCalendarStatus, useConnectGoogleCalendar, useDisconnectGoogleCalendar } from "@/hooks/useGoogleCalendar";
 import { useAppStore } from "@/stores/appStore";
 import { AdminSection } from "@/components/AdminSection";
+import { SubscriptionSection } from "@/components/SubscriptionSection";
 import { toast } from "sonner";
 
 export default function SettingsView() {
