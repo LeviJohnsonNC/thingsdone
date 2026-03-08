@@ -1,6 +1,6 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import {
-  Inbox, Star, ArrowRight, Calendar, Cloud,
+  Inbox, Star, ArrowRight, Calendar, Hourglass, Cloud,
   FolderOpen, BookOpen, Settings, LogOut
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -29,6 +29,7 @@ const NAV_GROUPS = [
       { path: "/focus", icon: Star, label: "Focus" },
       { path: "/next", icon: ArrowRight, label: "Next" },
       { path: "/scheduled", icon: Calendar, label: "Scheduled" },
+      { path: "/waiting", icon: Hourglass, label: "Waiting" },
       { path: "/someday", icon: Cloud, label: "Someday" },
     ],
   },

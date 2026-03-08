@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { useAreas, useCreateArea, useDeleteArea } from "@/hooks/useAreas";
 import { useTags, useCreateTag, useDeleteTag, usePurgeAllData } from "@/hooks/useTags";
+import { useContacts, useCreateContact, useDeleteContact } from "@/hooks/useContacts";
 import { useAuth } from "@/hooks/useAuth";
 import { useNeedsReview } from "@/hooks/useUserSettings";
 import { useGoogleCalendarStatus, useConnectGoogleCalendar, useDisconnectGoogleCalendar } from "@/hooks/useGoogleCalendar";
@@ -26,10 +27,13 @@ export default function SettingsView() {
   const { user, signOut } = useAuth();
   const { data: areas } = useAreas();
   const { data: tags } = useTags();
+  const { data: contacts } = useContacts();
   const createArea = useCreateArea();
   const deleteArea = useDeleteArea();
   const createTag = useCreateTag();
   const deleteTag = useDeleteTag();
+  const createContact = useCreateContact();
+  const deleteContact = useDeleteContact();
   const purgeAllData = usePurgeAllData();
   const needsReview = useNeedsReview();
   const { setWeeklyReviewOpen } = useAppStore();
@@ -38,6 +42,7 @@ export default function SettingsView() {
   const disconnectCalendar = useDisconnectGoogleCalendar();
   const [newArea, setNewArea] = useState("");
   const [newTag, setNewTag] = useState("");
+  const [newContact, setNewContact] = useState("");
   const [showUpgrade, setShowUpgrade] = useState(false);
   const { canCreateArea, areaCount, areaLimit } = useUsageLimits();
 
@@ -80,6 +85,13 @@ export default function SettingsView() {
     if (!newTag.trim()) return;
     await createTag.mutateAsync(newTag.trim());
     setNewTag("");
+  };
+
+  const handleAddContact = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newContact.trim()) return;
+    await createContact.mutateAsync(newContact.trim());
+    setNewContact("");
   };
 
   return (
@@ -205,6 +217,28 @@ export default function SettingsView() {
           <form onSubmit={handleAddTag} className="flex gap-2">
             <Input placeholder="New tag (e.g. @home)…" value={newTag} onChange={(e) => setNewTag(e.target.value)} className="flex-1" />
             <Button type="submit" size="sm" variant="outline" disabled={!newTag.trim()}>
+              <Plus className="h-4 w-4" />
+            </Button>
+          </form>
+        </section>
+
+        {/* Contacts */}
+        <section>
+          <h2 className="text-sm font-medium text-foreground mb-3">Contacts</h2>
+          <p className="text-xs text-muted-foreground mb-3">People you delegate tasks to. Used in the "Waiting On" field.</p>
+          <div className="space-y-2 mb-3">
+            {contacts?.map((contact) => (
+              <div key={contact.id} className="flex items-center justify-between bg-card border border-border rounded-md px-3 py-2">
+                <span className="text-sm">{contact.name}</span>
+                <button onClick={() => deleteContact.mutate(contact.id)} className="p-1 text-muted-foreground hover:text-destructive">
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
+            ))}
+          </div>
+          <form onSubmit={handleAddContact} className="flex gap-2">
+            <Input placeholder="New contact…" value={newContact} onChange={(e) => setNewContact(e.target.value)} className="flex-1" />
+            <Button type="submit" size="sm" variant="outline" disabled={!newContact.trim()}>
               <Plus className="h-4 w-4" />
             </Button>
           </form>

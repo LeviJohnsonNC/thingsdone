@@ -13,6 +13,7 @@ import InboxView from "@/pages/InboxView";
 import FocusView from "@/pages/FocusView";
 import NextView from "@/pages/NextView";
 import ScheduledView from "@/pages/ScheduledView";
+import WaitingView from "@/pages/WaitingView";
 import SomedayView from "@/pages/SomedayView";
 import ProjectsView from "@/pages/ProjectsView";
 import ProjectDetailView from "@/pages/ProjectDetailView";
@@ -48,6 +49,7 @@ function ProtectedRoutes() {
         <Route path="/focus" element={<FocusView />} />
         <Route path="/next" element={<NextView />} />
         <Route path="/scheduled" element={<ScheduledView />} />
+        <Route path="/waiting" element={<WaitingView />} />
         <Route path="/someday" element={<SomedayView />} />
         <Route path="/projects" element={<ProjectsView />} />
         <Route path="/projects/:id" element={<ProjectDetailView />} />

@@ -14,6 +14,7 @@ import { useItems, useUpdateItem, useCompleteItem, useDeleteItem } from "@/hooks
 import { useProjects } from "@/hooks/useProjects";
 import { useAreas } from "@/hooks/useAreas";
 import { useTags, useItemTags, useSetItemTags } from "@/hooks/useTags";
+import { useContacts } from "@/hooks/useContacts";
 import { useGoogleCalendarStatus, usePushItemToCalendar, useDeleteCalendarEvent } from "@/hooks/useGoogleCalendar";
 import { useAppStore } from "@/stores/appStore";
 import { cn } from "@/lib/utils";
@@ -59,6 +60,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
   const { data: itemTagIds } = useItemTags(itemId);
   const setItemTags = useSetItemTags();
   const { data: calendarToken } = useGoogleCalendarStatus();
+  const { data: contacts } = useContacts();
   const pushToCalendar = usePushItemToCalendar();
   const deleteCalendarEvent = useDeleteCalendarEvent();
 
@@ -489,12 +491,24 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
                   className="overflow-hidden"
                 >
                   <PropertyRow icon="👤" label="WAITING ON">
-                    <Input
-                      value={waitingOn}
-                      onChange={(e) => setWaitingOn(e.target.value)}
-                      placeholder="Who are you waiting on?"
-                      className="h-8 text-sm border-0 shadow-none px-2 bg-transparent focus-visible:ring-0"
-                    />
+                    <Select
+                      value={waitingOn || "none"}
+                      onValueChange={(v) => {
+                        const val = v === "none" ? "" : v;
+                        setWaitingOn(val);
+                        saveField("waiting_on", val || null);
+                      }}
+                    >
+                      <SelectTrigger className="h-8 text-sm border-0 shadow-none px-2 bg-transparent">
+                        <SelectValue placeholder="Select contact…" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="none">No one</SelectItem>
+                        {contacts?.map((c) => (
+                          <SelectItem key={c.id} value={c.name}>{c.name}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </PropertyRow>
                 </motion.div>
               )}
