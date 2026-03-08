@@ -156,19 +156,22 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
     }
   };
 
-  const handleSave = () => {
-    const updates: any = {};
-    if (title !== item.title) updates.title = title;
-    if (notes !== (item.notes ?? "")) updates.notes = notes;
-    if (waitingOn !== ((item as any).waiting_on ?? "")) updates.waiting_on = waitingOn;
-    if (Object.keys(updates).length > 0) {
-      updateItem.mutate({ id: item.id, ...updates });
+  const handleBlurTitle = () => {
+    if (title !== item.title) {
+      updateItem.mutate({ id: item.id, title } as any);
     }
-    setEditingItemId(null);
   };
 
-  const handleCancel = () => {
-    setEditingItemId(null);
+  const handleBlurNotes = () => {
+    if (notes !== (item.notes ?? "")) {
+      updateItem.mutate({ id: item.id, notes } as any);
+    }
+  };
+
+  const handleBlurWaitingOn = () => {
+    if (waitingOn !== ((item as any).waiting_on ?? "")) {
+      updateItem.mutate({ id: item.id, waiting_on: waitingOn || null } as any);
+    }
   };
 
   const activeTagIds = itemTagIds ?? [];
