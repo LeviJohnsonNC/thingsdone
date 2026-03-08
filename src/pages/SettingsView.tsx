@@ -15,6 +15,8 @@ import { useGoogleCalendarStatus, useConnectGoogleCalendar, useDisconnectGoogleC
 import { useAppStore } from "@/stores/appStore";
 import { AdminSection } from "@/components/AdminSection";
 import { SubscriptionSection } from "@/components/SubscriptionSection";
+import { UpgradePrompt } from "@/components/UpgradePrompt";
+import { useUsageLimits } from "@/hooks/useUsageLimits";
 import { toast } from "sonner";
 
 export default function SettingsView() {
