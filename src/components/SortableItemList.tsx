@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useCallback } from "react";
 import {
   DndContext,
   closestCenter,
@@ -37,16 +37,10 @@ export function SortableItemList({
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
 
-  const [optimisticItems, setOptimisticItems] = useState<Item[] | null>(null);
-  const displayItems = optimisticItems ?? items;
-
   const handleDragEnd = useCallback(
     (event: DragEndEvent) => {
       const { active, over } = event;
-      if (!over || active.id === over.id) {
-        setOptimisticItems(null);
-        return;
-      }
+      if (!over || active.id === over.id) return;
 
       const oldIndex = items.findIndex((i) => i.id === active.id);
       const newIndex = items.findIndex((i) => i.id === over.id);
@@ -56,17 +50,12 @@ export function SortableItemList({
       const [moved] = reordered.splice(oldIndex, 1);
       reordered.splice(newIndex, 0, moved);
 
-      setOptimisticItems(reordered);
-
       const updates = reordered.map((item, index) => ({
         id: item.id,
         order: index,
       }));
 
-      reorderItems.mutate(
-        { updates, field: orderField },
-        { onSettled: () => setOptimisticItems(null) }
-      );
+      reorderItems.mutate({ updates, field: orderField });
     },
     [items, reorderItems, orderField]
   );
@@ -78,10 +67,10 @@ export function SortableItemList({
       onDragEnd={handleDragEnd}
     >
       <SortableContext
-        items={displayItems.map((i) => i.id)}
+        items={items.map((i) => i.id)}
         strategy={verticalListSortingStrategy}
       >
-        {displayItems.map((item) => (
+        {items.map((item) => (
           <SortableItemRow
             key={item.id}
             item={item}
