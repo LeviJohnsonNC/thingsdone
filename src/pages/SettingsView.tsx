@@ -63,6 +63,14 @@ export default function SettingsView() {
       setSearchParams({}, { replace: true });
     }
   }, [searchParams, refetchCalendar, setSearchParams, queryClient]);
+
+  const handleAddArea = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newArea.trim()) return;
+    if (!canCreateArea) {
+      setShowUpgrade(true);
+      return;
+    }
     await createArea.mutateAsync(newArea.trim());
     setNewArea("");
   };
