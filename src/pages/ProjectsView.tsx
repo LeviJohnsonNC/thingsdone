@@ -36,7 +36,10 @@ export default function ProjectsView() {
     const items = allItems?.filter((i) => i.project_id === projectId) ?? [];
     const total = items.length;
     const done = items.filter((i) => i.state === "completed").length;
-    const nextAction = items.find((i) => i.state !== "completed" && i.state !== "trash");
+    const incompleteItems = items
+      .filter((i) => i.state !== "completed" && i.state !== "trash")
+      .sort((a, b) => (a.sort_order_project ?? 0) - (b.sort_order_project ?? 0));
+    const nextAction = incompleteItems[0];
     return { total, done, nextAction, progress: total > 0 ? (done / total) * 100 : 0 };
   };
 
