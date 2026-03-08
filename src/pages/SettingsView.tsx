@@ -188,6 +188,44 @@ export default function SettingsView() {
         </section>
 
         <Button variant="outline" onClick={signOut} className="w-full">Sign Out</Button>
+
+        {/* Purge All Data */}
+        <section>
+          <h2 className="text-sm font-medium text-destructive mb-3">Danger Zone</h2>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="destructive" className="w-full gap-2">
+                <AlertTriangle className="h-4 w-4" />
+                Purge All Data
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This will permanently delete all your tasks, projects, areas, tags, and settings. This action cannot be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={() => {
+                    purgeAllData.mutate(undefined, {
+                      onSuccess: () => {
+                        toast.success("All data has been purged");
+                        navigate("/inbox");
+                      },
+                      onError: () => toast.error("Failed to purge data"),
+                    });
+                  }}
+                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                >
+                  {purgeAllData.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : "Yes, delete everything"}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </section>
       </div>
     </div>
   );
