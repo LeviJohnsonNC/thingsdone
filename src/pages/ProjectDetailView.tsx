@@ -6,6 +6,7 @@ import { useProjectItems } from "@/hooks/useItems";
 import { useAreas } from "@/hooks/useAreas";
 import { SortableItemList } from "@/components/SortableItemList";
 import { QuickAddBar } from "@/components/QuickAddBar";
+import { ItemFilterBar, useItemFilters, applyItemFilters } from "@/components/ItemFilterBar";
 import { Progress } from "@/components/ui/progress";
 import { DoneSection } from "@/components/DoneSection";
 import { cn } from "@/lib/utils";
