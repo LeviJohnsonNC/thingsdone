@@ -9,6 +9,100 @@ const corsHeaders = {
 
 const ADMIN_EMAIL = "levijohnson@gmail.com";
 
+const REQUIRED_KEYS = ["areas", "tags", "projects", "items"] as const;
+
+function stripMarkdownFences(input: string): string {
+  return input
+    .trim()
+    .replace(/^```(?:json)?\s*/i, "")
+    .replace(/\s*```$/, "")
+    .trim();
+}
+
+function parseJsonCandidate(candidate: unknown): any | null {
+  if (!candidate) return null;
+  if (typeof candidate === "object") return candidate;
+  if (typeof candidate !== "string") return null;
+
+  const cleaned = stripMarkdownFences(candidate)
+    .replace(/[\u0000-\u0019]+/g, "")
+    .trim();
+
+  const attempts = [
+    cleaned,
+    cleaned.replace(/,\s*}/g, "}").replace(/,\s*]/g, "]"),
+  ];
+
+  for (const attempt of attempts) {
+    try {
+      return JSON.parse(attempt);
+    } catch {
+      // continue
+    }
+  }
+
+  return null;
+}
+
+function extractJsonStringFromText(content: string): string | null {
+  const trimmed = stripMarkdownFences(content);
+
+  // Prefer fenced JSON blocks if present
+  const fencedMatch = content.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
+  if (fencedMatch?.[1]) return fencedMatch[1];
+
+  // Fallback to widest object/array slice
+  const firstObj = trimmed.indexOf("{");
+  const lastObj = trimmed.lastIndexOf("}");
+  if (firstObj >= 0 && lastObj > firstObj) {
+    return trimmed.slice(firstObj, lastObj + 1);
+  }
+
+  const firstArr = trimmed.indexOf("[");
+  const lastArr = trimmed.lastIndexOf("]");
+  if (firstArr >= 0 && lastArr > firstArr) {
+    return trimmed.slice(firstArr, lastArr + 1);
+  }
+
+  return null;
+}
+
+function getMessageContentAsString(message: any): string {
+  const content = message?.content;
+  if (typeof content === "string") return content;
+  if (Array.isArray(content)) {
+    return content
+      .map((part) => (typeof part === "string" ? part : part?.text || part?.content || ""))
+      .join("\n");
+  }
+  return "";
+}
+
+function hasRequiredDatasetShape(data: any): boolean {
+  return !!data && REQUIRED_KEYS.every((key) => Array.isArray(data[key]));
+}
+
+function extractStructuredDataFromAIResult(result: any): any | null {
+  const message = result?.choices?.[0]?.message;
+
+  const candidates: unknown[] = [
+    message?.tool_calls?.[0]?.function?.arguments,
+    message?.function_call?.arguments,
+  ];
+
+  for (const candidate of candidates) {
+    const parsed = parseJsonCandidate(candidate);
+    if (hasRequiredDatasetShape(parsed)) return parsed;
+  }
+
+  const content = getMessageContentAsString(message);
+  const extractedJson = content ? extractJsonStringFromText(content) : null;
+  const parsedContent = parseJsonCandidate(extractedJson ?? content);
+  if (hasRequiredDatasetShape(parsedContent)) return parsedContent;
+
+  return null;
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -209,41 +303,55 @@ Generate data for a productivity-focused professional who works in tech, exercis
     }
 
     const aiResult = await aiResponse.json();
-    console.log("AI response structure:", JSON.stringify({
-      hasChoices: !!aiResult.choices,
-      choiceCount: aiResult.choices?.length,
-      finishReason: aiResult.choices?.[0]?.finish_reason,
-      hasToolCalls: !!aiResult.choices?.[0]?.message?.tool_calls,
-      toolCallCount: aiResult.choices?.[0]?.message?.tool_calls?.length,
-      hasContent: !!aiResult.choices?.[0]?.message?.content,
-    }));
+    console.log(
+      "AI response structure:",
+      JSON.stringify({
+        hasChoices: !!aiResult.choices,
+        choiceCount: aiResult.choices?.length,
+        finishReason: aiResult.choices?.[0]?.finish_reason,
+        hasToolCalls: !!aiResult.choices?.[0]?.message?.tool_calls,
+        toolCallCount: aiResult.choices?.[0]?.message?.tool_calls?.length,
+        hasFunctionCall: !!aiResult.choices?.[0]?.message?.function_call,
+        hasContent: !!aiResult.choices?.[0]?.message?.content,
+      })
+    );
 
-    let testData: any;
-    const toolCall = aiResult.choices?.[0]?.message?.tool_calls?.[0];
-    if (toolCall?.function?.arguments) {
-      testData = JSON.parse(toolCall.function.arguments);
-    } else {
-      // Fallback: try to extract JSON from content
-      const content = aiResult.choices?.[0]?.message?.content || "";
-      console.log("No tool call found, trying content extraction. Content length:", content.length);
-      const jsonMatch = content.match(/\{[\s\S]*\}/);
-      if (jsonMatch) {
-        try {
-          testData = JSON.parse(jsonMatch[0]);
-        } catch (parseErr) {
-          // Try cleaning common issues
-          let cleaned = jsonMatch[0]
-            .replace(/,\s*}/g, "}")
-            .replace(/,\s*]/g, "]");
-          testData = JSON.parse(cleaned);
-        }
-      } else {
-        throw new Error("AI did not return structured data. Content preview: " + content.substring(0, 200));
+    let testData = extractStructuredDataFromAIResult(aiResult);
+
+    if (!testData) {
+      console.warn("Primary extraction failed; retrying with strict raw JSON response");
+      const retryResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${LOVABLE_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "google/gemini-3-flash-preview",
+          messages: [
+            { role: "system", content: systemPrompt },
+            {
+              role: "user",
+              content:
+                "Return ONLY a valid JSON object (no markdown, no prose) with keys: areas, tags, projects, items. Include 5 areas, 7 tags, 8 projects, 40 items, and tag_temp_ids on each item.",
+            },
+          ],
+          temperature: 0.2,
+        }),
+      });
+
+      if (!retryResponse.ok) {
+        const retryErr = await retryResponse.text();
+        throw new Error(`AI retry failed (${retryResponse.status}): ${retryErr.substring(0, 200)}`);
       }
+
+      const retryResult = await retryResponse.json();
+      testData = extractStructuredDataFromAIResult(retryResult);
     }
 
-    if (!testData.areas || !testData.tags || !testData.projects || !testData.items) {
-      throw new Error("AI returned incomplete data structure. Keys: " + Object.keys(testData).join(", "));
+    if (!testData) {
+      const preview = getMessageContentAsString(aiResult?.choices?.[0]?.message).substring(0, 200);
+      throw new Error("AI did not return structured data after retry. Content preview: " + preview);
     }
     console.log("Generated data counts:", {
       areas: testData.areas.length,
