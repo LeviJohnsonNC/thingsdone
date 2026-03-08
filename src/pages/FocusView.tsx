@@ -3,6 +3,7 @@ import { SortableItemList } from "@/components/SortableItemList";
 import { EmptyState } from "@/components/EmptyState";
 import { ViewHeader } from "@/components/ViewHeader";
 import { DoneSection } from "@/components/DoneSection";
+import { ItemFilterBar, useItemFilters, applyItemFilters } from "@/components/ItemFilterBar";
 import { useFocusedItems, useCompletedItems } from "@/hooks/useItems";
 import { useAppStore } from "@/stores/appStore";
 
@@ -10,21 +11,24 @@ export default function FocusView() {
   const { selectedAreaId } = useAppStore();
   const { data: items, isLoading } = useFocusedItems(selectedAreaId);
   const { data: completedItems } = useCompletedItems(selectedAreaId);
+  const { filters, setFilters } = useItemFilters();
 
+  const filteredItems = applyItemFilters(items, filters);
   const focusedCompleted = completedItems?.filter(i => i.is_focused) ?? [];
 
   return (
     <div className="flex flex-col h-full">
-      <ViewHeader title="Focus" count={items?.length} />
+      <ViewHeader title="Focus" count={filteredItems.length} />
+      <ItemFilterBar filters={filters} onChange={setFilters} />
       <div className="flex-1">
-        {isLoading ? null : items?.length === 0 ? (
+        {isLoading ? null : filteredItems.length === 0 ? (
           <EmptyState
             icon={Star}
             title="Nothing focused right now"
             description="Star items to bring them here."
           />
         ) : (
-          <SortableItemList items={items ?? []} />
+          <SortableItemList items={filteredItems} />
         )}
         <DoneSection
           items={focusedCompleted}

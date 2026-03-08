@@ -6,6 +6,7 @@ import { useProjectItems } from "@/hooks/useItems";
 import { useAreas } from "@/hooks/useAreas";
 import { SortableItemList } from "@/components/SortableItemList";
 import { QuickAddBar } from "@/components/QuickAddBar";
+import { ItemFilterBar, useItemFilters, applyItemFilters } from "@/components/ItemFilterBar";
 import { Progress } from "@/components/ui/progress";
 import { DoneSection } from "@/components/DoneSection";
 import { cn } from "@/lib/utils";
@@ -18,6 +19,7 @@ export default function ProjectDetailView() {
   const { data: items } = useProjectItems(id!);
   const { data: areas } = useAreas();
   const updateProject = useUpdateProject();
+  const { filters, setFilters } = useItemFilters();
 
   const area = areas?.find((a) => a.id === project?.area_id);
   const total = items?.length ?? 0;
@@ -25,6 +27,7 @@ export default function ProjectDetailView() {
   const progress = total > 0 ? (done / total) * 100 : 0;
 
   const activeItems = items?.filter((i) => i.state !== "completed") ?? [];
+  const filteredActiveItems = applyItemFilters(activeItems as any, filters);
   const completedItems = items?.filter((i) => i.state === "completed") ?? [];
 
   const dimmedIds = useMemo(() => {
@@ -66,12 +69,13 @@ export default function ProjectDetailView() {
         <Progress value={progress} className="h-1.5" />
       </div>
 
+      <ItemFilterBar filters={filters} onChange={setFilters} />
       <QuickAddBar placeholder="Add action…" defaultState="next" projectId={project.id} />
 
       {/* Actions list */}
       <div className="flex-1 overflow-y-auto">
         <SortableItemList
-          items={activeItems}
+          items={filteredActiveItems}
           dimmedIds={dimmedIds}
           orderField="sort_order_project"
         />

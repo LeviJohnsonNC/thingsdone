@@ -2,6 +2,7 @@ import { Calendar, ExternalLink } from "lucide-react";
 import { ItemRow } from "@/components/ItemRow";
 import { EmptyState } from "@/components/EmptyState";
 import { ViewHeader } from "@/components/ViewHeader";
+import { ItemFilterBar, useItemFilters, applyItemFilters } from "@/components/ItemFilterBar";
 import { useItems } from "@/hooks/useItems";
 import { useAppStore } from "@/stores/appStore";
 import { useGoogleCalendarEvents, GoogleCalendarEvent } from "@/hooks/useGoogleCalendar";
@@ -96,14 +97,17 @@ export default function ScheduledView() {
   const { selectedAreaId } = useAppStore();
   const { data: items, isLoading } = useItems("scheduled", selectedAreaId);
   const { data: gcalEvents = [] } = useGoogleCalendarEvents();
+  const { filters, setFilters } = useItemFilters();
 
-  const merged = getMergedItems(items || [], gcalEvents);
+  const filteredItems = applyItemFilters(items, filters);
+  const merged = getMergedItems(filteredItems, gcalEvents);
   const groups = groupByDate(merged);
-  const totalCount = (items?.length || 0) + gcalEvents.length;
+  const totalCount = filteredItems.length + gcalEvents.length;
 
   return (
     <div className="flex flex-col h-full">
       <ViewHeader title="Scheduled" count={totalCount} />
+      <ItemFilterBar filters={filters} onChange={setFilters} />
       <div className="flex-1">
         {isLoading ? null : groups.length === 0 ? (
           <EmptyState
