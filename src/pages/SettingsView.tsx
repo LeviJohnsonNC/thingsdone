@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { useAreas, useCreateArea, useDeleteArea } from "@/hooks/useAreas";
 import { useTags, useCreateTag, useDeleteTag, usePurgeAllData } from "@/hooks/useTags";
+import { useContacts, useCreateContact, useDeleteContact } from "@/hooks/useContacts";
 import { useAuth } from "@/hooks/useAuth";
 import { useNeedsReview } from "@/hooks/useUserSettings";
 import { useGoogleCalendarStatus, useConnectGoogleCalendar, useDisconnectGoogleCalendar } from "@/hooks/useGoogleCalendar";
