@@ -14,6 +14,7 @@ import { useItems, useUpdateItem, useCompleteItem, useDeleteItem } from "@/hooks
 import { useProjects } from "@/hooks/useProjects";
 import { useAreas } from "@/hooks/useAreas";
 import { useTags, useItemTags, useSetItemTags } from "@/hooks/useTags";
+import { useContacts } from "@/hooks/useContacts";
 import { useGoogleCalendarStatus, usePushItemToCalendar, useDeleteCalendarEvent } from "@/hooks/useGoogleCalendar";
 import { useAppStore } from "@/stores/appStore";
 import { cn } from "@/lib/utils";
