@@ -97,3 +97,43 @@ export function useCreateTag() {
     },
   });
 }
+
+export function useDeleteTag() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (tagId: string) => {
+      // item_tags rows will be cascade-deleted via FK
+      const { error } = await supabase.from("tags").delete().eq("id", tagId);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tags"] });
+      queryClient.invalidateQueries({ queryKey: ["item_tags"] });
+    },
+  });
+}
+
+export function usePurgeAllData() {
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async () => {
+      // Delete in order respecting FK constraints
+      const uid = user!.id;
+      await supabase.from("item_tags").delete().in("item_id",
+        (await supabase.from("items").select("id").eq("user_id", uid)).data?.map(i => i.id) ?? []
+      );
+      await supabase.from("items").delete().eq("user_id", uid);
+      await supabase.from("projects").delete().eq("user_id", uid);
+      await supabase.from("tags").delete().eq("user_id", uid);
+      await supabase.from("areas").delete().eq("user_id", uid);
+      await supabase.from("google_calendar_tokens").delete().eq("user_id", uid);
+      await supabase.from("user_settings").delete().eq("user_id", uid);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries();
+    },
+  });
+}
