@@ -25,7 +25,7 @@ export interface UsageLimits {
 export function useUsageLimits(): UsageLimits & { isLoading: boolean } {
   const { user } = useAuth();
   const { isPro } = useSubscription();
-  const isUnlimited = isPro || user?.email === "levijohnson@gmail.com";
+  const isUnlimited = isPro || user?.email === "levijohnson@gmail.com" || user?.email === "christyj@gmail.com";
 
   const { data, isLoading } = useQuery({
     queryKey: ["usage-limits", user?.id, isPro],
