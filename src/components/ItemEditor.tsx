@@ -389,7 +389,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
                 </Popover>
               </PropertyRow>
 
-              <PropertyRow icon="📅" label="SCHEDULED" className="flex-1">
+              <PropertyRow icon={scheduledIcon} label="SCHEDULED" className="flex-1">
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
