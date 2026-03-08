@@ -6,7 +6,7 @@ interface ViewHeaderProps {
 
 export function ViewHeader({ title, count, children }: ViewHeaderProps) {
   return (
-    <div className="flex items-center justify-between px-4 py-4 border-b border-border bg-card">
+    <div className="sticky top-0 z-10 flex items-center justify-between px-4 py-4 border-b border-border bg-card/95 backdrop-blur-sm">
       <div className="flex items-center gap-2">
         <h1 className="text-xl font-semibold text-foreground">{title}</h1>
         {count !== undefined && count > 0 && (

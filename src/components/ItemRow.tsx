@@ -6,6 +6,7 @@ import type { Item } from "@/lib/types";
 import { useCompleteItem, useUpdateItem } from "@/hooks/useItems";
 import { useAppStore } from "@/stores/appStore";
 import { ItemEditor } from "./ItemEditor";
+import { toast } from "sonner";
 
 interface ItemRowProps {
   item: Item;
@@ -20,6 +21,7 @@ export function ItemRow({ item, showProject, dimmed, dragHandleProps }: ItemRowP
   const updateItem = useUpdateItem();
   const x = useMotionValue(0);
   const [swiping, setSwiping] = useState<"left" | "right" | null>(null);
+  const [completing, setCompleting] = useState(false);
 
   const isEditing = editingItemId === item.id;
 
@@ -28,9 +30,14 @@ export function ItemRow({ item, showProject, dimmed, dragHandleProps }: ItemRowP
 
   const handleDragEnd = (_: any, info: PanInfo) => {
     if (info.offset.x > 80) {
-      completeItem.mutate(item.id);
+      setCompleting(true);
+      setTimeout(() => {
+        completeItem.mutate(item.id);
+        toast.success("Completed!", { duration: 1500 });
+      }, 200);
     } else if (info.offset.x < -80) {
       updateItem.mutate({ id: item.id, is_focused: !item.is_focused });
+      toast(item.is_focused ? "Removed from Focus" : "Added to Focus", { duration: 1500 });
     }
     setSwiping(null);
   };
@@ -39,90 +46,102 @@ export function ItemRow({ item, showProject, dimmed, dragHandleProps }: ItemRowP
 
   return (
     <div>
-      <div className="relative overflow-hidden">
-        {/* Swipe backgrounds */}
-        <motion.div className="absolute inset-0 flex items-center px-4" style={{ backgroundColor: bgRight }}>
-          <Check className="h-5 w-5 text-primary-foreground" />
-        </motion.div>
-        <motion.div className="absolute inset-0 flex items-center justify-end px-4" style={{ backgroundColor: bgLeft }}>
-          <Star className="h-5 w-5 text-primary-foreground" />
-        </motion.div>
-
-        <motion.div
-          drag="x"
-          dragConstraints={{ left: 0, right: 0 }}
-          dragElastic={0.3}
-          onDragEnd={handleDragEnd}
-          style={{ x }}
-          onDrag={(_, info) => {
-            setSwiping(info.offset.x > 20 ? "right" : info.offset.x < -20 ? "left" : null);
-          }}
-          className={cn(
-            "relative flex items-center gap-2 bg-card px-2 py-3 border-b border-border cursor-pointer transition-opacity",
-            dimmed && "opacity-50",
-            isEditing && "bg-accent/50"
-          )}
-          onClick={() => setEditingItemId(isEditing ? null : item.id)}
-        >
-          {/* Drag handle */}
-          {dragHandleProps ? (
-            <button
-              {...dragHandleProps}
-              className="flex items-center justify-center shrink-0 touch-none cursor-grab active:cursor-grabbing p-0.5 -ml-0.5"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <GripVertical className="h-4 w-4 text-muted-foreground/40 hover:text-muted-foreground transition-colors" />
-            </button>
-          ) : (
-            <div className="w-5" />
-          )}
-
-          {/* Complete circle */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              completeItem.mutate(item.id);
-            }}
-            className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 border-border hover:border-success-green hover:bg-success-green/10 transition-colors"
-          />
-
-          <div className="flex-1 min-w-0">
-            <p className={cn("text-sm truncate", isOverdue && "text-overdue-red")}>
-              {item.title}
-            </p>
-            <div className="flex items-center gap-2 mt-0.5">
-              {item.due_date && (
-                <span className={cn("text-xs", isOverdue ? "text-overdue-red" : "text-muted-foreground")}>
-                  {new Date(item.due_date).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
-                </span>
-              )}
-              {item.time_estimate && (
-                <span className="text-xs text-muted-foreground">
-                  {item.time_estimate >= 60 ? `${item.time_estimate / 60}h` : `${item.time_estimate}m`}
-                </span>
-              )}
-            </div>
-          </div>
-
-          {/* Star */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              updateItem.mutate({ id: item.id, is_focused: !item.is_focused });
-            }}
-            className="shrink-0 p-1"
+      <AnimatePresence>
+        {!completing && (
+          <motion.div
+            className="relative overflow-hidden"
+            exit={{ height: 0, opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
           >
-            <Star
+            {/* Swipe backgrounds */}
+            <motion.div className="absolute inset-0 flex items-center px-4" style={{ backgroundColor: bgRight }}>
+              <Check className="h-5 w-5 text-primary-foreground" />
+            </motion.div>
+            <motion.div className="absolute inset-0 flex items-center justify-end px-4" style={{ backgroundColor: bgLeft }}>
+              <Star className="h-5 w-5 text-primary-foreground" />
+            </motion.div>
+
+            <motion.div
+              drag="x"
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={0.3}
+              onDragEnd={handleDragEnd}
+              style={{ x }}
+              onDrag={(_, info) => {
+                setSwiping(info.offset.x > 20 ? "right" : info.offset.x < -20 ? "left" : null);
+              }}
               className={cn(
-                "h-4 w-4 transition-colors",
-                item.is_focused
-                  ? "fill-focus-gold text-focus-gold"
-                  : "text-muted-foreground/30 hover:text-muted-foreground"
+                "relative flex items-center gap-2 bg-card px-2 py-3 border-b border-border cursor-pointer transition-opacity",
+                dimmed && "opacity-50",
+                isEditing && "bg-accent/50"
               )}
-            />
-          </button>
-        </motion.div>
-      </div>
+              onClick={() => setEditingItemId(isEditing ? null : item.id)}
+            >
+              {/* Drag handle */}
+              {dragHandleProps ? (
+                <button
+                  {...dragHandleProps}
+                  className="flex items-center justify-center shrink-0 touch-none cursor-grab active:cursor-grabbing p-1 -ml-0.5"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <GripVertical className="h-4 w-4 text-muted-foreground/40 hover:text-muted-foreground transition-colors" />
+                </button>
+              ) : (
+                <div className="w-5" />
+              )}
+
+              {/* Complete circle */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setCompleting(true);
+                  setTimeout(() => {
+                    completeItem.mutate(item.id);
+                    toast.success("Completed!", { duration: 1500 });
+                  }, 200);
+                }}
+                className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 border-border hover:border-success-green hover:bg-success-green/10 transition-colors"
+              />
+
+              <div className="flex-1 min-w-0">
+                <p className={cn("text-sm truncate", isOverdue && "text-overdue-red")}>
+                  {item.title}
+                </p>
+                <div className="flex items-center gap-2 mt-0.5">
+                  {item.due_date && (
+                    <span className={cn("text-xs", isOverdue ? "text-overdue-red" : "text-muted-foreground")}>
+                      {new Date(item.due_date).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
+                    </span>
+                  )}
+                  {item.time_estimate && (
+                    <span className="text-xs text-muted-foreground">
+                      {item.time_estimate >= 60 ? `${item.time_estimate / 60}h` : `${item.time_estimate}m`}
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {/* Star */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  updateItem.mutate({ id: item.id, is_focused: !item.is_focused });
+                }}
+                className="shrink-0 p-1.5"
+              >
+                <Star
+                  className={cn(
+                    "h-4 w-4 transition-colors",
+                    item.is_focused
+                      ? "fill-focus-gold text-focus-gold"
+                      : "text-muted-foreground/30 hover:text-muted-foreground"
+                  )}
+                />
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Inline editor */}
       <AnimatePresence>

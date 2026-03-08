@@ -307,7 +307,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
           {/* Properties Grid */}
           <div className="p-4 space-y-3">
             {/* Time Estimate + Energy - side by side */}
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <PropertyRow icon={timeEstIcon} label="TIME EST." className="flex-1">
                 <div className="inline-flex bg-muted rounded-lg p-0.5 gap-0.5">
                   <SegmentButton
@@ -355,7 +355,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
             </div>
 
             {/* Due + Scheduled - side by side */}
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <PropertyRow icon={dueIcon} label="DUE" className="flex-1">
                 <Popover>
                   <PopoverTrigger asChild>
@@ -424,7 +424,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
             </div>
 
             {/* Project + Area - side by side */}
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <PropertyRow icon={projectIcon} label="PROJECT" className="flex-1">
                 <Select
                   value={item.project_id ?? "none"}
@@ -531,8 +531,12 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
 function PropertyRow({ icon, label, children, className }: { icon: string; label: string; children: React.ReactNode; className?: string }) {
   return (
     <div className={cn("flex items-center gap-3", className)}>
-      <div className="w-[100px] shrink-0 flex items-center gap-1.5">
-        <img src={icon} alt={label} className="h-3.5 w-3.5 opacity-60" />
+      <div className="w-[80px] sm:w-[100px] shrink-0 flex items-center gap-1.5">
+        {typeof icon === "string" && icon.length <= 2 ? (
+          <span className="text-sm">{icon}</span>
+        ) : (
+          <img src={icon} alt={label} className="h-3.5 w-3.5 opacity-60" />
+        )}
         <span className="text-[10px] font-medium tracking-wider text-muted-foreground uppercase">{label}</span>
       </div>
       <div className="flex-1 min-w-0">{children}</div>
@@ -546,7 +550,7 @@ function SegmentButton({ active, onClick, children }: { active: boolean; onClick
     <button
       onClick={onClick}
       className={cn(
-        "px-2.5 py-1 rounded-md text-xs font-medium transition-all duration-150",
+        "px-2.5 py-1.5 rounded-md text-xs font-medium transition-all duration-150 min-h-[36px]",
         active
           ? "bg-card text-foreground shadow-sm"
           : "text-muted-foreground hover:text-foreground"
