@@ -56,9 +56,13 @@ export function DesktopSidebar() {
   const { signOut } = useAuth();
   const { data: inboxItems } = useItems("inbox");
   const { data: areas } = useAreas();
+  const { data: settings } = useUserSettings();
   const { selectedAreaId, setSelectedAreaId } = useAppStore();
 
   const inboxCount = inboxItems?.length ?? 0;
+  const daysSinceReview = settings?.last_review_at
+    ? differenceInDays(new Date(), new Date(settings.last_review_at))
+    : null;
 
   return (
     <aside className="w-60 border-r border-border bg-card flex flex-col h-screen shrink-0">
