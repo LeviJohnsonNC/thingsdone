@@ -12,6 +12,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
   const isMobile = useIsMobile();
   const location = useLocation();
   const setEditingItemId = useAppStore((s) => s.setEditingItemId);
+  useActiveTheme();
 
   useEffect(() => {
     setEditingItemId(null);
