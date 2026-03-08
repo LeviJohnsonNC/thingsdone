@@ -38,6 +38,8 @@ export default function SettingsView() {
   const disconnectCalendar = useDisconnectGoogleCalendar();
   const [newArea, setNewArea] = useState("");
   const [newTag, setNewTag] = useState("");
+  const [showUpgrade, setShowUpgrade] = useState(false);
+  const { canCreateArea, areaCount, areaLimit } = useUsageLimits();
 
   // Handle callback from Google OAuth
   useEffect(() => {
