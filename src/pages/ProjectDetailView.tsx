@@ -19,6 +19,7 @@ export default function ProjectDetailView() {
   const { data: items } = useProjectItems(id!);
   const { data: areas } = useAreas();
   const updateProject = useUpdateProject();
+  const { filters, setFilters } = useItemFilters();
 
   const area = areas?.find((a) => a.id === project?.area_id);
   const total = items?.length ?? 0;
@@ -26,6 +27,7 @@ export default function ProjectDetailView() {
   const progress = total > 0 ? (done / total) * 100 : 0;
 
   const activeItems = items?.filter((i) => i.state !== "completed") ?? [];
+  const filteredActiveItems = applyItemFilters(activeItems as any, filters);
   const completedItems = items?.filter((i) => i.state === "completed") ?? [];
 
   const dimmedIds = useMemo(() => {
