@@ -38,49 +38,82 @@ export function useNextItems(areaId?: string | null) {
   return useQuery({
     queryKey: ["items", "next", areaId, user?.id],
     queryFn: async () => {
-      // Fetch next items
-      let query = supabase
+      const today = new Date().toISOString().split("T")[0];
+
+      // 1) "next" state items
+      let nextQuery = supabase
         .from("items")
         .select("*")
         .eq("state", "next")
         .order("sort_order", { ascending: true });
+      if (areaId) nextQuery = nextQuery.eq("area_id", areaId);
 
-      if (areaId) {
-        query = query.eq("area_id", areaId);
-      }
+      // 2) Inbox items
+      let inboxQuery = supabase
+        .from("items")
+        .select("*")
+        .eq("state", "inbox")
+        .order("created_at", { ascending: true });
+      if (areaId) inboxQuery = inboxQuery.eq("area_id", areaId);
 
-      const { data: items, error } = await query;
-      if (error) throw error;
+      // 3) Scheduled items due today or earlier
+      let scheduledQuery = supabase
+        .from("items")
+        .select("*")
+        .eq("state", "scheduled")
+        .lte("scheduled_date", today)
+        .order("scheduled_date", { ascending: true });
+      if (areaId) scheduledQuery = scheduledQuery.eq("area_id", areaId);
 
-      // Get unique project IDs from these items
+      const [nextRes, inboxRes, scheduledRes] = await Promise.all([
+        nextQuery, inboxQuery, scheduledQuery,
+      ]);
+      if (nextRes.error) throw nextRes.error;
+      if (inboxRes.error) throw inboxRes.error;
+      if (scheduledRes.error) throw scheduledRes.error;
+
+      const nextItems = nextRes.data as Item[];
+      const inboxItems = inboxRes.data as Item[];
+      const scheduledItems = scheduledRes.data as Item[];
+
+      // Sequential project filtering for "next" items only
       const projectIds = [...new Set(
-        (items as Item[]).filter(i => i.project_id).map(i => i.project_id!)
+        nextItems.filter(i => i.project_id).map(i => i.project_id!)
       )];
 
-      if (projectIds.length === 0) return items as Item[];
+      let filteredNextItems = nextItems;
+      if (projectIds.length > 0) {
+        const { data: seqItems, error: seqError } = await supabase
+          .from("items")
+          .select("id, project_id, sort_order_project")
+          .in("project_id", projectIds)
+          .neq("state", "completed")
+          .order("sort_order_project", { ascending: true });
+        if (seqError) throw seqError;
 
-      // All projects are sequential — fetch ALL incomplete items to determine first action
-      const { data: seqItems, error: seqError } = await supabase
-        .from("items")
-        .select("id, project_id, sort_order_project")
-        .in("project_id", projectIds)
-        .neq("state", "completed")
-        .order("sort_order_project", { ascending: true });
-      if (seqError) throw seqError;
-
-      // Build map: project_id -> first incomplete item id
-      const firstActionByProject = new Map<string, string>();
-      for (const si of seqItems ?? []) {
-        if (si.project_id && !firstActionByProject.has(si.project_id)) {
-          firstActionByProject.set(si.project_id, si.id);
+        const firstActionByProject = new Map<string, string>();
+        for (const si of seqItems ?? []) {
+          if (si.project_id && !firstActionByProject.has(si.project_id)) {
+            firstActionByProject.set(si.project_id, si.id);
+          }
         }
+
+        filteredNextItems = nextItems.filter(item => {
+          if (!item.project_id) return true;
+          return firstActionByProject.get(item.project_id) === item.id;
+        });
       }
 
-      // Keep item if it has no project, or if it IS the first action in its project
-      return (items as Item[]).filter(item => {
-        if (!item.project_id) return true;
-        return firstActionByProject.get(item.project_id) === item.id;
-      });
+      // Merge and deduplicate
+      const seen = new Set<string>();
+      const merged: Item[] = [];
+      for (const item of [...filteredNextItems, ...inboxItems, ...scheduledItems]) {
+        if (!seen.has(item.id)) {
+          seen.add(item.id);
+          merged.push(item);
+        }
+      }
+      return merged;
     },
     enabled: !!user,
   });

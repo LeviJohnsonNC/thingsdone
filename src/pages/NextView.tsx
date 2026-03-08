@@ -68,7 +68,7 @@ export default function NextView() {
           <EmptyState
             icon={ArrowRight}
             title="No next actions"
-            description="Time to process your inbox or review projects."
+            description="No actionable items — inbox is empty, nothing scheduled for today."
           />
         ) : (
           <SortableItemList items={filteredItems ?? []} />
