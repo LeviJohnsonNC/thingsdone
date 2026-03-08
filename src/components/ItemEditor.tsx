@@ -532,7 +532,7 @@ function PropertyRow({ icon, label, children, className }: { icon: string; label
   return (
     <div className={cn("flex items-center gap-3", className)}>
       <div className="w-[100px] shrink-0 flex items-center gap-1.5">
-        <span className="text-sm">{icon}</span>
+        <img src={icon} alt={label} className="h-3.5 w-3.5 opacity-60" />
         <span className="text-[10px] font-medium tracking-wider text-muted-foreground uppercase">{label}</span>
       </div>
       <div className="flex-1 min-w-0">{children}</div>
