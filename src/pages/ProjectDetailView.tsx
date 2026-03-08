@@ -1,15 +1,14 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, Star, Plus } from "lucide-react";
 import { useProjects, useUpdateProject } from "@/hooks/useProjects";
 import { useProjectItems, useCreateItem } from "@/hooks/useItems";
 import { useAreas } from "@/hooks/useAreas";
-import { ItemRow } from "@/components/ItemRow";
+import { SortableItemList } from "@/components/SortableItemList";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DoneSection } from "@/components/DoneSection";
 import { cn } from "@/lib/utils";
 
@@ -30,6 +29,19 @@ export default function ProjectDetailView() {
   const total = items?.length ?? 0;
   const done = items?.filter((i) => i.state === "completed").length ?? 0;
   const progress = total > 0 ? (done / total) * 100 : 0;
+
+  const activeItems = items?.filter((i) => i.state !== "completed") ?? [];
+  const completedItems = items?.filter((i) => i.state === "completed") ?? [];
+
+  // For sequential projects, dim all items after the first
+  const dimmedIds = useMemo(() => {
+    if (project.type !== "sequential") return new Set<string>();
+    const ids = new Set<string>();
+    activeItems.forEach((item, i) => {
+      if (i > 0) ids.add(item.id);
+    });
+    return ids;
+  }, [project.type, activeItems]);
 
   const handleAddAction = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -83,19 +95,12 @@ export default function ProjectDetailView() {
 
       {/* Actions list */}
       <div className="flex-1 overflow-y-auto">
-        {items
-          ?.filter((i) => i.state !== "completed")
-          .map((item) => {
-            const activeItems = items.filter((i) => i.state !== "completed");
-            const isSequentialFuture =
-              project.type === "sequential" && activeItems.indexOf(item) > 0;
-
-            return <ItemRow key={item.id} item={item} dimmed={isSequentialFuture} />;
-          })}
-        <DoneSection
-          items={items?.filter((i) => i.state === "completed") ?? []}
-          restoreState="next"
+        <SortableItemList
+          items={activeItems}
+          dimmedIds={dimmedIds}
+          orderField="sort_order_project"
         />
+        <DoneSection items={completedItems} restoreState="next" />
       </div>
 
       {/* Add action */}

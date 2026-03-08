@@ -1,6 +1,6 @@
 import { Inbox as InboxIcon } from "lucide-react";
 import { QuickAddBar } from "@/components/QuickAddBar";
-import { ItemRow } from "@/components/ItemRow";
+import { SortableItemList } from "@/components/SortableItemList";
 import { EmptyState } from "@/components/EmptyState";
 import { ViewHeader } from "@/components/ViewHeader";
 import { DoneSection } from "@/components/DoneSection";
@@ -24,7 +24,7 @@ export default function InboxView() {
             description="Nothing to process. Enjoy the calm."
           />
         ) : (
-          items?.map((item) => <ItemRow key={item.id} item={item} />)
+          <SortableItemList items={items ?? []} />
         )}
         <DoneSection items={completedItems ?? []} restoreState="inbox" />
       </div>
