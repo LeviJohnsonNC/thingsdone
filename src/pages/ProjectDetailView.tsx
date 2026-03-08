@@ -33,13 +33,12 @@ export default function ProjectDetailView() {
 
   // For sequential projects, dim all items after the first
   const dimmedIds = useMemo(() => {
-    if (!project || project.type !== "sequential") return new Set<string>();
     const ids = new Set<string>();
     activeItems.forEach((item, i) => {
       if (i > 0) ids.add(item.id);
     });
     return ids;
-  }, [project?.type, activeItems]);
+  }, [activeItems]);
 
   if (!project) return null;
 
