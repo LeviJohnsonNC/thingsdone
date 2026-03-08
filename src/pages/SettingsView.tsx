@@ -255,6 +255,13 @@ export default function SettingsView() {
           </AlertDialog>
         </section>
       </div>
+      <UpgradePrompt
+        open={showUpgrade}
+        onOpenChange={setShowUpgrade}
+        trigger="areas"
+        currentUsage={areaCount}
+        limit={areaLimit === Infinity ? 3 : areaLimit}
+      />
     </div>
   );
 }
