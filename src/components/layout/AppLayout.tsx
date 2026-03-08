@@ -6,6 +6,7 @@ import { MobileBottomNav } from "./MobileBottomNav";
 import { QuickAddFAB } from "../QuickAddFAB";
 import { WeeklyReviewWizard } from "../WeeklyReviewWizard";
 import { useAppStore } from "@/stores/appStore";
+import { OverLimitBanner } from "../OverLimitBanner";
 
 export function AppLayout({ children }: { children: ReactNode }) {
   const isMobile = useIsMobile();
