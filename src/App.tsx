@@ -49,6 +49,7 @@ function ProtectedRoutes() {
         <Route path="/focus" element={<FocusView />} />
         <Route path="/next" element={<NextView />} />
         <Route path="/scheduled" element={<ScheduledView />} />
+        <Route path="/waiting" element={<WaitingView />} />
         <Route path="/someday" element={<SomedayView />} />
         <Route path="/projects" element={<ProjectsView />} />
         <Route path="/projects/:id" element={<ProjectDetailView />} />

@@ -29,6 +29,7 @@ const NAV_GROUPS = [
       { path: "/focus", icon: Star, label: "Focus" },
       { path: "/next", icon: ArrowRight, label: "Next" },
       { path: "/scheduled", icon: Calendar, label: "Scheduled" },
+      { path: "/waiting", icon: Hourglass, label: "Waiting" },
       { path: "/someday", icon: Cloud, label: "Someday" },
     ],
   },

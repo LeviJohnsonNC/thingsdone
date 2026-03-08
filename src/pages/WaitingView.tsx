@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { Hourglass } from "lucide-react";
+import { QuickAddBar } from "@/components/QuickAddBar";
 import { ViewHeader } from "@/components/ViewHeader";
 import { ItemRow } from "@/components/ItemRow";
 import { EmptyState } from "@/components/EmptyState";

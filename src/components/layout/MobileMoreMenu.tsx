@@ -17,6 +17,7 @@ import {
 
 const MORE_ITEMS = [
   { path: "/scheduled", icon: Calendar, label: "Scheduled" },
+  { path: "/waiting", icon: Hourglass, label: "Waiting" },
   { path: "/someday", icon: Cloud, label: "Someday" },
   { path: "/logbook", icon: BookOpen, label: "Logbook" },
 ];
