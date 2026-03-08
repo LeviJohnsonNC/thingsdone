@@ -1,9 +1,11 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { DesktopSidebar } from "./DesktopSidebar";
 import { MobileBottomNav } from "./MobileBottomNav";
 import { QuickAddFAB } from "../QuickAddFAB";
 import { WeeklyReviewWizard } from "../WeeklyReviewWizard";
+import { useAppStore } from "@/stores/appStore";
 
 export function AppLayout({ children }: { children: ReactNode }) {
   const isMobile = useIsMobile();
