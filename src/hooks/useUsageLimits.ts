@@ -61,16 +61,16 @@ export function useUsageLimits(): UsageLimits & { isLoading: boolean } {
   const activeProjectCount = data?.activeProjectCount ?? 0;
   const areaCount = data?.areaCount ?? 0;
 
-  const activeItemLimit = isPro ? Infinity : FREE_LIMITS.activeItems;
-  const activeProjectLimit = isPro ? Infinity : FREE_LIMITS.activeProjects;
-  const areaLimit = isPro ? Infinity : FREE_LIMITS.areas;
+  const activeItemLimit = isUnlimited ? Infinity : FREE_LIMITS.activeItems;
+  const activeProjectLimit = isUnlimited ? Infinity : FREE_LIMITS.activeProjects;
+  const areaLimit = isUnlimited ? Infinity : FREE_LIMITS.areas;
 
-  const canCreateItem = isPro || activeItemCount < FREE_LIMITS.activeItems;
-  const canCreateProject = isPro || activeProjectCount < FREE_LIMITS.activeProjects;
-  const canCreateArea = isPro || areaCount < FREE_LIMITS.areas;
+  const canCreateItem = isUnlimited || activeItemCount < FREE_LIMITS.activeItems;
+  const canCreateProject = isUnlimited || activeProjectCount < FREE_LIMITS.activeProjects;
+  const canCreateArea = isUnlimited || areaCount < FREE_LIMITS.areas;
 
   const isOverAnyLimit =
-    !isPro &&
+    !isUnlimited &&
     (activeItemCount >= FREE_LIMITS.activeItems ||
       activeProjectCount >= FREE_LIMITS.activeProjects ||
       areaCount >= FREE_LIMITS.areas);
