@@ -505,15 +505,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-between px-4 py-3 bg-muted/40 border-t border-border/60 rounded-b-xl">
-            <div className="flex gap-2">
-              <Button size="sm" onClick={handleSave} className="font-semibold">
-                Save
-              </Button>
-              <Button size="sm" variant="outline" onClick={handleCancel}>
-                Cancel
-              </Button>
-            </div>
+          <div className="flex items-center justify-end px-4 py-3 bg-muted/40 border-t border-border/60 rounded-b-xl">
             <Button
               size="sm"
               variant="ghost"
