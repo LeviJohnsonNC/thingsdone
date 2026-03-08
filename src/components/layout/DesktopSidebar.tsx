@@ -1,12 +1,14 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import {
   Inbox, Star, ArrowRight, Calendar, Hourglass, Cloud,
-  FolderOpen, BookOpen, Settings, LogOut
+  FolderOpen, BookOpen, Settings, LogOut, ClipboardList
 } from "lucide-react";
+import { differenceInDays } from "date-fns";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
 import { useItems } from "@/hooks/useItems";
 import { useAreas } from "@/hooks/useAreas";
+import { useUserSettings } from "@/hooks/useUserSettings";
 import { useAppStore } from "@/stores/appStore";
 import {
   Select,
@@ -37,6 +39,7 @@ const NAV_GROUPS = [
     label: "Organize",
     items: [
       { path: "/projects", icon: FolderOpen, label: "Projects" },
+      { path: "/review", icon: ClipboardList, label: "Weekly Review", reviewBadge: true },
     ],
   },
   {
@@ -53,9 +56,13 @@ export function DesktopSidebar() {
   const { signOut } = useAuth();
   const { data: inboxItems } = useItems("inbox");
   const { data: areas } = useAreas();
+  const { data: settings } = useUserSettings();
   const { selectedAreaId, setSelectedAreaId } = useAppStore();
 
   const inboxCount = inboxItems?.length ?? 0;
+  const daysSinceReview = settings?.last_review_at
+    ? differenceInDays(new Date(), new Date(settings.last_review_at))
+    : null;
 
   return (
     <aside className="w-60 border-r border-border bg-card flex flex-col h-screen shrink-0">
@@ -104,6 +111,14 @@ export function DesktopSidebar() {
                   {item.badge && inboxCount > 0 && (
                     <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-primary text-[11px] font-medium text-primary-foreground px-1.5">
                       {inboxCount}
+                    </span>
+                  )}
+                  {(item as any).reviewBadge && daysSinceReview !== null && (
+                    <span className={cn(
+                      "text-[10px] font-medium",
+                      daysSinceReview >= 7 ? "text-focus-gold" : "text-muted-foreground"
+                    )}>
+                      {daysSinceReview}d
                     </span>
                   )}
                 </button>

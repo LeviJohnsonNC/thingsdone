@@ -8,6 +8,7 @@ import { useScheduledActivation } from "@/hooks/useScheduledActivation";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { MarketingLayout } from "@/components/marketing/MarketingLayout";
 import { lazy, Suspense } from "react";
+import ReviewView from "@/pages/ReviewView";
 import Auth from "@/pages/Auth";
 import InboxView from "@/pages/InboxView";
 import FocusView from "@/pages/FocusView";
@@ -55,6 +56,7 @@ function ProtectedRoutes() {
         <Route path="/projects/:id" element={<ProjectDetailView />} />
         <Route path="/logbook" element={<LogbookView />} />
         <Route path="/settings" element={<SettingsView />} />
+        <Route path="/review" element={<ReviewView />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </AppLayout>

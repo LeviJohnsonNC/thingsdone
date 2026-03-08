@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Calendar, Hourglass, Cloud, BookOpen, Settings, LogOut } from "lucide-react";
+import { Calendar, Hourglass, Cloud, BookOpen, Settings, LogOut, ClipboardList } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import { useAppStore } from "@/stores/appStore";
@@ -17,6 +17,7 @@ const MORE_ITEMS = [
   { path: "/scheduled", icon: Calendar, label: "Scheduled" },
   { path: "/waiting", icon: Hourglass, label: "Waiting" },
   { path: "/someday", icon: Cloud, label: "Someday" },
+  { path: "/review", icon: ClipboardList, label: "Weekly Review" },
   { path: "/logbook", icon: BookOpen, label: "Logbook" },
 ];
 

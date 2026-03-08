@@ -265,6 +265,42 @@ export type Database = {
           },
         ]
       }
+      reviews: {
+        Row: {
+          completed_at: string | null
+          created_at: string | null
+          current_step: number
+          id: string
+          reflection_text: string | null
+          started_at: string
+          stats: Json | null
+          summary_text: string | null
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string | null
+          current_step?: number
+          id?: string
+          reflection_text?: string | null
+          started_at?: string
+          stats?: Json | null
+          summary_text?: string | null
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string | null
+          current_step?: number
+          id?: string
+          reflection_text?: string | null
+          started_at?: string
+          stats?: Json | null
+          summary_text?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       subscriptions: {
         Row: {
           cancel_at_period_end: boolean | null
