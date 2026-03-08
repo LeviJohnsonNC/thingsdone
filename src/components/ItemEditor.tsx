@@ -20,14 +20,19 @@ import { cn } from "@/lib/utils";
 import { TIME_ESTIMATE_OPTIONS, ENERGY_OPTIONS } from "@/lib/types";
 import type { ItemState, EnergyLevel } from "@/lib/types";
 import { toast } from "sonner";
+import inboxIcon from "@/assets/icons/inbox.svg";
+import nextIcon from "@/assets/icons/next.svg";
+import waitingIcon from "@/assets/icons/waiting.svg";
+import scheduledIcon from "@/assets/icons/scheduled.svg";
+import somedayIcon from "@/assets/icons/someday.svg";
 
 // State config with accent colors (HSL values matching design system)
 const STATE_CONFIG: Record<string, { label: string; icon: string; activeClass: string; borderClass: string; bgClass: string }> = {
-  inbox: { label: "Inbox", icon: "📥", activeClass: "bg-muted text-foreground border-border", borderClass: "border-border", bgClass: "hover:bg-muted/60" },
-  next: { label: "Next", icon: "⚡", activeClass: "bg-primary/10 text-primary border-primary", borderClass: "border-primary", bgClass: "hover:bg-primary/5" },
-  waiting: { label: "Waiting", icon: "⏳", activeClass: "bg-focus-gold/10 text-focus-gold border-focus-gold", borderClass: "border-focus-gold", bgClass: "hover:bg-focus-gold/5" },
-  someday: { label: "Someday", icon: "💭", activeClass: "bg-purple-100 text-purple-700 border-purple-400 dark:bg-purple-900/30 dark:text-purple-300 dark:border-purple-500", borderClass: "border-purple-400 dark:border-purple-500", bgClass: "hover:bg-purple-50 dark:hover:bg-purple-900/20" },
-  scheduled: { label: "Scheduled", icon: "📅", activeClass: "bg-emerald-100 text-emerald-700 border-emerald-400 dark:bg-emerald-900/30 dark:text-emerald-300 dark:border-emerald-500", borderClass: "border-emerald-400 dark:border-emerald-500", bgClass: "hover:bg-emerald-50 dark:hover:bg-emerald-900/20" },
+  inbox: { label: "Inbox", icon: inboxIcon, activeClass: "bg-muted text-foreground border-border", borderClass: "border-border", bgClass: "hover:bg-muted/60" },
+  next: { label: "Next", icon: nextIcon, activeClass: "bg-primary/10 text-primary border-primary", borderClass: "border-primary", bgClass: "hover:bg-primary/5" },
+  waiting: { label: "Waiting", icon: waitingIcon, activeClass: "bg-focus-gold/10 text-focus-gold border-focus-gold", borderClass: "border-focus-gold", bgClass: "hover:bg-focus-gold/5" },
+  someday: { label: "Someday", icon: somedayIcon, activeClass: "bg-purple-100 text-purple-700 border-purple-400 dark:bg-purple-900/30 dark:text-purple-300 dark:border-purple-500", borderClass: "border-purple-400 dark:border-purple-500", bgClass: "hover:bg-purple-50 dark:hover:bg-purple-900/20" },
+  scheduled: { label: "Scheduled", icon: scheduledIcon, activeClass: "bg-emerald-100 text-emerald-700 border-emerald-400 dark:bg-emerald-900/30 dark:text-emerald-300 dark:border-emerald-500", borderClass: "border-emerald-400 dark:border-emerald-500", bgClass: "hover:bg-emerald-50 dark:hover:bg-emerald-900/20" },
 };
 
 const GTD_STATES = ["inbox", "next", "waiting", "scheduled", "someday"] as const;
