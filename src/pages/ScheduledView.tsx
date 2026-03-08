@@ -4,6 +4,7 @@ import { EmptyState } from "@/components/EmptyState";
 import { ViewHeader } from "@/components/ViewHeader";
 import { ItemFilterBar, useItemFilters, applyItemFilters } from "@/components/ItemFilterBar";
 import { useItems } from "@/hooks/useItems";
+import { useAllItemTags } from "@/hooks/useTags";
 import { useAppStore } from "@/stores/appStore";
 import { useGoogleCalendarEvents, GoogleCalendarEvent } from "@/hooks/useGoogleCalendar";
 import { Badge } from "@/components/ui/badge";
