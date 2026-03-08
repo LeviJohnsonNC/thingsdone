@@ -232,6 +232,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
             <Input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
+              onBlur={handleBlurTitle}
               className="text-lg font-semibold border-0 px-0 focus-visible:ring-0 shadow-none h-auto py-0"
               placeholder="What needs to be done?"
               autoFocus
