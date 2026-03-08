@@ -65,7 +65,6 @@ export function StateReviewStep({
             <ItemRow
               key={item.id}
               item={item}
-              onTap={() => setEditingItemId(item.id)}
             />
           ))}
         </div>
