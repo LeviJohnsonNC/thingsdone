@@ -196,13 +196,6 @@ export default function ReviewView() {
     <div className="flex flex-col h-full bg-background">
       {/* Progress bar */}
       <div className="border-b border-border bg-card">
-        <div className="flex items-center justify-between max-w-2xl mx-auto px-4 pt-3">
-          <span />
-          <Link to="/review/history" className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors">
-            <History className="h-3.5 w-3.5" />
-            Past Reviews
-          </Link>
-        </div>
         <ReviewProgress
           currentStep={review.currentStep}
           onStepClick={(step) => review.setStep(step)}
