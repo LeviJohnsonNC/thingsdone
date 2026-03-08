@@ -397,16 +397,16 @@ Generate data for a productivity-focused professional who works in tech, exercis
       const { data: insertedTags, error: tErr } = await adminClient
         .from("tags")
         .insert(
-          testData.tags.map((t: any) => ({
-            name: t.name,
-            sort_order: t.sort_order,
+          testData.tags.map((t: any, i: number) => ({
+            name: t.name || t.title || `Tag ${i + 1}`,
+            sort_order: t.sort_order ?? i,
             user_id: userId,
           }))
         )
         .select("id");
       if (tErr) throw new Error(`Tags insert failed: ${tErr.message}`);
       testData.tags.forEach((t: any, i: number) => {
-        tagMap.set(t.temp_id, insertedTags![i].id);
+        tagMap.set(t.temp_id || t.id || `tag_${i}`, insertedTags![i].id);
       });
     }
 
@@ -415,51 +415,53 @@ Generate data for a productivity-focused professional who works in tech, exercis
       const { data: insertedProjects, error: pErr } = await adminClient
         .from("projects")
         .insert(
-          testData.projects.map((p: any) => ({
-            title: p.title,
+          testData.projects.map((p: any, i: number) => ({
+            title: p.title || p.name || `Project ${i + 1}`,
             notes: p.notes || "",
-            state: p.state,
-            type: p.type,
+            state: ["active", "someday", "scheduled"].includes(p.state) ? p.state : "active",
+            type: ["parallel", "sequential"].includes(p.type) ? p.type : "parallel",
             area_id: p.area_temp_id ? areaMap.get(p.area_temp_id) || null : null,
-            is_focused: p.is_focused,
+            is_focused: !!p.is_focused,
             scheduled_date: p.scheduled_date || null,
             due_date: p.due_date || null,
-            sort_order: p.sort_order,
+            sort_order: p.sort_order ?? i,
             user_id: userId,
           }))
         )
         .select("id");
       if (pErr) throw new Error(`Projects insert failed: ${pErr.message}`);
       testData.projects.forEach((p: any, i: number) => {
-        projectMap.set(p.temp_id, insertedProjects![i].id);
+        projectMap.set(p.temp_id || p.id || `proj_${i}`, insertedProjects![i].id);
       });
     }
 
     // 4. Insert items
+    const validStates = ["inbox", "next", "scheduled", "someday", "waiting", "completed"];
     const itemTagAssociations: { item_index: number; tag_temp_ids: string[] }[] = [];
     if (testData.items.length > 0) {
       const { data: insertedItems, error: iErr } = await adminClient
         .from("items")
         .insert(
           testData.items.map((item: any, idx: number) => {
-            if (item.tag_temp_ids?.length > 0) {
-              itemTagAssociations.push({ item_index: idx, tag_temp_ids: item.tag_temp_ids });
+            const tags = item.tag_temp_ids || item.tags || [];
+            if (Array.isArray(tags) && tags.length > 0) {
+              itemTagAssociations.push({ item_index: idx, tag_temp_ids: tags });
             }
             return {
-              title: item.title,
+              title: item.title || item.name || `Item ${idx + 1}`,
               notes: item.notes || "",
-              state: item.state,
+              state: validStates.includes(item.state) ? item.state : "inbox",
               project_id: item.project_temp_id ? projectMap.get(item.project_temp_id) || null : null,
               area_id: item.area_temp_id ? areaMap.get(item.area_temp_id) || null : null,
-              is_focused: item.is_focused,
-              energy: item.energy || null,
-              time_estimate: item.time_estimate || null,
+              is_focused: !!item.is_focused,
+              energy: ["low", "medium", "high"].includes(item.energy) ? item.energy : null,
+              time_estimate: typeof item.time_estimate === "number" && item.time_estimate > 0 ? item.time_estimate : null,
               due_date: item.due_date || null,
               scheduled_date: item.scheduled_date || null,
               waiting_on: item.waiting_on || null,
               completed_at: item.completed_at || null,
-              sort_order: item.sort_order,
-              sort_order_project: item.sort_order_project,
+              sort_order: item.sort_order ?? idx,
+              sort_order_project: item.sort_order_project ?? 0,
               user_id: userId,
             };
           })
