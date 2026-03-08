@@ -71,7 +71,7 @@ export function UpgradePrompt({ open, onOpenChange, trigger, currentUsage, limit
 
         <div className="rounded-lg border border-border bg-card p-4 space-y-3 mt-2">
           <div className="flex items-center justify-between">
-            <span className="font-semibold text-sm">Things Done Pro</span>
+            <span className="font-semibold text-sm">Things Done. Pro</span>
             <span className="text-sm text-muted-foreground">$4/month</span>
           </div>
           <ul className="space-y-1.5">

@@ -20,7 +20,7 @@ export function AppPreviewSection() {
               <span className="h-3 w-3 rounded-full bg-focus-gold/30" />
               <span className="h-3 w-3 rounded-full bg-success-green/30" />
             </div>
-            <span className="ml-2 text-xs text-muted-foreground">Things Done</span>
+            <span className="ml-2 text-xs text-muted-foreground">Things Done.</span>
           </div>
           {/* Mock content */}
           <div className="grid gap-0 divide-y divide-border">
