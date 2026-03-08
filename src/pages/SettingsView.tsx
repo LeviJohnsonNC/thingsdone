@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, Plus, Trash2, RefreshCw, Calendar, Check, Loader2 } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, RefreshCw, Calendar, Check, Loader2, AlertTriangle } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ViewHeader } from "@/components/ViewHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { useAreas, useCreateArea, useDeleteArea } from "@/hooks/useAreas";
-import { useTags, useCreateTag } from "@/hooks/useTags";
+import { useTags, useCreateTag, useDeleteTag, usePurgeAllData } from "@/hooks/useTags";
 import { useAuth } from "@/hooks/useAuth";
 import { useNeedsReview } from "@/hooks/useUserSettings";
 import { useGoogleCalendarStatus, useConnectGoogleCalendar, useDisconnectGoogleCalendar } from "@/hooks/useGoogleCalendar";
@@ -24,6 +25,8 @@ export default function SettingsView() {
   const createArea = useCreateArea();
   const deleteArea = useDeleteArea();
   const createTag = useCreateTag();
+  const deleteTag = useDeleteTag();
+  const purgeAllData = usePurgeAllData();
   const needsReview = useNeedsReview();
   const { setWeeklyReviewOpen } = useAppStore();
   const { data: calendarToken, refetch: refetchCalendar } = useGoogleCalendarStatus();
@@ -168,8 +171,11 @@ export default function SettingsView() {
           <h2 className="text-sm font-medium text-foreground mb-3">Context Tags</h2>
           <div className="space-y-2 mb-3">
             {tags?.map((tag) => (
-              <div key={tag.id} className="flex items-center bg-card border border-border rounded-md px-3 py-2">
+              <div key={tag.id} className="flex items-center justify-between bg-card border border-border rounded-md px-3 py-2">
                 <span className="text-sm">{tag.name}</span>
+                <button onClick={() => deleteTag.mutate(tag.id)} className="p-1 text-muted-foreground hover:text-destructive">
+                  <Trash2 className="h-4 w-4" />
+                </button>
               </div>
             ))}
           </div>
@@ -182,6 +188,44 @@ export default function SettingsView() {
         </section>
 
         <Button variant="outline" onClick={signOut} className="w-full">Sign Out</Button>
+
+        {/* Purge All Data */}
+        <section>
+          <h2 className="text-sm font-medium text-destructive mb-3">Danger Zone</h2>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="destructive" className="w-full gap-2">
+                <AlertTriangle className="h-4 w-4" />
+                Purge All Data
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This will permanently delete all your tasks, projects, areas, tags, and settings. This action cannot be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={() => {
+                    purgeAllData.mutate(undefined, {
+                      onSuccess: () => {
+                        toast.success("All data has been purged");
+                        navigate("/inbox");
+                      },
+                      onError: () => toast.error("Failed to purge data"),
+                    });
+                  }}
+                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                >
+                  {purgeAllData.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : "Yes, delete everything"}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </section>
       </div>
     </div>
   );
