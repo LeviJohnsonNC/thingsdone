@@ -39,6 +39,7 @@ const NAV_GROUPS = [
     label: "Organize",
     items: [
       { path: "/projects", icon: FolderOpen, label: "Projects" },
+      { path: "/review", icon: ClipboardList, label: "Weekly Review", reviewBadge: true },
     ],
   },
   {
