@@ -55,14 +55,14 @@ export default function SettingsView() {
 
     const calendarParam = searchParams.get("calendar");
     if (calendarParam === "connected") {
+      toast.success("Google Calendar connected!");
+      refetchCalendar();
+      setSearchParams({}, { replace: true });
+    } else if (calendarParam === "error") {
       toast.error("Failed to connect Google Calendar");
       setSearchParams({}, { replace: true });
     }
-  }, [searchParams, refetchCalendar, setSearchParams]);
-
-  const handleAddArea = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newArea.trim()) return;
+  }, [searchParams, refetchCalendar, setSearchParams, queryClient]);
     await createArea.mutateAsync(newArea.trim());
     setNewArea("");
   };
