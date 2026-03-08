@@ -32,12 +32,12 @@ export function MobileBottomNav() {
                 key={tab.path}
                 onClick={() => navigate(tab.path)}
                 className={cn(
-                  "flex flex-1 flex-col items-center gap-0.5 py-2 text-[11px] transition-colors min-h-[52px]",
+                  "flex flex-1 flex-col items-center gap-0.5 py-2 text-[11px] transition-colors min-h-[56px]",
                   isActive ? "text-primary" : "text-muted-foreground"
                 )}
               >
                 <div className="relative">
-                  <tab.icon className="h-5 w-5" />
+                  <tab.icon className="h-6 w-6" />
                   {tab.badge && inboxCount > 0 && (
                     <span className="absolute -right-2.5 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary text-[10px] font-medium text-primary-foreground px-1">
                       {inboxCount}
@@ -51,11 +51,11 @@ export function MobileBottomNav() {
           <button
             onClick={() => setMoreMenuOpen(true)}
             className={cn(
-              "flex flex-1 flex-col items-center gap-0.5 py-2 text-[11px] min-h-[52px]",
+              "flex flex-1 flex-col items-center gap-0.5 py-2 text-[11px] min-h-[56px]",
               moreMenuOpen ? "text-primary" : "text-muted-foreground"
             )}
           >
-            <MoreHorizontal className="h-5 w-5" />
+            <MoreHorizontal className="h-6 w-6" />
             <span>More</span>
           </button>
         </div>

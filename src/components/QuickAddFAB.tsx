@@ -26,7 +26,8 @@ export function QuickAddFAB() {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="fixed bottom-20 right-4 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg active:scale-95 transition-transform"
+        className="fixed z-50 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg active:scale-95 transition-transform"
+        style={{ bottom: "calc(4.5rem + env(safe-area-inset-bottom, 0px))", right: "1rem" }}
         aria-label="Quick add"
       >
         <Plus className="h-6 w-6" />
