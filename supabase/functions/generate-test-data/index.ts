@@ -353,7 +353,13 @@ Generate data for a productivity-focused professional who works in tech, exercis
       const preview = getMessageContentAsString(aiResult?.choices?.[0]?.message).substring(0, 200);
       throw new Error("AI did not return structured data after retry. Content preview: " + preview);
     }
-    console.log("Generated data counts:", {
+    // Sanitize: ensure required fields exist, filter out invalid records
+    testData.areas = (testData.areas || []).filter((a: any) => a && (a.name || a.title));
+    testData.tags = (testData.tags || []).filter((t: any) => t && (t.name || t.title));
+    testData.projects = (testData.projects || []).filter((p: any) => p && (p.title || p.name));
+    testData.items = (testData.items || []).filter((i: any) => i && (i.title || i.name));
+
+    console.log("Sanitized data counts:", {
       areas: testData.areas.length,
       tags: testData.tags.length,
       projects: testData.projects.length,
@@ -373,16 +379,16 @@ Generate data for a productivity-focused professional who works in tech, exercis
       const { data: insertedAreas, error: aErr } = await adminClient
         .from("areas")
         .insert(
-          testData.areas.map((a: any) => ({
-            name: a.name,
-            sort_order: a.sort_order,
+          testData.areas.map((a: any, i: number) => ({
+            name: a.name || a.title || `Area ${i + 1}`,
+            sort_order: a.sort_order ?? i,
             user_id: userId,
           }))
         )
         .select("id");
       if (aErr) throw new Error(`Areas insert failed: ${aErr.message}`);
       testData.areas.forEach((a: any, i: number) => {
-        areaMap.set(a.temp_id, insertedAreas![i].id);
+        areaMap.set(a.temp_id || a.id || `area_${i}`, insertedAreas![i].id);
       });
     }
 
