@@ -14,7 +14,7 @@ import { useItems, useUpdateItem, useCompleteItem, useDeleteItem } from "@/hooks
 import { useProjects } from "@/hooks/useProjects";
 import { useAreas } from "@/hooks/useAreas";
 import { useTags, useItemTags, useSetItemTags } from "@/hooks/useTags";
-import { useContacts } from "@/hooks/useContacts";
+import { useContacts, useCreateContact } from "@/hooks/useContacts";
 import { useGoogleCalendarStatus, usePushItemToCalendar, useDeleteCalendarEvent } from "@/hooks/useGoogleCalendar";
 import { useAppStore } from "@/stores/appStore";
 import { cn } from "@/lib/utils";
@@ -31,6 +31,7 @@ import energyIcon from "@/assets/icons/energy.svg";
 import dueIcon from "@/assets/icons/due.svg";
 import projectIcon from "@/assets/icons/project.svg";
 import areaIcon from "@/assets/icons/area.svg";
+import waitingOnIcon from "@/assets/icons/waiting-on.svg";
 
 // State config with accent colors (HSL values matching design system)
 const STATE_CONFIG: Record<string, { label: string; icon: string; activeClass: string; borderClass: string; bgClass: string }> = {
@@ -425,7 +426,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
               </PropertyRow>
             </div>
 
-            {/* Project + Area - side by side */}
+            {/* Project + Area + Waiting On */}
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <PropertyRow icon={projectIcon} label="PROJECT" className="flex-1">
                 <Select
@@ -460,6 +461,23 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
                   </SelectContent>
                 </Select>
               </PropertyRow>
+
+              <WaitingOnField
+                value={waitingOn}
+                contacts={contacts ?? []}
+                onChange={(val) => {
+                  setWaitingOn(val);
+                  saveField("waiting_on", val || null);
+                  // Auto-switch to waiting state when a contact is selected
+                  if (val && currentState !== "waiting") {
+                    handleStateChange("waiting");
+                  }
+                  // Auto-switch back to inbox if clearing the contact while in waiting state
+                  if (!val && currentState === "waiting") {
+                    handleStateChange("inbox");
+                  }
+                }}
+              />
             </div>
 
             {/* Google Calendar toggle */}
@@ -479,40 +497,6 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
                 </div>
               </PropertyRow>
             )}
-
-            {/* Waiting On - conditional */}
-            <AnimatePresence>
-              {currentState === "waiting" && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                  className="overflow-hidden"
-                >
-                  <PropertyRow icon="👤" label="WAITING ON">
-                    <Select
-                      value={waitingOn || "none"}
-                      onValueChange={(v) => {
-                        const val = v === "none" ? "" : v;
-                        setWaitingOn(val);
-                        saveField("waiting_on", val || null);
-                      }}
-                    >
-                      <SelectTrigger className="h-8 text-sm border-0 shadow-none px-2 bg-transparent">
-                        <SelectValue placeholder="Select contact…" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="none">No one</SelectItem>
-                        {contacts?.map((c) => (
-                          <SelectItem key={c.id} value={c.name}>{c.name}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </PropertyRow>
-                </motion.div>
-              )}
-            </AnimatePresence>
           </div>
 
           {/* Footer */}
@@ -538,6 +522,65 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
         </div>
       </div>
     </motion.div>
+  );
+}
+
+// Helper: Waiting On field with inline contact creation
+function WaitingOnField({ value, contacts, onChange }: { value: string; contacts: { id: string; name: string }[]; onChange: (val: string) => void }) {
+  const [newName, setNewName] = useState("");
+  const [showNew, setShowNew] = useState(false);
+  const createContact = useCreateContact();
+
+  const handleCreate = async () => {
+    const trimmed = newName.trim();
+    if (!trimmed) return;
+    await createContact.mutateAsync(trimmed);
+    onChange(trimmed);
+    setNewName("");
+    setShowNew(false);
+  };
+
+  return (
+    <PropertyRow icon={waitingOnIcon} label="WAITING ON" className="flex-1">
+      <Select
+        value={value || "none"}
+        onValueChange={(v) => {
+          if (v === "__new__") {
+            setShowNew(true);
+            return;
+          }
+          onChange(v === "none" ? "" : v);
+        }}
+      >
+        <SelectTrigger className="h-8 text-sm border-0 shadow-none px-2 bg-transparent">
+          <SelectValue placeholder="No one" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="none">No one</SelectItem>
+          {contacts.map((c) => (
+            <SelectItem key={c.id} value={c.name}>{c.name}</SelectItem>
+          ))}
+          <SelectItem value="__new__" className="text-primary">
+            <span className="flex items-center gap-1"><Plus className="h-3 w-3" /> Add contact…</span>
+          </SelectItem>
+        </SelectContent>
+      </Select>
+      {showNew && (
+        <div className="flex items-center gap-1 mt-1">
+          <Input
+            value={newName}
+            onChange={(e) => setNewName(e.target.value)}
+            placeholder="Name…"
+            className="h-7 text-xs flex-1"
+            autoFocus
+            onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); handleCreate(); } if (e.key === "Escape") setShowNew(false); }}
+          />
+          <Button size="sm" variant="ghost" className="h-7 px-2" onClick={handleCreate} disabled={!newName.trim() || createContact.isPending}>
+            <Check className="h-3 w-3" />
+          </Button>
+        </div>
+      )}
+    </PropertyRow>
   );
 }
 
