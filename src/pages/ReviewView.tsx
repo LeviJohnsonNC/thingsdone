@@ -151,7 +151,8 @@ export default function ReviewView() {
           [review.currentStep]: (prev[review.currentStep] ?? []).filter((s) => s !== suggestion),
         }));
         toast.success("Action applied");
-      } catch {
+      } catch (err) {
+        console.error("Review action failed:", err);
         toast.error("Failed to apply action");
       }
     },
