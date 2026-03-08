@@ -21,6 +21,7 @@ import ProjectsView from "@/pages/ProjectsView";
 import ProjectDetailView from "@/pages/ProjectDetailView";
 import LogbookView from "@/pages/LogbookView";
 import SettingsView from "@/pages/SettingsView";
+import HelpView from "@/pages/HelpView";
 import NotFound from "@/pages/NotFound";
 
 const HomePage = lazy(() => import("@/pages/HomePage"));
@@ -56,6 +57,7 @@ function ProtectedRoutes() {
         <Route path="/projects" element={<ProjectsView />} />
         <Route path="/projects/:id" element={<ProjectDetailView />} />
         <Route path="/logbook" element={<LogbookView />} />
+        <Route path="/help" element={<HelpView />} />
         <Route path="/settings" element={<SettingsView />} />
         <Route path="/review" element={<ReviewView />} />
         <Route path="/review/history" element={<ReviewHistoryView />} />
