@@ -479,6 +479,24 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
                 }}
               />
             </div>
+
+            {/* Google Calendar toggle */}
+            {isCalendarConnected && hasDate && (
+              <PropertyRow icon={scheduledIcon} label="CALENDAR">
+                <div className="flex items-center gap-2 px-2">
+                  <Switch
+                    id={`gcal-${item.id}`}
+                    checked={addToCalendar}
+                    onCheckedChange={handleCalendarToggle}
+                    disabled={pushToCalendar.isPending}
+                    className="scale-90"
+                  />
+                  <Label htmlFor={`gcal-${item.id}`} className="text-sm text-muted-foreground cursor-pointer">
+                    Google Calendar
+                  </Label>
+                </div>
+              </PropertyRow>
+            )}
           </div>
 
           {/* Footer */}
