@@ -442,7 +442,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
                 </Select>
               </PropertyRow>
 
-              <PropertyRow icon="🏷" label="AREA" className="flex-1">
+              <PropertyRow icon={areaIcon} label="AREA" className="flex-1">
                 <Select
                   value={item.area_id ?? "none"}
                   onValueChange={(v) => saveField("area_id", v === "none" ? null : v)}
