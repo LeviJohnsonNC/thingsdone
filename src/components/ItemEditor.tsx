@@ -426,7 +426,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
               </PropertyRow>
             </div>
 
-            {/* Project + Area - side by side */}
+            {/* Project + Area + Waiting On */}
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <PropertyRow icon={projectIcon} label="PROJECT" className="flex-1">
                 <Select
@@ -461,59 +461,24 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
                   </SelectContent>
                 </Select>
               </PropertyRow>
+
+              <WaitingOnField
+                value={waitingOn}
+                contacts={contacts ?? []}
+                onChange={(val) => {
+                  setWaitingOn(val);
+                  saveField("waiting_on", val || null);
+                  // Auto-switch to waiting state when a contact is selected
+                  if (val && currentState !== "waiting") {
+                    handleStateChange("waiting");
+                  }
+                  // Auto-switch back to inbox if clearing the contact while in waiting state
+                  if (!val && currentState === "waiting") {
+                    handleStateChange("inbox");
+                  }
+                }}
+              />
             </div>
-
-            {/* Google Calendar toggle */}
-            {isCalendarConnected && hasDate && (
-              <PropertyRow icon={scheduledIcon} label="CALENDAR">
-                <div className="flex items-center gap-2 px-2">
-                  <Switch
-                    id={`gcal-${item.id}`}
-                    checked={addToCalendar}
-                    onCheckedChange={handleCalendarToggle}
-                    disabled={pushToCalendar.isPending}
-                    className="scale-90"
-                  />
-                  <Label htmlFor={`gcal-${item.id}`} className="text-sm text-muted-foreground cursor-pointer">
-                    Google Calendar
-                  </Label>
-                </div>
-              </PropertyRow>
-            )}
-
-            {/* Waiting On - conditional */}
-            <AnimatePresence>
-              {currentState === "waiting" && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                  className="overflow-hidden"
-                >
-                  <PropertyRow icon="👤" label="WAITING ON">
-                    <Select
-                      value={waitingOn || "none"}
-                      onValueChange={(v) => {
-                        const val = v === "none" ? "" : v;
-                        setWaitingOn(val);
-                        saveField("waiting_on", val || null);
-                      }}
-                    >
-                      <SelectTrigger className="h-8 text-sm border-0 shadow-none px-2 bg-transparent">
-                        <SelectValue placeholder="Select contact…" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="none">No one</SelectItem>
-                        {contacts?.map((c) => (
-                          <SelectItem key={c.id} value={c.name}>{c.name}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </PropertyRow>
-                </motion.div>
-              )}
-            </AnimatePresence>
           </div>
 
           {/* Footer */}
