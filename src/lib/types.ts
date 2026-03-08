@@ -8,7 +8,7 @@ export type ItemTag = Tables<"item_tags">;
 
 export type ItemState = "inbox" | "next" | "scheduled" | "someday" | "waiting" | "completed" | "trash";
 export type ProjectState = "active" | "someday" | "scheduled" | "completed";
-export type ProjectType = "sequential" | "parallel";
+
 export type TimeEstimate = 5 | 15 | 30 | 60 | 120 | 240;
 export type EnergyLevel = "low" | "medium" | "high";
 
