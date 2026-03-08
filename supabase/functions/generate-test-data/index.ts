@@ -9,6 +9,100 @@ const corsHeaders = {
 
 const ADMIN_EMAIL = "levijohnson@gmail.com";
 
+const REQUIRED_KEYS = ["areas", "tags", "projects", "items"] as const;
+
+function stripMarkdownFences(input: string): string {
+  return input
+    .trim()
+    .replace(/^```(?:json)?\s*/i, "")
+    .replace(/\s*```$/, "")
+    .trim();
+}
+
+function parseJsonCandidate(candidate: unknown): any | null {
+  if (!candidate) return null;
+  if (typeof candidate === "object") return candidate;
+  if (typeof candidate !== "string") return null;
+
+  const cleaned = stripMarkdownFences(candidate)
+    .replace(/[\u0000-\u0019]+/g, "")
+    .trim();
+
+  const attempts = [
+    cleaned,
+    cleaned.replace(/,\s*}/g, "}").replace(/,\s*]/g, "]"),
+  ];
+
+  for (const attempt of attempts) {
+    try {
+      return JSON.parse(attempt);
+    } catch {
+      // continue
+    }
+  }
+
+  return null;
+}
+
+function extractJsonStringFromText(content: string): string | null {
+  const trimmed = stripMarkdownFences(content);
+
+  // Prefer fenced JSON blocks if present
+  const fencedMatch = content.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
+  if (fencedMatch?.[1]) return fencedMatch[1];
+
+  // Fallback to widest object/array slice
+  const firstObj = trimmed.indexOf("{");
+  const lastObj = trimmed.lastIndexOf("}");
+  if (firstObj >= 0 && lastObj > firstObj) {
+    return trimmed.slice(firstObj, lastObj + 1);
+  }
+
+  const firstArr = trimmed.indexOf("[");
+  const lastArr = trimmed.lastIndexOf("]");
+  if (firstArr >= 0 && lastArr > firstArr) {
+    return trimmed.slice(firstArr, lastArr + 1);
+  }
+
+  return null;
+}
+
+function getMessageContentAsString(message: any): string {
+  const content = message?.content;
+  if (typeof content === "string") return content;
+  if (Array.isArray(content)) {
+    return content
+      .map((part) => (typeof part === "string" ? part : part?.text || part?.content || ""))
+      .join("\n");
+  }
+  return "";
+}
+
+function hasRequiredDatasetShape(data: any): boolean {
+  return !!data && REQUIRED_KEYS.every((key) => Array.isArray(data[key]));
+}
+
+function extractStructuredDataFromAIResult(result: any): any | null {
+  const message = result?.choices?.[0]?.message;
+
+  const candidates: unknown[] = [
+    message?.tool_calls?.[0]?.function?.arguments,
+    message?.function_call?.arguments,
+  ];
+
+  for (const candidate of candidates) {
+    const parsed = parseJsonCandidate(candidate);
+    if (hasRequiredDatasetShape(parsed)) return parsed;
+  }
+
+  const content = getMessageContentAsString(message);
+  const extractedJson = content ? extractJsonStringFromText(content) : null;
+  const parsedContent = parseJsonCandidate(extractedJson ?? content);
+  if (hasRequiredDatasetShape(parsedContent)) return parsedContent;
+
+  return null;
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
