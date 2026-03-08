@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import {
   DndContext,
   closestCenter,
@@ -7,6 +7,9 @@ import {
   useSensor,
   useSensors,
   DragEndEvent,
+  DragStartEvent,
+  DragOverlay,
+  MeasuringStrategy,
 } from "@dnd-kit/core";
 import {
   SortableContext,
@@ -15,6 +18,7 @@ import {
 } from "@dnd-kit/sortable";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { SortableItemRow } from "./SortableItemRow";
+import { ItemRow } from "./ItemRow";
 import { useReorderItems } from "@/hooks/useReorderItems";
 import type { Item } from "@/lib/types";
 
@@ -25,6 +29,10 @@ interface SortableItemListProps {
   orderField?: "sort_order" | "sort_order_project";
 }
 
+const measuring = {
+  droppable: { strategy: MeasuringStrategy.Always },
+};
+
 export function SortableItemList({
   items,
   showProject,
@@ -32,13 +40,19 @@ export function SortableItemList({
   orderField = "sort_order",
 }: SortableItemListProps) {
   const reorderItems = useReorderItems();
+  const [activeId, setActiveId] = useState<string | null>(null);
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
 
+  const handleDragStart = useCallback((event: DragStartEvent) => {
+    setActiveId(event.active.id as string);
+  }, []);
+
   const handleDragEnd = useCallback(
     (event: DragEndEvent) => {
+      setActiveId(null);
       const { active, over } = event;
       if (!over || active.id === over.id) return;
 
@@ -60,11 +74,21 @@ export function SortableItemList({
     [items, reorderItems, orderField]
   );
 
+  const handleDragCancel = useCallback(() => {
+    setActiveId(null);
+  }, []);
+
+  const activeItem = activeId ? items.find((i) => i.id === activeId) : null;
+
   return (
     <DndContext
       sensors={sensors}
       collisionDetection={closestCenter}
+      onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
+      onDragCancel={handleDragCancel}
+      modifiers={[restrictToVerticalAxis]}
+      measuring={measuring}
     >
       <SortableContext
         items={items.map((i) => i.id)}
@@ -79,6 +103,13 @@ export function SortableItemList({
           />
         ))}
       </SortableContext>
+      <DragOverlay dropAnimation={null}>
+        {activeItem ? (
+          <div className="shadow-lg rounded-lg bg-background opacity-90">
+            <ItemRow item={activeItem} showProject={showProject} />
+          </div>
+        ) : null}
+      </DragOverlay>
     </DndContext>
   );
 }
