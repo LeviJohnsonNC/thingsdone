@@ -59,14 +59,9 @@ export default function Auth() {
             ← Home
           </Link>
 
-          {/* Brand wordmark - small, secondary */}
-          <p className="mb-2 text-sm font-medium text-muted-foreground">
-            Things Done.
-          </p>
-
-          {/* Primary heading - functional */}
+          {/* Brand heading - primary */}
           <h1 className="text-2xl font-semibold tracking-tight text-foreground">
-            {isSignUp ? "Create your account" : "Sign in"}
+            Things Done.
           </h1>
 
           {/* Form with proper labels */}
