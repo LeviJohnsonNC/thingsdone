@@ -1,6 +1,5 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { GripVertical } from "lucide-react";
 import { ItemRow } from "./ItemRow";
 import type { Item } from "@/lib/types";
 
@@ -15,6 +14,7 @@ export function SortableItemRow({ item, showProject, dimmed }: SortableItemRowPr
     attributes,
     listeners,
     setNodeRef,
+    setActivatorNodeRef,
     transform,
     transition,
     isDragging,
@@ -34,8 +34,9 @@ export function SortableItemRow({ item, showProject, dimmed }: SortableItemRowPr
         item={item}
         showProject={showProject}
         dimmed={dimmed}
-        dragHandleProps={{ ...attributes, ...listeners }}
+        dragHandleProps={{ ...attributes, ...listeners, ref: setActivatorNodeRef }}
       />
     </div>
   );
 }
+
