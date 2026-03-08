@@ -211,7 +211,7 @@ export default function ReviewView() {
               observations={currentObservations}
               onAcceptSuggestion={handleAcceptSuggestion}
               onDismissSuggestion={handleDismissSuggestion}
-              onRequestAI={() => requestAI(1)}
+              onRequestAI={(brainDump) => requestAI(1, brainDump)}
               aiLoading={ai.loading}
             />
           )}
