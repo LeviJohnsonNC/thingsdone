@@ -131,10 +131,17 @@ export default function ReviewView() {
             break;
           case "update":
             if (suggestion.item_id && suggestion.suggested_fields) {
-              await updateItem.mutateAsync({
-                id: suggestion.item_id,
-                ...suggestion.suggested_fields,
-              } as any);
+              // Only pass known item fields to avoid DB errors
+              const allowedFields = ["energy", "time_estimate", "waiting_on", "project_id", "due_date", "scheduled_date", "notes", "is_focused", "area_id"];
+              const sanitized: Record<string, unknown> = { id: suggestion.item_id };
+              for (const [key, value] of Object.entries(suggestion.suggested_fields)) {
+                if (allowedFields.includes(key) && value != null) {
+                  sanitized[key] = value;
+                }
+              }
+              if (Object.keys(sanitized).length > 1) {
+                await updateItem.mutateAsync(sanitized as any);
+              }
             }
             break;
         }
