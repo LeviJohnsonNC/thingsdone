@@ -296,52 +296,53 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
 
           {/* Properties Grid */}
           <div className="p-4 space-y-3">
-            {/* Time Estimate - segmented */}
-            <PropertyRow icon="⏱" label="TIME EST.">
-              <div className="flex bg-muted rounded-lg p-0.5 gap-0.5">
-                <SegmentButton
-                  active={!item.time_estimate}
-                  onClick={() => saveField("time_estimate", null)}
-                >
-                  —
-                </SegmentButton>
-                {TIME_ESTIMATE_OPTIONS.map((opt) => (
+            {/* Time Estimate + Energy - side by side */}
+            <div className="flex gap-4">
+              <PropertyRow icon="⏱" label="TIME EST." className="flex-1">
+                <div className="flex bg-muted rounded-lg p-0.5 gap-0.5">
                   <SegmentButton
-                    key={opt.value}
-                    active={item.time_estimate === opt.value}
-                    onClick={() => saveField("time_estimate", opt.value)}
+                    active={!item.time_estimate}
+                    onClick={() => saveField("time_estimate", null)}
                   >
-                    {opt.label}
+                    —
                   </SegmentButton>
-                ))}
-              </div>
-            </PropertyRow>
-
-            {/* Energy - segmented with colored dots */}
-            <PropertyRow icon="⚡" label="ENERGY">
-              <div className="flex bg-muted rounded-lg p-0.5 gap-0.5">
-                <SegmentButton
-                  active={!energy}
-                  onClick={() => saveField("energy", null)}
-                >
-                  —
-                </SegmentButton>
-                {ENERGY_OPTIONS.map((opt) => (
-                  <SegmentButton
-                    key={opt.value}
-                    active={energy === opt.value}
-                    onClick={() => saveField("energy", opt.value)}
-                  >
-                    <span className="flex items-center gap-1">
-                      {energy === opt.value && (
-                        <span className={cn("h-1.5 w-1.5 rounded-full", opt.dot)} />
-                      )}
+                  {TIME_ESTIMATE_OPTIONS.map((opt) => (
+                    <SegmentButton
+                      key={opt.value}
+                      active={item.time_estimate === opt.value}
+                      onClick={() => saveField("time_estimate", opt.value)}
+                    >
                       {opt.label}
-                    </span>
+                    </SegmentButton>
+                  ))}
+                </div>
+              </PropertyRow>
+
+              <PropertyRow icon="⚡" label="ENERGY" className="flex-1">
+                <div className="flex bg-muted rounded-lg p-0.5 gap-0.5">
+                  <SegmentButton
+                    active={!energy}
+                    onClick={() => saveField("energy", null)}
+                  >
+                    —
                   </SegmentButton>
-                ))}
-              </div>
-            </PropertyRow>
+                  {ENERGY_OPTIONS.map((opt) => (
+                    <SegmentButton
+                      key={opt.value}
+                      active={energy === opt.value}
+                      onClick={() => saveField("energy", opt.value)}
+                    >
+                      <span className="flex items-center gap-1">
+                        {energy === opt.value && (
+                          <span className={cn("h-1.5 w-1.5 rounded-full", opt.dot)} />
+                        )}
+                        {opt.label}
+                      </span>
+                    </SegmentButton>
+                  ))}
+                </div>
+              </PropertyRow>
+            </div>
 
             {/* Due + Scheduled - side by side */}
             <div className="flex gap-4">
