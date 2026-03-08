@@ -60,6 +60,9 @@ export default {
         "focus-gold": "hsl(var(--focus-gold))",
         "success-green": "hsl(var(--success-green))",
         "overdue-red": "hsl(var(--overdue-red))",
+        "hero-bg": "hsl(var(--hero-bg))",
+        "pricing-highlight": "hsl(var(--pricing-highlight))",
+        "feature-card-bg": "hsl(var(--feature-card-bg))",
       },
       borderRadius: {
         lg: "var(--radius)",
