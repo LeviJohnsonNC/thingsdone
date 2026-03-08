@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
 import { useItems } from "@/hooks/useItems";
 import { useAreas } from "@/hooks/useAreas";
+import { useUserSettings } from "@/hooks/useUserSettings";
 import { useAppStore } from "@/stores/appStore";
 import {
   Select,
