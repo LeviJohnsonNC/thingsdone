@@ -43,6 +43,9 @@ export default function SettingsView() {
   const [newContact, setNewContact] = useState("");
   const [showUpgrade, setShowUpgrade] = useState(false);
   const { canCreateArea, areaCount, areaLimit } = useUsageLimits();
+  const { data: settings } = useUserSettings();
+  const saveGlobalTheme = useSaveGlobalTheme();
+  const saveAreaTheme = useSaveAreaTheme();
 
   // Handle callback from Google OAuth
   useEffect(() => {
