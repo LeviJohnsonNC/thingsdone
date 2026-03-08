@@ -263,6 +263,7 @@ export default function ReviewView() {
             size="sm"
             onClick={review.prevStep}
             disabled={review.currentStep === 1}
+            className={review.currentStep === 1 ? "invisible" : ""}
           >
             <ArrowLeft className="h-4 w-4 mr-1" />
             Back
