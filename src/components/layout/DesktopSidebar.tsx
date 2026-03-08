@@ -1,8 +1,9 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import {
   Inbox, Star, ArrowRight, Calendar, Hourglass, Cloud,
-  FolderOpen, BookOpen, Settings, LogOut
+  FolderOpen, BookOpen, Settings, LogOut, ClipboardList
 } from "lucide-react";
+import { differenceInDays } from "date-fns";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
 import { useItems } from "@/hooks/useItems";
