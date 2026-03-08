@@ -209,12 +209,42 @@ Generate data for a productivity-focused professional who works in tech, exercis
     }
 
     const aiResult = await aiResponse.json();
+    console.log("AI response structure:", JSON.stringify({
+      hasChoices: !!aiResult.choices,
+      choiceCount: aiResult.choices?.length,
+      finishReason: aiResult.choices?.[0]?.finish_reason,
+      hasToolCalls: !!aiResult.choices?.[0]?.message?.tool_calls,
+      toolCallCount: aiResult.choices?.[0]?.message?.tool_calls?.length,
+      hasContent: !!aiResult.choices?.[0]?.message?.content,
+    }));
+
+    let testData: any;
     const toolCall = aiResult.choices?.[0]?.message?.tool_calls?.[0];
-    if (!toolCall) {
-      throw new Error("AI did not return structured data");
+    if (toolCall?.function?.arguments) {
+      testData = JSON.parse(toolCall.function.arguments);
+    } else {
+      // Fallback: try to extract JSON from content
+      const content = aiResult.choices?.[0]?.message?.content || "";
+      console.log("No tool call found, trying content extraction. Content length:", content.length);
+      const jsonMatch = content.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        try {
+          testData = JSON.parse(jsonMatch[0]);
+        } catch (parseErr) {
+          // Try cleaning common issues
+          let cleaned = jsonMatch[0]
+            .replace(/,\s*}/g, "}")
+            .replace(/,\s*]/g, "]");
+          testData = JSON.parse(cleaned);
+        }
+      } else {
+        throw new Error("AI did not return structured data. Content preview: " + content.substring(0, 200));
+      }
     }
 
-    const testData = JSON.parse(toolCall.function.arguments);
+    if (!testData.areas || !testData.tags || !testData.projects || !testData.items) {
+      throw new Error("AI returned incomplete data structure. Keys: " + Object.keys(testData).join(", "));
+    }
     console.log("Generated data counts:", {
       areas: testData.areas.length,
       tags: testData.tags.length,
