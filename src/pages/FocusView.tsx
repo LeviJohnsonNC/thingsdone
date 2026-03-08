@@ -5,15 +5,17 @@ import { ViewHeader } from "@/components/ViewHeader";
 import { DoneSection } from "@/components/DoneSection";
 import { ItemFilterBar, useItemFilters, applyItemFilters } from "@/components/ItemFilterBar";
 import { useFocusedItems, useCompletedItems } from "@/hooks/useItems";
+import { useAllItemTags } from "@/hooks/useTags";
 import { useAppStore } from "@/stores/appStore";
 
 export default function FocusView() {
   const { selectedAreaId } = useAppStore();
   const { data: items, isLoading } = useFocusedItems(selectedAreaId);
   const { data: completedItems } = useCompletedItems(selectedAreaId);
+  const { data: itemTagMap } = useAllItemTags();
   const { filters, setFilters } = useItemFilters();
 
-  const filteredItems = applyItemFilters(items, filters);
+  const filteredItems = applyItemFilters(items, filters, itemTagMap);
   const focusedCompleted = completedItems?.filter(i => i.is_focused) ?? [];
 
   return (

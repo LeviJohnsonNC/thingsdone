@@ -4,6 +4,7 @@ import { EmptyState } from "@/components/EmptyState";
 import { ViewHeader } from "@/components/ViewHeader";
 import { ItemFilterBar, useItemFilters, applyItemFilters } from "@/components/ItemFilterBar";
 import { useItems } from "@/hooks/useItems";
+import { useAllItemTags } from "@/hooks/useTags";
 import { useAppStore } from "@/stores/appStore";
 import { useGoogleCalendarEvents, GoogleCalendarEvent } from "@/hooks/useGoogleCalendar";
 import { Badge } from "@/components/ui/badge";
@@ -97,9 +98,10 @@ export default function ScheduledView() {
   const { selectedAreaId } = useAppStore();
   const { data: items, isLoading } = useItems("scheduled", selectedAreaId);
   const { data: gcalEvents = [] } = useGoogleCalendarEvents();
+  const { data: itemTagMap } = useAllItemTags();
   const { filters, setFilters } = useItemFilters();
 
-  const filteredItems = applyItemFilters(items, filters);
+  const filteredItems = applyItemFilters(items, filters, itemTagMap);
   const merged = getMergedItems(filteredItems, gcalEvents);
   const groups = groupByDate(merged);
   const totalCount = filteredItems.length + gcalEvents.length;

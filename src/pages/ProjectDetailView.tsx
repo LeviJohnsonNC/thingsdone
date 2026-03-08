@@ -7,6 +7,7 @@ import { useAreas } from "@/hooks/useAreas";
 import { SortableItemList } from "@/components/SortableItemList";
 import { QuickAddBar } from "@/components/QuickAddBar";
 import { ItemFilterBar, useItemFilters, applyItemFilters } from "@/components/ItemFilterBar";
+import { useAllItemTags } from "@/hooks/useTags";
 import { Progress } from "@/components/ui/progress";
 import { DoneSection } from "@/components/DoneSection";
 import { cn } from "@/lib/utils";
@@ -19,6 +20,7 @@ export default function ProjectDetailView() {
   const { data: items } = useProjectItems(id!);
   const { data: areas } = useAreas();
   const updateProject = useUpdateProject();
+  const { data: itemTagMap } = useAllItemTags();
   const { filters, setFilters } = useItemFilters();
 
   const area = areas?.find((a) => a.id === project?.area_id);
@@ -27,7 +29,7 @@ export default function ProjectDetailView() {
   const progress = total > 0 ? (done / total) * 100 : 0;
 
   const activeItems = items?.filter((i) => i.state !== "completed") ?? [];
-  const filteredActiveItems = applyItemFilters(activeItems as any, filters);
+  const filteredActiveItems = applyItemFilters(activeItems as any, filters, itemTagMap);
   const completedItems = items?.filter((i) => i.state === "completed") ?? [];
 
   const dimmedIds = useMemo(() => {
