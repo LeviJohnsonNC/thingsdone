@@ -25,6 +25,11 @@ import nextIcon from "@/assets/icons/next.svg";
 import waitingIcon from "@/assets/icons/waiting.svg";
 import scheduledIcon from "@/assets/icons/scheduled.svg";
 import somedayIcon from "@/assets/icons/someday.svg";
+import timeEstIcon from "@/assets/icons/time-est.svg";
+import energyIcon from "@/assets/icons/energy.svg";
+import dueIcon from "@/assets/icons/due.svg";
+import projectIcon from "@/assets/icons/project.svg";
+import areaIcon from "@/assets/icons/area.svg";
 
 // State config with accent colors (HSL values matching design system)
 const STATE_CONFIG: Record<string, { label: string; icon: string; activeClass: string; borderClass: string; bgClass: string }> = {
@@ -303,7 +308,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
           <div className="p-4 space-y-3">
             {/* Time Estimate + Energy - side by side */}
             <div className="flex gap-4">
-              <PropertyRow icon="⏱" label="TIME EST." className="flex-1">
+              <PropertyRow icon={timeEstIcon} label="TIME EST." className="flex-1">
                 <div className="flex bg-muted rounded-lg p-0.5 gap-0.5">
                   <SegmentButton
                     active={!item.time_estimate}
@@ -323,7 +328,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
                 </div>
               </PropertyRow>
 
-              <PropertyRow icon="⚡" label="ENERGY" className="flex-1">
+              <PropertyRow icon={energyIcon} label="ENERGY" className="flex-1">
                 <div className="flex bg-muted rounded-lg p-0.5 gap-0.5">
                   <SegmentButton
                     active={!energy}
@@ -351,7 +356,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
 
             {/* Due + Scheduled - side by side */}
             <div className="flex gap-4">
-              <PropertyRow icon="🏁" label="DUE" className="flex-1">
+              <PropertyRow icon={dueIcon} label="DUE" className="flex-1">
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
@@ -384,7 +389,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
                 </Popover>
               </PropertyRow>
 
-              <PropertyRow icon="📅" label="SCHEDULED" className="flex-1">
+              <PropertyRow icon={scheduledIcon} label="SCHEDULED" className="flex-1">
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
@@ -420,7 +425,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
 
             {/* Project + Area - side by side */}
             <div className="flex gap-4">
-              <PropertyRow icon="📂" label="PROJECT" className="flex-1">
+              <PropertyRow icon={projectIcon} label="PROJECT" className="flex-1">
                 <Select
                   value={item.project_id ?? "none"}
                   onValueChange={(v) => saveField("project_id", v === "none" ? null : v)}
@@ -437,7 +442,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
                 </Select>
               </PropertyRow>
 
-              <PropertyRow icon="🏷" label="AREA" className="flex-1">
+              <PropertyRow icon={areaIcon} label="AREA" className="flex-1">
                 <Select
                   value={item.area_id ?? "none"}
                   onValueChange={(v) => saveField("area_id", v === "none" ? null : v)}
@@ -457,7 +462,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
 
             {/* Google Calendar toggle */}
             {isCalendarConnected && hasDate && (
-              <PropertyRow icon="📆" label="CALENDAR">
+              <PropertyRow icon={scheduledIcon} label="CALENDAR">
                 <div className="flex items-center gap-2 px-2">
                   <Switch
                     id={`gcal-${item.id}`}
@@ -527,7 +532,7 @@ function PropertyRow({ icon, label, children, className }: { icon: string; label
   return (
     <div className={cn("flex items-center gap-3", className)}>
       <div className="w-[100px] shrink-0 flex items-center gap-1.5">
-        <span className="text-sm">{icon}</span>
+        <img src={icon} alt={label} className="h-3.5 w-3.5 opacity-60" />
         <span className="text-[10px] font-medium tracking-wider text-muted-foreground uppercase">{label}</span>
       </div>
       <div className="flex-1 min-w-0">{children}</div>
