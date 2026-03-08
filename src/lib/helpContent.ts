@@ -352,7 +352,7 @@ A project is any outcome that requires more than one action. In Things Done:
 - Give it a clear outcome-oriented title
 - Add items to a project from the item detail view
 
-### Inside a project
+## Inside a project
 
 Each project has its own list of actions. You can:
 - **Reorder items** by dragging them — the order matters because Things Done surfaces only the first incomplete action in your Next view
@@ -360,7 +360,7 @@ Each project has its own list of actions. You can:
 - **Set a project type** — sequential (default) or parallel
 - **Set due dates** and **scheduled dates** at the project level
 
-### Project states
+## Project states
 
 Projects can be:
 - **Active** — In progress, with a next action

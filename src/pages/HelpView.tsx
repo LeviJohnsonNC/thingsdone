@@ -27,41 +27,65 @@ function HelpCard({ topic, onClick }: { topic: HelpTopic; onClick: () => void })
   );
 }
 
-/** Render markdown-lite content: **bold**, ## headings, - lists */
+/** Render markdown-lite content: **bold**, ## / ### headings, - lists, 1. lists */
 function ContentRenderer({ content }: { content: string }) {
   const lines = content.split("\n");
+
+  type ParsedLine =
+    | { type: "heading"; level: 2 | 3; text: string }
+    | { type: "bullet"; text: string }
+    | { type: "ordered"; text: string }
+    | { type: "blank" }
+    | { type: "paragraph"; text: string };
+
+  const parsed: ParsedLine[] = lines.map((line) => {
+    if (line.startsWith("### ")) return { type: "heading", level: 3, text: line.slice(4) };
+    if (line.startsWith("## ")) return { type: "heading", level: 2, text: line.slice(3) };
+    const trimmed = line.trimStart();
+    if (trimmed.startsWith("- ")) return { type: "bullet", text: trimmed.slice(2) };
+    if (/^\d+\.\s/.test(trimmed)) return { type: "ordered", text: trimmed.replace(/^\d+\.\s/, "") };
+    if (line.trim() === "") return { type: "blank" };
+    return { type: "paragraph", text: line };
+  });
+
   const elements: React.ReactNode[] = [];
+  let i = 0;
 
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
+  while (i < parsed.length) {
+    const item = parsed[i];
 
-    if (line.startsWith("## ")) {
-      elements.push(
-        <h3 key={i} className="mt-5 mb-2 text-sm font-semibold text-foreground">
-          {line.slice(3)}
-        </h3>
-      );
-    } else if (line.startsWith("- ")) {
-      elements.push(
-        <li key={i} className="ml-4 text-sm text-foreground/90 leading-relaxed list-disc">
-          <InlineFormat text={line.slice(2)} />
-        </li>
-      );
-    } else if (line.match(/^\d+\.\s/)) {
-      const text = line.replace(/^\d+\.\s/, "");
-      elements.push(
-        <li key={i} className="ml-4 text-sm text-foreground/90 leading-relaxed list-decimal">
-          <InlineFormat text={text} />
-        </li>
-      );
-    } else if (line.trim() === "") {
+    if (item.type === "heading") {
+      const cls = item.level === 2
+        ? "mt-5 mb-2 text-sm font-semibold text-foreground"
+        : "mt-4 mb-1.5 text-sm font-medium text-foreground";
+      elements.push(<h3 key={i} className={cls}><InlineFormat text={item.text} /></h3>);
+      i++;
+    } else if (item.type === "bullet") {
+      const items: React.ReactNode[] = [];
+      while (i < parsed.length && parsed[i].type === "bullet") {
+        const b = parsed[i] as { type: "bullet"; text: string };
+        items.push(<li key={i} className="text-sm text-foreground/90 leading-relaxed"><InlineFormat text={b.text} /></li>);
+        i++;
+      }
+      elements.push(<ul key={`ul-${i}`} className="ml-4 list-disc space-y-0.5">{items}</ul>);
+    } else if (item.type === "ordered") {
+      const items: React.ReactNode[] = [];
+      while (i < parsed.length && parsed[i].type === "ordered") {
+        const o = parsed[i] as { type: "ordered"; text: string };
+        items.push(<li key={i} className="text-sm text-foreground/90 leading-relaxed"><InlineFormat text={o.text} /></li>);
+        i++;
+      }
+      elements.push(<ol key={`ol-${i}`} className="ml-4 list-decimal space-y-0.5">{items}</ol>);
+    } else if (item.type === "blank") {
       elements.push(<div key={i} className="h-2" />);
+      i++;
     } else {
       elements.push(
         <p key={i} className="text-sm text-foreground/90 leading-relaxed">
-          <InlineFormat text={line} />
+          <InlineFormat text={item.text} />
         </p>
       );
+      i++;
     }
   }
 
