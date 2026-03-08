@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Plus } from "lucide-react";
 import { useCreateItem } from "@/hooks/useItems";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useUsageLimits } from "@/hooks/useUsageLimits";
+import { UpgradePrompt } from "@/components/UpgradePrompt";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -9,8 +11,18 @@ import { Button } from "@/components/ui/button";
 export function QuickAddFAB() {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
+  const [showUpgrade, setShowUpgrade] = useState(false);
   const createItem = useCreateItem();
   const isMobile = useIsMobile();
+  const { canCreateItem, activeItemCount, activeItemLimit } = useUsageLimits();
+
+  const handleFabClick = () => {
+    if (!canCreateItem) {
+      setShowUpgrade(true);
+      return;
+    }
+    setOpen(true);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,7 +37,7 @@ export function QuickAddFAB() {
   return (
     <>
       <button
-        onClick={() => setOpen(true)}
+        onClick={handleFabClick}
         className="fixed z-50 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg active:scale-95 transition-transform"
         style={{ bottom: "calc(4.5rem + env(safe-area-inset-bottom, 0px))", right: "1rem" }}
         aria-label="Quick add"
@@ -52,6 +64,14 @@ export function QuickAddFAB() {
           </form>
         </DialogContent>
       </Dialog>
+
+      <UpgradePrompt
+        open={showUpgrade}
+        onOpenChange={setShowUpgrade}
+        trigger="items"
+        currentUsage={activeItemCount}
+        limit={activeItemLimit === Infinity ? 30 : activeItemLimit}
+      />
     </>
   );
 }
