@@ -309,7 +309,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
             {/* Time Estimate + Energy - side by side */}
             <div className="flex gap-4">
               <PropertyRow icon={timeEstIcon} label="TIME EST." className="flex-1">
-                <div className="flex bg-muted rounded-lg p-0.5 gap-0.5">
+                <div className="inline-flex bg-muted rounded-lg p-0.5 gap-0.5">
                   <SegmentButton
                     active={!item.time_estimate}
                     onClick={() => saveField("time_estimate", null)}
@@ -329,7 +329,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
               </PropertyRow>
 
               <PropertyRow icon={energyIcon} label="ENERGY" className="flex-1">
-                <div className="flex bg-muted rounded-lg p-0.5 gap-0.5">
+                <div className="inline-flex bg-muted rounded-lg p-0.5 gap-0.5">
                   <SegmentButton
                     active={!energy}
                     onClick={() => saveField("energy", null)}
