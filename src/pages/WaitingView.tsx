@@ -36,7 +36,7 @@ export default function WaitingView() {
 
   return (
     <div className="flex flex-col h-full">
-      <ViewHeader title="Waiting" icon={<Hourglass className="h-5 w-5" />} count={items?.length} />
+      <ViewHeader title="Waiting" count={items?.length} />
 
       <div className="flex-1 overflow-y-auto">
         {grouped.length === 0 ? (
