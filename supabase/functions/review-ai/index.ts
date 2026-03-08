@@ -134,7 +134,7 @@ serve(async (req) => {
       });
     }
 
-    const { step, items, projects, context } = await req.json();
+    const { step, items, projects, context, brain_dump } = await req.json();
     const stepPrompt = STEP_PROMPTS[step];
     if (!stepPrompt) {
       return new Response(JSON.stringify({ error: "Invalid step" }), {
@@ -152,7 +152,7 @@ serve(async (req) => {
     }
 
     // Build user message with context
-    const userContent = `${stepPrompt}
+    let userContent = `${stepPrompt}
 
 Context:
 ${JSON.stringify(context, null, 2)}
@@ -160,6 +160,11 @@ ${JSON.stringify(context, null, 2)}
 ${step <= 5 ? `Items:\n${JSON.stringify(items?.slice(0, 50), null, 2)}` : ""}
 ${step === 6 ? `Projects:\n${JSON.stringify(projects?.slice(0, 30), null, 2)}` : ""}
 ${step === 7 ? `Review stats:\n${JSON.stringify(context, null, 2)}` : ""}`;
+
+    // Add brain dump text for step 1 if provided
+    if (step === 1 && brain_dump?.trim()) {
+      userContent += `\n\nBrain dump text from user (turn each distinct thought into a "create" suggestion with an appropriate target_state like inbox, next, waiting, scheduled, or someday):\n${brain_dump}`;
+    }
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",

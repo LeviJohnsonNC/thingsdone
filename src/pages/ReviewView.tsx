@@ -69,7 +69,7 @@ export default function ReviewView() {
     : null;
 
   const requestAI = useCallback(
-    async (step: number) => {
+    async (step: number, brainDump?: string) => {
       const items = itemsByStep[step] ?? [];
       const context = {
         total_items_by_state: {
@@ -83,7 +83,7 @@ export default function ReviewView() {
         completed_this_week: 0,
       };
 
-      const result = await ai.getStepSuggestions(step, items as any, projects ?? [], context);
+      const result = await ai.getStepSuggestions(step, items as any, projects ?? [], context, brainDump);
       if (result) {
         setStepSuggestions((prev) => ({ ...prev, [step]: result.suggestions }));
         setStepObservations((prev) => ({ ...prev, [step]: result.observations }));
