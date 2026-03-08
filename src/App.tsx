@@ -21,6 +21,7 @@ import ProjectsView from "@/pages/ProjectsView";
 import ProjectDetailView from "@/pages/ProjectDetailView";
 import LogbookView from "@/pages/LogbookView";
 import SettingsView from "@/pages/SettingsView";
+import HelpView from "@/pages/HelpView";
 import NotFound from "@/pages/NotFound";
 
 const HomePage = lazy(() => import("@/pages/HomePage"));
