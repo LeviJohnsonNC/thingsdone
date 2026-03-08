@@ -3,8 +3,10 @@ import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { ArrowLeft } from "lucide-react";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent } from "@/components/ui/card";
+import { Lock } from "lucide-react";
+import authBg from "@/assets/auth-bg.png";
 
 export default function Auth() {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -34,55 +36,121 @@ export default function Auth() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
-      <div className="w-full max-w-sm space-y-6">
-        <Link
-          to="/"
-          className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to home
-        </Link>
+    <div className="relative flex min-h-screen items-center justify-center p-4">
+      {/* Background image */}
+      <img
+        src={authBg}
+        alt=""
+        className="absolute inset-0 h-full w-full object-cover"
+        aria-hidden="true"
+      />
+      
+      {/* Overlay for better contrast */}
+      <div className="absolute inset-0 bg-background/30 backdrop-blur-[2px]" />
 
-        <Card className="w-full border-border shadow-lg">
-          <CardHeader className="text-center space-y-2">
-            <CardTitle className="text-2xl font-semibold">Things Done.</CardTitle>
-            <CardDescription>
-              {isSignUp ? "Create your account" : "Sign in to your account"}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
+      {/* Auth card */}
+      <Card className="relative z-10 w-full max-w-md border-border/50 bg-card/95 shadow-2xl shadow-black/10 backdrop-blur-md">
+        <CardContent className="p-8">
+          {/* Back to home link - subtle, inside card */}
+          <Link
+            to="/"
+            className="mb-6 inline-flex items-center text-sm text-muted-foreground transition-colors hover:text-foreground"
+          >
+            ← Home
+          </Link>
+
+          {/* Brand wordmark - small, secondary */}
+          <p className="mb-2 text-sm font-medium text-muted-foreground">
+            Things Done.
+          </p>
+
+          {/* Primary heading - functional */}
+          <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+            {isSignUp ? "Create your account" : "Sign in"}
+          </h1>
+          
+          {/* Supporting text */}
+          <p className="mt-1.5 text-sm text-muted-foreground">
+            {isSignUp
+              ? "Start organizing work and life in one place."
+              : "Welcome back to Things Done."}
+          </p>
+
+          {/* Form with proper labels */}
+          <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+            <div className="space-y-2">
+              <Label htmlFor="email" className="text-sm font-medium">
+                Email
+              </Label>
               <Input
+                id="email"
                 type="email"
-                placeholder="Email"
+                placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                className="h-11 bg-background/50 transition-shadow focus-visible:ring-primary/50"
               />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="password" className="text-sm font-medium">
+                Password
+              </Label>
               <Input
+                id="password"
                 type="password"
-                placeholder="Password"
+                placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 minLength={6}
+                className="h-11 bg-background/50 transition-shadow focus-visible:ring-primary/50"
               />
-              {error && <p className="text-sm text-destructive">{error}</p>}
-              {message && <p className="text-sm text-success-green">{message}</p>}
-              <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? "Loading..." : isSignUp ? "Sign Up" : "Sign In"}
-              </Button>
-            </form>
-            <button
-              onClick={() => { setIsSignUp(!isSignUp); setError(""); setMessage(""); }}
-              className="mt-4 w-full text-center text-sm text-muted-foreground hover:text-foreground transition-colors"
+            </div>
+
+            {error && (
+              <p className="text-sm text-destructive">{error}</p>
+            )}
+            {message && (
+              <p className="text-sm text-success-green">{message}</p>
+            )}
+
+            <Button
+              type="submit"
+              className="h-11 w-full text-base font-medium"
+              disabled={loading}
             >
-              {isSignUp ? "Already have an account? Sign in" : "Don't have an account? Sign up"}
+              {loading
+                ? "Loading..."
+                : isSignUp
+                ? "Create Account"
+                : "Sign In"}
+            </Button>
+          </form>
+
+          {/* Alternate auth path */}
+          <p className="mt-6 text-center text-sm text-muted-foreground">
+            {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
+            <button
+              onClick={() => {
+                setIsSignUp(!isSignUp);
+                setError("");
+                setMessage("");
+              }}
+              className="font-medium text-primary underline-offset-4 transition-colors hover:underline"
+            >
+              {isSignUp ? "Sign in" : "Sign up"}
             </button>
-          </CardContent>
-        </Card>
-      </div>
+          </p>
+
+          {/* Trust signal */}
+          <p className="mt-6 flex items-center justify-center gap-1.5 text-xs text-muted-foreground/70">
+            <Lock className="h-3 w-3" />
+            Your data stays private
+          </p>
+        </CardContent>
+      </Card>
     </div>
   );
 }
