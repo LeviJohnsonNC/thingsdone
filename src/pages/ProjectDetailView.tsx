@@ -23,9 +23,7 @@ export default function ProjectDetailView() {
   const createItem = useCreateItem();
   const [addTitle, setAddTitle] = useState("");
 
-  if (!project) return null;
-
-  const area = areas?.find((a) => a.id === project.area_id);
+  const area = areas?.find((a) => a.id === project?.area_id);
   const total = items?.length ?? 0;
   const done = items?.filter((i) => i.state === "completed").length ?? 0;
   const progress = total > 0 ? (done / total) * 100 : 0;
@@ -35,13 +33,15 @@ export default function ProjectDetailView() {
 
   // For sequential projects, dim all items after the first
   const dimmedIds = useMemo(() => {
-    if (project.type !== "sequential") return new Set<string>();
+    if (!project || project.type !== "sequential") return new Set<string>();
     const ids = new Set<string>();
     activeItems.forEach((item, i) => {
       if (i > 0) ids.add(item.id);
     });
     return ids;
-  }, [project.type, activeItems]);
+  }, [project?.type, activeItems]);
+
+  if (!project) return null;
 
   const handleAddAction = async (e: React.FormEvent) => {
     e.preventDefault();
