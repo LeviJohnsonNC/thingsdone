@@ -6,6 +6,8 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/hooks/useAuth";
 import { useScheduledActivation } from "@/hooks/useScheduledActivation";
 import { AppLayout } from "@/components/layout/AppLayout";
+import { MarketingLayout } from "@/components/marketing/MarketingLayout";
+import { lazy, Suspense } from "react";
 import Auth from "@/pages/Auth";
 import InboxView from "@/pages/InboxView";
 import FocusView from "@/pages/FocusView";
@@ -17,6 +19,10 @@ import ProjectDetailView from "@/pages/ProjectDetailView";
 import LogbookView from "@/pages/LogbookView";
 import SettingsView from "@/pages/SettingsView";
 import NotFound from "@/pages/NotFound";
+
+const HomePage = lazy(() => import("@/pages/HomePage"));
+const FeaturesPage = lazy(() => import("@/pages/FeaturesPage"));
+const PricingPage = lazy(() => import("@/pages/PricingPage"));
 
 const queryClient = new QueryClient();
 
@@ -53,22 +59,13 @@ function ProtectedRoutes() {
   );
 }
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/auth" element={<AuthPage />} />
-            <Route path="/*" element={<ProtectedRoutes />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
-    </AuthProvider>
-  </QueryClientProvider>
-);
+/** Redirect authenticated users away from marketing pages */
+function PublicRoute({ children }: { children: React.ReactNode }) {
+  const { user, loading } = useAuth();
+  if (loading) return null;
+  if (user) return <Navigate to="/inbox" replace />;
+  return <>{children}</>;
+}
 
 function AuthPage() {
   const { user, loading } = useAuth();
@@ -76,5 +73,33 @@ function AuthPage() {
   if (user) return <Navigate to="/inbox" replace />;
   return <Auth />;
 }
+
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <AuthProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Suspense fallback={
+            <div className="flex min-h-screen items-center justify-center bg-background">
+              <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+            </div>
+          }>
+            <Routes>
+              {/* Public marketing routes */}
+              <Route path="/" element={<PublicRoute><MarketingLayout><HomePage /></MarketingLayout></PublicRoute>} />
+              <Route path="/features" element={<PublicRoute><MarketingLayout><FeaturesPage /></MarketingLayout></PublicRoute>} />
+              <Route path="/pricing" element={<PublicRoute><MarketingLayout><PricingPage /></MarketingLayout></PublicRoute>} />
+              <Route path="/auth" element={<AuthPage />} />
+              {/* Protected app routes */}
+              <Route path="/*" element={<ProtectedRoutes />} />
+            </Routes>
+          </Suspense>
+        </BrowserRouter>
+      </TooltipProvider>
+    </AuthProvider>
+  </QueryClientProvider>
+);
 
 export default App;

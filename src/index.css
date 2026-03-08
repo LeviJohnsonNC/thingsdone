@@ -46,6 +46,12 @@
     --sidebar-accent-foreground: 210 29% 18%;
     --sidebar-border: 210 20% 91%;
     --sidebar-ring: 213 58% 57%;
+
+    --hero-bg: 210 25% 97%;
+    --pricing-highlight: 213 58% 95%;
+    --accent-gradient-start: 213 58% 57%;
+    --accent-gradient-end: 220 65% 48%;
+    --feature-card-bg: 210 20% 99%;
   }
 
   .dark {
@@ -98,6 +104,11 @@
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     -webkit-tap-highlight-color: transparent;
   }
+}
+
+/* Marketing display font */
+.font-display {
+  font-family: 'Instrument Serif', serif;
 }
 
 /* Utility: hide scrollbar */
