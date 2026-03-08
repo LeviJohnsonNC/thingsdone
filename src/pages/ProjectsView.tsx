@@ -6,12 +6,13 @@ import { useProjects, useCreateProject } from "@/hooks/useProjects";
 import { useItems } from "@/hooks/useItems";
 import { useAreas } from "@/hooks/useAreas";
 import { useAppStore } from "@/stores/appStore";
+import { useUsageLimits } from "@/hooks/useUsageLimits";
+import { UpgradePrompt } from "@/components/UpgradePrompt";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Progress } from "@/components/ui/progress";
-import { cn } from "@/lib/utils";
 
 export default function ProjectsView() {
   const navigate = useNavigate();
@@ -20,8 +21,18 @@ export default function ProjectsView() {
   const { data: allItems } = useItems();
   const { data: areas } = useAreas();
   const createProject = useCreateProject();
+  const { canCreateProject, activeProjectCount, activeProjectLimit } = useUsageLimits();
   const [showCreate, setShowCreate] = useState(false);
+  const [showUpgrade, setShowUpgrade] = useState(false);
   const [newTitle, setNewTitle] = useState("");
+
+  const handleNewClick = () => {
+    if (!canCreateProject) {
+      setShowUpgrade(true);
+      return;
+    }
+    setShowCreate(true);
+  };
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,7 +57,7 @@ export default function ProjectsView() {
   return (
     <div className="flex flex-col h-full">
       <ViewHeader title="Projects" count={projects?.length}>
-        <Button size="sm" variant="outline" onClick={() => setShowCreate(true)}>
+        <Button size="sm" variant="outline" onClick={handleNewClick}>
           <Plus className="h-4 w-4 mr-1" />
           New
         </Button>
@@ -114,6 +125,14 @@ export default function ProjectsView() {
           </form>
         </DialogContent>
       </Dialog>
+
+      <UpgradePrompt
+        open={showUpgrade}
+        onOpenChange={setShowUpgrade}
+        trigger="projects"
+        currentUsage={activeProjectCount}
+        limit={activeProjectLimit === Infinity ? 3 : activeProjectLimit}
+      />
     </div>
   );
 }

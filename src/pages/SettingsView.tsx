@@ -14,6 +14,9 @@ import { useNeedsReview } from "@/hooks/useUserSettings";
 import { useGoogleCalendarStatus, useConnectGoogleCalendar, useDisconnectGoogleCalendar } from "@/hooks/useGoogleCalendar";
 import { useAppStore } from "@/stores/appStore";
 import { AdminSection } from "@/components/AdminSection";
+import { SubscriptionSection } from "@/components/SubscriptionSection";
+import { UpgradePrompt } from "@/components/UpgradePrompt";
+import { useUsageLimits } from "@/hooks/useUsageLimits";
 import { toast } from "sonner";
 
 export default function SettingsView() {
@@ -35,9 +38,21 @@ export default function SettingsView() {
   const disconnectCalendar = useDisconnectGoogleCalendar();
   const [newArea, setNewArea] = useState("");
   const [newTag, setNewTag] = useState("");
+  const [showUpgrade, setShowUpgrade] = useState(false);
+  const { canCreateArea, areaCount, areaLimit } = useUsageLimits();
 
   // Handle callback from Google OAuth
   useEffect(() => {
+    const subParam = searchParams.get("subscription");
+    if (subParam === "success") {
+      toast.success("Welcome to Pro! 🎉");
+      queryClient.invalidateQueries({ queryKey: ["subscription"] });
+      queryClient.invalidateQueries({ queryKey: ["usage-limits"] });
+      setSearchParams({}, { replace: true });
+    } else if (subParam === "canceled") {
+      setSearchParams({}, { replace: true });
+    }
+
     const calendarParam = searchParams.get("calendar");
     if (calendarParam === "connected") {
       toast.success("Google Calendar connected!");
@@ -47,11 +62,15 @@ export default function SettingsView() {
       toast.error("Failed to connect Google Calendar");
       setSearchParams({}, { replace: true });
     }
-  }, [searchParams, refetchCalendar, setSearchParams]);
+  }, [searchParams, refetchCalendar, setSearchParams, queryClient]);
 
   const handleAddArea = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newArea.trim()) return;
+    if (!canCreateArea) {
+      setShowUpgrade(true);
+      return;
+    }
     await createArea.mutateAsync(newArea.trim());
     setNewArea("");
   };
@@ -146,6 +165,9 @@ export default function SettingsView() {
           <p className="text-sm text-muted-foreground">{user?.email}</p>
         </section>
 
+        {/* Subscription */}
+        <SubscriptionSection />
+
         {/* Areas */}
         <section>
           <h2 className="text-sm font-medium text-foreground mb-3">Areas of Focus</h2>
@@ -233,6 +255,13 @@ export default function SettingsView() {
           </AlertDialog>
         </section>
       </div>
+      <UpgradePrompt
+        open={showUpgrade}
+        onOpenChange={setShowUpgrade}
+        trigger="areas"
+        currentUsage={areaCount}
+        limit={areaLimit === Infinity ? 3 : areaLimit}
+      />
     </div>
   );
 }

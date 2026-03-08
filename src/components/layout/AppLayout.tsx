@@ -6,6 +6,7 @@ import { MobileBottomNav } from "./MobileBottomNav";
 import { QuickAddFAB } from "../QuickAddFAB";
 import { WeeklyReviewWizard } from "../WeeklyReviewWizard";
 import { useAppStore } from "@/stores/appStore";
+import { OverLimitBanner } from "../OverLimitBanner";
 
 export function AppLayout({ children }: { children: ReactNode }) {
   const isMobile = useIsMobile();
@@ -19,6 +20,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
   if (isMobile) {
     return (
       <div className="flex flex-col min-h-screen bg-background">
+        <OverLimitBanner />
         <main className="flex-1 overflow-y-auto pb-20">{children}</main>
         <MobileBottomNav />
         <QuickAddFAB />
@@ -30,7 +32,10 @@ export function AppLayout({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-screen bg-background">
       <DesktopSidebar />
-      <main className="flex-1 overflow-y-auto">{children}</main>
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <OverLimitBanner />
+        <main className="flex-1 overflow-y-auto">{children}</main>
+      </div>
       <QuickAddFAB />
       <WeeklyReviewWizard />
     </div>
