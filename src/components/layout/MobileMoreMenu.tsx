@@ -4,7 +4,6 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { Separator } from "@/components/ui/separator";
 import { useAppStore } from "@/stores/appStore";
 import { useAuth } from "@/hooks/useAuth";
-import { useAreas } from "@/hooks/useAreas";
 import { useNeedsReview } from "@/hooks/useUserSettings";
 import {
   Select,
