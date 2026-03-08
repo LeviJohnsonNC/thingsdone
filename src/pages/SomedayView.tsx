@@ -1,5 +1,5 @@
 import { Cloud } from "lucide-react";
-import { ItemRow } from "@/components/ItemRow";
+import { SortableItemList } from "@/components/SortableItemList";
 import { EmptyState } from "@/components/EmptyState";
 import { ViewHeader } from "@/components/ViewHeader";
 import { DoneSection } from "@/components/DoneSection";
@@ -22,7 +22,7 @@ export default function SomedayView() {
             description="Move items here when you might do them eventually."
           />
         ) : (
-          items?.map((item) => <ItemRow key={item.id} item={item} />)
+          <SortableItemList items={items ?? []} />
         )}
         <DoneSection items={completedItems ?? []} restoreState="someday" />
       </div>

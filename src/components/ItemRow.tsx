@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, useMotionValue, useTransform, PanInfo, AnimatePresence } from "framer-motion";
-import { Star, Check } from "lucide-react";
+import { Star, Check, GripVertical } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Item } from "@/lib/types";
 import { useCompleteItem, useUpdateItem } from "@/hooks/useItems";
@@ -11,9 +11,10 @@ interface ItemRowProps {
   item: Item;
   showProject?: boolean;
   dimmed?: boolean;
+  dragHandleProps?: Record<string, any>;
 }
 
-export function ItemRow({ item, showProject, dimmed }: ItemRowProps) {
+export function ItemRow({ item, showProject, dimmed, dragHandleProps }: ItemRowProps) {
   const { editingItemId, setEditingItemId } = useAppStore();
   const completeItem = useCompleteItem();
   const updateItem = useUpdateItem();
@@ -57,12 +58,25 @@ export function ItemRow({ item, showProject, dimmed }: ItemRowProps) {
             setSwiping(info.offset.x > 20 ? "right" : info.offset.x < -20 ? "left" : null);
           }}
           className={cn(
-            "relative flex items-center gap-3 bg-card px-4 py-3 border-b border-border cursor-pointer transition-opacity",
+            "relative flex items-center gap-2 bg-card px-2 py-3 border-b border-border cursor-pointer transition-opacity",
             dimmed && "opacity-50",
             isEditing && "bg-accent/50"
           )}
           onClick={() => setEditingItemId(isEditing ? null : item.id)}
         >
+          {/* Drag handle */}
+          {dragHandleProps ? (
+            <button
+              {...dragHandleProps}
+              className="flex items-center justify-center shrink-0 touch-none cursor-grab active:cursor-grabbing p-0.5 -ml-0.5"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <GripVertical className="h-4 w-4 text-muted-foreground/40 hover:text-muted-foreground transition-colors" />
+            </button>
+          ) : (
+            <div className="w-5" />
+          )}
+
           {/* Complete circle */}
           <button
             onClick={(e) => {

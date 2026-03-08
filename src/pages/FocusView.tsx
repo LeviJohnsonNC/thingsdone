@@ -1,5 +1,5 @@
 import { Star } from "lucide-react";
-import { ItemRow } from "@/components/ItemRow";
+import { SortableItemList } from "@/components/SortableItemList";
 import { EmptyState } from "@/components/EmptyState";
 import { ViewHeader } from "@/components/ViewHeader";
 import { DoneSection } from "@/components/DoneSection";
@@ -11,7 +11,6 @@ export default function FocusView() {
   const { data: items, isLoading } = useFocusedItems(selectedAreaId);
   const { data: completedItems } = useCompletedItems(selectedAreaId);
 
-  // Show completed items that were focused
   const focusedCompleted = completedItems?.filter(i => i.is_focused) ?? [];
 
   return (
@@ -25,7 +24,7 @@ export default function FocusView() {
             description="Star items to bring them here."
           />
         ) : (
-          items?.map((item) => <ItemRow key={item.id} item={item} />)
+          <SortableItemList items={items ?? []} />
         )}
         <DoneSection
           items={focusedCompleted}

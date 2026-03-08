@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ArrowRight } from "lucide-react";
-import { ItemRow } from "@/components/ItemRow";
+import { SortableItemList } from "@/components/SortableItemList";
 import { EmptyState } from "@/components/EmptyState";
 import { ViewHeader } from "@/components/ViewHeader";
 import { DoneSection } from "@/components/DoneSection";
@@ -71,7 +71,7 @@ export default function NextView() {
             description="Time to process your inbox or review projects."
           />
         ) : (
-          filteredItems?.map((item) => <ItemRow key={item.id} item={item} />)
+          <SortableItemList items={filteredItems ?? []} />
         )}
         <DoneSection items={completedItems ?? []} restoreState="next" />
       </div>
