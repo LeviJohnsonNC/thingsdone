@@ -8,7 +8,6 @@ import { SortableItemList } from "@/components/SortableItemList";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
-import { Badge } from "@/components/ui/badge";
 import { DoneSection } from "@/components/DoneSection";
 import { cn } from "@/lib/utils";
 
@@ -31,15 +30,14 @@ export default function ProjectDetailView() {
   const activeItems = items?.filter((i) => i.state !== "completed") ?? [];
   const completedItems = items?.filter((i) => i.state === "completed") ?? [];
 
-  // For sequential projects, dim all items after the first
+  // All projects are sequential — dim all items after the first
   const dimmedIds = useMemo(() => {
-    if (!project || project.type !== "sequential") return new Set<string>();
     const ids = new Set<string>();
     activeItems.forEach((item, i) => {
       if (i > 0) ids.add(item.id);
     });
     return ids;
-  }, [project?.type, activeItems]);
+  }, [activeItems]);
 
   if (!project) return null;
 
@@ -76,16 +74,6 @@ export default function ProjectDetailView() {
         </div>
 
         <div className="flex items-center gap-2 mb-2">
-          <Badge
-            variant={project.type === "sequential" ? "default" : "outline"}
-            className="text-xs cursor-pointer"
-            onClick={() => updateProject.mutate({
-              id: project.id,
-              type: project.type === "sequential" ? "parallel" : "sequential",
-            })}
-          >
-            {project.type === "sequential" ? "Sequential" : "Parallel"}
-          </Badge>
           {area && <span className="text-xs text-muted-foreground">{area.name}</span>}
           <span className="text-xs text-muted-foreground ml-auto">{done}/{total}</span>
         </div>

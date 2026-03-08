@@ -52,36 +52,23 @@ export function useNextItems(areaId?: string | null) {
       const { data: items, error } = await query;
       if (error) throw error;
 
-      // Get unique project IDs from these items
+      // All projects are sequential — only show first incomplete item per project
       const projectIds = [...new Set(
         (items as Item[]).filter(i => i.project_id).map(i => i.project_id!)
       )];
 
       if (projectIds.length === 0) return items as Item[];
 
-      // Fetch those projects to check type
-      const { data: projects, error: projError } = await supabase
-        .from("projects")
-        .select("id, type")
-        .in("id", projectIds);
-      if (projError) throw projError;
-
-      const sequentialProjectIds = new Set(
-        projects?.filter(p => p.type === "sequential").map(p => p.id) ?? []
-      );
-
-      if (sequentialProjectIds.size === 0) return items as Item[];
-
-      // For sequential projects, fetch ALL incomplete items to determine first action
+      // Fetch ALL incomplete items for these projects to determine first action
       const { data: seqItems, error: seqError } = await supabase
         .from("items")
         .select("id, project_id, sort_order_project")
-        .in("project_id", [...sequentialProjectIds])
+        .in("project_id", projectIds)
         .neq("state", "completed")
         .order("sort_order_project", { ascending: true });
       if (seqError) throw seqError;
 
-      // Build map: sequential project_id -> first incomplete item id
+      // Build map: project_id -> first incomplete item id
       const firstActionByProject = new Map<string, string>();
       for (const si of seqItems ?? []) {
         if (si.project_id && !firstActionByProject.has(si.project_id)) {
@@ -89,9 +76,9 @@ export function useNextItems(areaId?: string | null) {
         }
       }
 
-      // Filter: keep item if it's not in a sequential project, or if it IS the first action
+      // Filter: keep item if it has no project, or if it IS the first action
       return (items as Item[]).filter(item => {
-        if (!item.project_id || !sequentialProjectIds.has(item.project_id)) return true;
+        if (!item.project_id) return true;
         return firstActionByProject.get(item.project_id) === item.id;
       });
     },

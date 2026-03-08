@@ -33,10 +33,14 @@ export default function ProjectsView() {
   };
 
   const getProjectStats = (projectId: string) => {
-    const items = allItems?.filter((i) => i.project_id === projectId) ?? [];
-    const total = items.length;
-    const done = items.filter((i) => i.state === "completed").length;
-    const nextAction = items.find((i) => i.state !== "completed" && i.state !== "trash");
+    const projectItems = allItems?.filter((i) => i.project_id === projectId) ?? [];
+    const total = projectItems.length;
+    const done = projectItems.filter((i) => i.state === "completed").length;
+    // First incomplete item by sort_order_project (sequential)
+    const incompleteItems = projectItems
+      .filter((i) => i.state !== "completed" && i.state !== "trash")
+      .sort((a, b) => (a.sort_order_project ?? 0) - (b.sort_order_project ?? 0));
+    const nextAction = incompleteItems[0];
     return { total, done, nextAction, progress: total > 0 ? (done / total) * 100 : 0 };
   };
 
@@ -70,23 +74,20 @@ export default function ProjectsView() {
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium truncate">{project.title}</p>
                     <div className="flex items-center gap-2 mt-1">
+                      <span className="text-xs text-muted-foreground">
+                        {stats.done}/{stats.total}
+                      </span>
+                      {stats.nextAction && (
+                        <span className="text-xs text-muted-foreground truncate">
+                          → {stats.nextAction.title}
+                        </span>
+                      )}
                       {area && (
                         <span className="text-[11px] text-muted-foreground bg-muted px-1.5 py-0.5 rounded">
                           {area.name}
                         </span>
                       )}
-                      <span className="text-xs text-muted-foreground">
-                        {stats.done}/{stats.total}
-                      </span>
-                      <span className="text-[11px] text-muted-foreground capitalize">
-                        {project.type}
-                      </span>
                     </div>
-                    {stats.nextAction && (
-                      <p className="text-xs text-muted-foreground mt-1 truncate">
-                        → {stats.nextAction.title}
-                      </p>
-                    )}
                   </div>
                   <div className="w-16 pt-1.5">
                     <Progress value={stats.progress} className="h-1.5" />
