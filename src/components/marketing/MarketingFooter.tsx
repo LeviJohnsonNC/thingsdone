@@ -5,7 +5,7 @@ export function MarketingFooter() {
     <footer className="border-t border-border/50 bg-background">
       <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-4 px-6 py-8 text-[13px] text-muted-foreground sm:flex-row">
         <div className="flex items-center gap-2">
-          <span className="font-semibold text-foreground">Things Done</span>
+          <span className="font-semibold text-foreground">Things Done.</span>
           <span>© {new Date().getFullYear()}</span>
         </div>
         <div className="flex items-center gap-6">

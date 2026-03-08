@@ -76,7 +76,7 @@ const FEATURES = [
 
 export default function FeaturesPage() {
   useEffect(() => {
-    document.title = "Features — Things Done";
+    document.title = "Features — Things Done.";
   }, []);
 
   return (

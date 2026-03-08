@@ -17,7 +17,7 @@ export function MarketingNav() {
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-6">
         <Link to="/" className="text-lg font-semibold text-foreground tracking-tight">
-          Things Done
+          Things Done.
         </Link>
 
         {/* Desktop links */}

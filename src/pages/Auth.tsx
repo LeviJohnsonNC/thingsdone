@@ -46,7 +46,7 @@ export default function Auth() {
 
         <Card className="w-full border-border shadow-lg">
           <CardHeader className="text-center space-y-2">
-            <CardTitle className="text-2xl font-semibold">Things Done</CardTitle>
+            <CardTitle className="text-2xl font-semibold">Things Done.</CardTitle>
             <CardDescription>
               {isSignUp ? "Create your account" : "Sign in to your account"}
             </CardDescription>
