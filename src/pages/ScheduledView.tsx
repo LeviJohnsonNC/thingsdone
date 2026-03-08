@@ -98,9 +98,10 @@ export default function ScheduledView() {
   const { selectedAreaId } = useAppStore();
   const { data: items, isLoading } = useItems("scheduled", selectedAreaId);
   const { data: gcalEvents = [] } = useGoogleCalendarEvents();
+  const { data: itemTagMap } = useAllItemTags();
   const { filters, setFilters } = useItemFilters();
 
-  const filteredItems = applyItemFilters(items, filters);
+  const filteredItems = applyItemFilters(items, filters, itemTagMap);
   const merged = getMergedItems(filteredItems, gcalEvents);
   const groups = groupByDate(merged);
   const totalCount = filteredItems.length + gcalEvents.length;
