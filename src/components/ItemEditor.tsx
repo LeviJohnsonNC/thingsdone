@@ -328,7 +328,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
                 </div>
               </PropertyRow>
 
-              <PropertyRow icon="⚡" label="ENERGY" className="flex-1">
+              <PropertyRow icon={energyIcon} label="ENERGY" className="flex-1">
                 <div className="flex bg-muted rounded-lg p-0.5 gap-0.5">
                   <SegmentButton
                     active={!energy}
