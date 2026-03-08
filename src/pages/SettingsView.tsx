@@ -43,12 +43,18 @@ export default function SettingsView() {
 
   // Handle callback from Google OAuth
   useEffect(() => {
+    const subParam = searchParams.get("subscription");
+    if (subParam === "success") {
+      toast.success("Welcome to Pro! 🎉");
+      queryClient.invalidateQueries({ queryKey: ["subscription"] });
+      queryClient.invalidateQueries({ queryKey: ["usage-limits"] });
+      setSearchParams({}, { replace: true });
+    } else if (subParam === "canceled") {
+      setSearchParams({}, { replace: true });
+    }
+
     const calendarParam = searchParams.get("calendar");
     if (calendarParam === "connected") {
-      toast.success("Google Calendar connected!");
-      refetchCalendar();
-      setSearchParams({}, { replace: true });
-    } else if (calendarParam === "error") {
       toast.error("Failed to connect Google Calendar");
       setSearchParams({}, { replace: true });
     }
