@@ -81,15 +81,12 @@ export default function ProjectsView() {
                       <span className="text-xs text-muted-foreground">
                         {stats.done}/{stats.total}
                       </span>
-                      <span className="text-[11px] text-muted-foreground capitalize">
-                        {project.type}
-                      </span>
+                      {stats.nextAction && (
+                        <span className="text-[11px] text-muted-foreground truncate">
+                          → {stats.nextAction.title}
+                        </span>
+                      )}
                     </div>
-                    {stats.nextAction && (
-                      <p className="text-xs text-muted-foreground mt-1 truncate">
-                        → {stats.nextAction.title}
-                      </p>
-                    )}
                   </div>
                   <div className="w-16 pt-1.5">
                     <Progress value={stats.progress} className="h-1.5" />

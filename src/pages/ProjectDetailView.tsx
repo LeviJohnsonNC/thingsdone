@@ -75,16 +75,6 @@ export default function ProjectDetailView() {
         </div>
 
         <div className="flex items-center gap-2 mb-2">
-          <Badge
-            variant={project.type === "sequential" ? "default" : "outline"}
-            className="text-xs cursor-pointer"
-            onClick={() => updateProject.mutate({
-              id: project.id,
-              type: project.type === "sequential" ? "parallel" : "sequential",
-            })}
-          >
-            {project.type === "sequential" ? "Sequential" : "Parallel"}
-          </Badge>
           {area && <span className="text-xs text-muted-foreground">{area.name}</span>}
           <span className="text-xs text-muted-foreground ml-auto">{done}/{total}</span>
         </div>
