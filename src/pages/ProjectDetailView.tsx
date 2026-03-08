@@ -8,6 +8,7 @@ import { SortableItemList } from "@/components/SortableItemList";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
+
 import { DoneSection } from "@/components/DoneSection";
 import { cn } from "@/lib/utils";
 
@@ -30,7 +31,7 @@ export default function ProjectDetailView() {
   const activeItems = items?.filter((i) => i.state !== "completed") ?? [];
   const completedItems = items?.filter((i) => i.state === "completed") ?? [];
 
-  // All projects are sequential — dim all items after the first
+  // For sequential projects, dim all items after the first
   const dimmedIds = useMemo(() => {
     const ids = new Set<string>();
     activeItems.forEach((item, i) => {

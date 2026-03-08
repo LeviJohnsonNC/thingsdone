@@ -61,8 +61,10 @@ export function useReorderItems() {
         }
       }
     },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["items"] });
-    },
+        onSettled: (_data, error) => {
+                if (error) {
+                          queryClient.invalidateQueries({ queryKey: ["items"] });
+                }
+        },
   });
 }

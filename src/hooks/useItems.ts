@@ -52,14 +52,14 @@ export function useNextItems(areaId?: string | null) {
       const { data: items, error } = await query;
       if (error) throw error;
 
-      // All projects are sequential — only show first incomplete item per project
+      // Get unique project IDs from these items
       const projectIds = [...new Set(
         (items as Item[]).filter(i => i.project_id).map(i => i.project_id!)
       )];
 
       if (projectIds.length === 0) return items as Item[];
 
-      // Fetch ALL incomplete items for these projects to determine first action
+      // All projects are sequential — fetch ALL incomplete items to determine first action
       const { data: seqItems, error: seqError } = await supabase
         .from("items")
         .select("id, project_id, sort_order_project")
@@ -76,7 +76,7 @@ export function useNextItems(areaId?: string | null) {
         }
       }
 
-      // Filter: keep item if it has no project, or if it IS the first action
+      // Keep item if it has no project, or if it IS the first action in its project
       return (items as Item[]).filter(item => {
         if (!item.project_id) return true;
         return firstActionByProject.get(item.project_id) === item.id;

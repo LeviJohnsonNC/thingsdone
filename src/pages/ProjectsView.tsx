@@ -33,11 +33,10 @@ export default function ProjectsView() {
   };
 
   const getProjectStats = (projectId: string) => {
-    const projectItems = allItems?.filter((i) => i.project_id === projectId) ?? [];
-    const total = projectItems.length;
-    const done = projectItems.filter((i) => i.state === "completed").length;
-    // First incomplete item by sort_order_project (sequential)
-    const incompleteItems = projectItems
+    const items = allItems?.filter((i) => i.project_id === projectId) ?? [];
+    const total = items.length;
+    const done = items.filter((i) => i.state === "completed").length;
+    const incompleteItems = items
       .filter((i) => i.state !== "completed" && i.state !== "trash")
       .sort((a, b) => (a.sort_order_project ?? 0) - (b.sort_order_project ?? 0));
     const nextAction = incompleteItems[0];
@@ -74,17 +73,17 @@ export default function ProjectsView() {
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium truncate">{project.title}</p>
                     <div className="flex items-center gap-2 mt-1">
+                      {area && (
+                        <span className="text-[11px] text-muted-foreground bg-muted px-1.5 py-0.5 rounded">
+                          {area.name}
+                        </span>
+                      )}
                       <span className="text-xs text-muted-foreground">
                         {stats.done}/{stats.total}
                       </span>
                       {stats.nextAction && (
-                        <span className="text-xs text-muted-foreground truncate">
+                        <span className="text-[11px] text-muted-foreground truncate">
                           → {stats.nextAction.title}
-                        </span>
-                      )}
-                      {area && (
-                        <span className="text-[11px] text-muted-foreground bg-muted px-1.5 py-0.5 rounded">
-                          {area.name}
                         </span>
                       )}
                     </div>
