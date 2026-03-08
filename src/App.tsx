@@ -57,6 +57,7 @@ function ProtectedRoutes() {
         <Route path="/projects" element={<ProjectsView />} />
         <Route path="/projects/:id" element={<ProjectDetailView />} />
         <Route path="/logbook" element={<LogbookView />} />
+        <Route path="/help" element={<HelpView />} />
         <Route path="/settings" element={<SettingsView />} />
         <Route path="/review" element={<ReviewView />} />
         <Route path="/review/history" element={<ReviewHistoryView />} />

@@ -75,6 +75,14 @@ export function MobileMoreMenu() {
           <Separator />
 
           <button
+            onClick={() => handleNav("/help")}
+            className="flex w-full items-center gap-3 px-4 py-3 text-sm text-foreground hover:bg-accent rounded-md transition-colors min-h-[44px]"
+          >
+            <HelpCircle className="h-5 w-5 text-muted-foreground" />
+            <span>Help</span>
+          </button>
+
+          <button
             onClick={() => handleNav("/settings")}
             className="flex w-full items-center gap-3 px-4 py-3 text-sm text-foreground hover:bg-accent rounded-md transition-colors min-h-[44px]"
           >

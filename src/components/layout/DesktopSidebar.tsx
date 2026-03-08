@@ -130,6 +130,13 @@ export function DesktopSidebar() {
 
       <div className="border-t border-border p-2">
         <button
+          onClick={() => navigate("/help")}
+          className="flex w-full items-center gap-3 px-4 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-foreground rounded-md transition-colors"
+        >
+          <HelpCircle className="h-4 w-4" />
+          <span>Help</span>
+        </button>
+        <button
           onClick={() => navigate("/settings")}
           className="flex w-full items-center gap-3 px-4 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-foreground rounded-md transition-colors"
         >
