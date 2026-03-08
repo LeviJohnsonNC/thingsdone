@@ -99,22 +99,6 @@ export default function SettingsView() {
       </div>
 
       <div className="flex-1 overflow-y-auto p-4 space-y-8 max-w-lg">
-        {/* Weekly Review */}
-        <section>
-          <h2 className="text-sm font-medium text-foreground mb-3">Weekly Review</h2>
-          <Button
-            variant="outline"
-            className="w-full justify-start gap-2"
-            onClick={() => setWeeklyReviewOpen(true)}
-          >
-            <RefreshCw className="h-4 w-4" />
-            Start Weekly Review
-            {needsReview && (
-              <Badge variant="destructive" className="ml-auto text-[10px] h-5">Due</Badge>
-            )}
-          </Button>
-        </section>
-
         {/* Connected Accounts */}
         <section>
           <h2 className="text-sm font-medium text-foreground mb-3">Connected Accounts</h2>
