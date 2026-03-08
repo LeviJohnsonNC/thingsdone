@@ -8,6 +8,7 @@ import { useScheduledActivation } from "@/hooks/useScheduledActivation";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { MarketingLayout } from "@/components/marketing/MarketingLayout";
 import { lazy, Suspense } from "react";
+import ReviewView from "@/pages/ReviewView";
 import Auth from "@/pages/Auth";
 import InboxView from "@/pages/InboxView";
 import FocusView from "@/pages/FocusView";
