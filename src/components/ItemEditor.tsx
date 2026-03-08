@@ -194,6 +194,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
                 )}
               >
                 <img src={cfg.icon} alt={cfg.label} className="h-4 w-4" />
+                {cfg.label}
               </button>
             );
           })}
