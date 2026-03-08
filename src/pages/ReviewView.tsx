@@ -277,7 +277,10 @@ export default function ReviewView() {
               <ArrowRight className="h-4 w-4 ml-1" />
             </Button>
           ) : (
-            <div />
+            <Link to="/review/history" className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors">
+              <History className="h-3.5 w-3.5" />
+              Past Reviews
+            </Link>
           )}
         </div>
       </div>
