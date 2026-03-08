@@ -171,8 +171,11 @@ export default function SettingsView() {
           <h2 className="text-sm font-medium text-foreground mb-3">Context Tags</h2>
           <div className="space-y-2 mb-3">
             {tags?.map((tag) => (
-              <div key={tag.id} className="flex items-center bg-card border border-border rounded-md px-3 py-2">
+              <div key={tag.id} className="flex items-center justify-between bg-card border border-border rounded-md px-3 py-2">
                 <span className="text-sm">{tag.name}</span>
+                <button onClick={() => deleteTag.mutate(tag.id)} className="p-1 text-muted-foreground hover:text-destructive">
+                  <Trash2 className="h-4 w-4" />
+                </button>
               </div>
             ))}
           </div>
