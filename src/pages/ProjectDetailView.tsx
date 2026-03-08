@@ -1,11 +1,14 @@
 import { useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Star, Plus } from "lucide-react";
+import { ArrowLeft, Star } from "lucide-react";
 import { useProjects, useUpdateProject } from "@/hooks/useProjects";
-import { useProjectItems, useCreateItem } from "@/hooks/useItems";
+import { useProjectItems } from "@/hooks/useItems";
 import { useAreas } from "@/hooks/useAreas";
 import { SortableItemList } from "@/components/SortableItemList";
-import { Button } from "@/components/ui/button";
+import { QuickAddBar } from "@/components/QuickAddBar";
+import { Progress } from "@/components/ui/progress";
+import { DoneSection } from "@/components/DoneSection";
+import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 
