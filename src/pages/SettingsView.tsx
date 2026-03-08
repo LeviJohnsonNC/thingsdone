@@ -147,6 +147,9 @@ export default function SettingsView() {
           <p className="text-sm text-muted-foreground">{user?.email}</p>
         </section>
 
+        {/* Subscription */}
+        <SubscriptionSection />
+
         {/* Areas */}
         <section>
           <h2 className="text-sm font-medium text-foreground mb-3">Areas of Focus</h2>

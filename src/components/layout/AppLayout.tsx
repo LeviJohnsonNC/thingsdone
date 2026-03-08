@@ -32,7 +32,10 @@ export function AppLayout({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-screen bg-background">
       <DesktopSidebar />
-      <main className="flex-1 overflow-y-auto">{children}</main>
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <OverLimitBanner />
+        <main className="flex-1 overflow-y-auto">{children}</main>
+      </div>
       <QuickAddFAB />
       <WeeklyReviewWizard />
     </div>
