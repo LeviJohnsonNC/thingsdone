@@ -69,12 +69,13 @@ export default function ProjectDetailView() {
         <Progress value={progress} className="h-1.5" />
       </div>
 
+      <ItemFilterBar filters={filters} onChange={setFilters} />
       <QuickAddBar placeholder="Add action…" defaultState="next" projectId={project.id} />
 
       {/* Actions list */}
       <div className="flex-1 overflow-y-auto">
         <SortableItemList
-          items={activeItems}
+          items={filteredActiveItems}
           dimmedIds={dimmedIds}
           orderField="sort_order_project"
         />
