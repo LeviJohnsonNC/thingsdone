@@ -15,6 +15,9 @@ import { AdminSection } from "@/components/AdminSection";
 import { SubscriptionSection } from "@/components/SubscriptionSection";
 import { UpgradePrompt } from "@/components/UpgradePrompt";
 import { useUsageLimits } from "@/hooks/useUsageLimits";
+import { useUserSettings } from "@/hooks/useUserSettings";
+import { useSaveGlobalTheme, useSaveAreaTheme } from "@/hooks/useTheme";
+import { ThemePicker } from "@/components/ThemePicker";
 import { toast } from "sonner";
 
 export default function SettingsView() {
