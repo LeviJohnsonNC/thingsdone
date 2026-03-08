@@ -9,7 +9,7 @@ import { QuickAddBar } from "@/components/QuickAddBar";
 import { Progress } from "@/components/ui/progress";
 import { DoneSection } from "@/components/DoneSection";
 import { cn } from "@/lib/utils";
-import { Input } from "@/components/ui/input";
+
 import { Progress } from "@/components/ui/progress";
 
 import { DoneSection } from "@/components/DoneSection";
