@@ -60,6 +60,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
   const { data: itemTagIds } = useItemTags(itemId);
   const setItemTags = useSetItemTags();
   const { data: calendarToken } = useGoogleCalendarStatus();
+  const { data: contacts } = useContacts();
   const pushToCalendar = usePushItemToCalendar();
   const deleteCalendarEvent = useDeleteCalendarEvent();
 
