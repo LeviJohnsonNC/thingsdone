@@ -113,6 +113,14 @@ export function DesktopSidebar() {
                       {inboxCount}
                     </span>
                   )}
+                  {(item as any).reviewBadge && daysSinceReview !== null && (
+                    <span className={cn(
+                      "text-[10px] font-medium",
+                      daysSinceReview >= 7 ? "text-focus-gold" : "text-muted-foreground"
+                    )}>
+                      {daysSinceReview}d
+                    </span>
+                  )}
                 </button>
               );
             })}

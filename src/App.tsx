@@ -56,6 +56,7 @@ function ProtectedRoutes() {
         <Route path="/projects/:id" element={<ProjectDetailView />} />
         <Route path="/logbook" element={<LogbookView />} />
         <Route path="/settings" element={<SettingsView />} />
+        <Route path="/review" element={<ReviewView />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </AppLayout>
