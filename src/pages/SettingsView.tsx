@@ -13,6 +13,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useNeedsReview } from "@/hooks/useUserSettings";
 import { useGoogleCalendarStatus, useConnectGoogleCalendar, useDisconnectGoogleCalendar } from "@/hooks/useGoogleCalendar";
 import { useAppStore } from "@/stores/appStore";
+import { AdminSection } from "@/components/AdminSection";
 import { toast } from "sonner";
 
 export default function SettingsView() {
@@ -188,6 +189,11 @@ export default function SettingsView() {
         </section>
 
         <Button variant="outline" onClick={signOut} className="w-full">Sign Out</Button>
+
+        {/* Admin Section - only visible to admin */}
+        {user?.email === "levijohnson@gmail.com" && (
+          <AdminSection />
+        )}
 
         {/* Purge All Data */}
         <section>
