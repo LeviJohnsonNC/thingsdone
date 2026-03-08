@@ -425,7 +425,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
 
             {/* Project + Area - side by side */}
             <div className="flex gap-4">
-              <PropertyRow icon="📂" label="PROJECT" className="flex-1">
+              <PropertyRow icon={projectIcon} label="PROJECT" className="flex-1">
                 <Select
                   value={item.project_id ?? "none"}
                   onValueChange={(v) => saveField("project_id", v === "none" ? null : v)}
