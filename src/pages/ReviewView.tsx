@@ -99,11 +99,17 @@ export default function ReviewView() {
         switch (suggestion.action) {
           case "move":
             if (suggestion.item_id && suggestion.target_state) {
-              await updateItem.mutateAsync({
+              const moveFields: Record<string, unknown> = {
                 id: suggestion.item_id,
                 state: suggestion.target_state,
-                ...suggestion.suggested_fields,
-              } as any);
+              };
+              if (suggestion.suggested_fields) {
+                const allowed = ["energy", "time_estimate", "waiting_on", "project_id", "due_date", "scheduled_date"];
+                for (const [k, v] of Object.entries(suggestion.suggested_fields)) {
+                  if (allowed.includes(k) && v != null) moveFields[k] = v;
+                }
+              }
+              await updateItem.mutateAsync(moveFields as any);
               review.incrementStat("itemsMoved");
             }
             break;
@@ -131,10 +137,17 @@ export default function ReviewView() {
             break;
           case "update":
             if (suggestion.item_id && suggestion.suggested_fields) {
-              await updateItem.mutateAsync({
-                id: suggestion.item_id,
-                ...suggestion.suggested_fields,
-              } as any);
+              // Only pass known item fields to avoid DB errors
+              const allowedFields = ["energy", "time_estimate", "waiting_on", "project_id", "due_date", "scheduled_date", "notes", "is_focused", "area_id"];
+              const sanitized: Record<string, unknown> = { id: suggestion.item_id };
+              for (const [key, value] of Object.entries(suggestion.suggested_fields)) {
+                if (allowedFields.includes(key) && value != null) {
+                  sanitized[key] = value;
+                }
+              }
+              if (Object.keys(sanitized).length > 1) {
+                await updateItem.mutateAsync(sanitized as any);
+              }
             }
             break;
         }
@@ -144,7 +157,8 @@ export default function ReviewView() {
           [review.currentStep]: (prev[review.currentStep] ?? []).filter((s) => s !== suggestion),
         }));
         toast.success("Action applied");
-      } catch {
+      } catch (err) {
+        console.error("Review action failed:", err);
         toast.error("Failed to apply action");
       }
     },
