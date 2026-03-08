@@ -156,19 +156,22 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
     }
   };
 
-  const handleSave = () => {
-    const updates: any = {};
-    if (title !== item.title) updates.title = title;
-    if (notes !== (item.notes ?? "")) updates.notes = notes;
-    if (waitingOn !== ((item as any).waiting_on ?? "")) updates.waiting_on = waitingOn;
-    if (Object.keys(updates).length > 0) {
-      updateItem.mutate({ id: item.id, ...updates });
+  const handleBlurTitle = () => {
+    if (title !== item.title) {
+      updateItem.mutate({ id: item.id, title } as any);
     }
-    setEditingItemId(null);
   };
 
-  const handleCancel = () => {
-    setEditingItemId(null);
+  const handleBlurNotes = () => {
+    if (notes !== (item.notes ?? "")) {
+      updateItem.mutate({ id: item.id, notes } as any);
+    }
+  };
+
+  const handleBlurWaitingOn = () => {
+    if (waitingOn !== ((item as any).waiting_on ?? "")) {
+      updateItem.mutate({ id: item.id, waiting_on: waitingOn || null } as any);
+    }
   };
 
   const activeTagIds = itemTagIds ?? [];
@@ -229,6 +232,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
             <Input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
+              onBlur={handleBlurTitle}
               className="text-lg font-semibold border-0 px-0 focus-visible:ring-0 shadow-none h-auto py-0"
               placeholder="What needs to be done?"
               autoFocus
@@ -256,6 +260,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
               ref={notesRef}
               value={notes}
               onChange={(e) => { setNotes(e.target.value); autoResize(); }}
+              onBlur={handleBlurNotes}
               placeholder="Add notes…"
               className="w-full resize-none bg-transparent text-sm text-muted-foreground placeholder:text-muted-foreground/50 border-0 outline-none focus:ring-0 min-h-[2.5rem]"
               rows={2}
@@ -500,15 +505,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-between px-4 py-3 bg-muted/40 border-t border-border/60 rounded-b-xl">
-            <div className="flex gap-2">
-              <Button size="sm" onClick={handleSave} className="font-semibold">
-                Save
-              </Button>
-              <Button size="sm" variant="outline" onClick={handleCancel}>
-                Cancel
-              </Button>
-            </div>
+          <div className="flex items-center justify-end px-4 py-3 bg-muted/40 border-t border-border/60 rounded-b-xl">
             <Button
               size="sm"
               variant="ghost"
