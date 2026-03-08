@@ -189,6 +189,11 @@ export default function SettingsView() {
 
         <Button variant="outline" onClick={signOut} className="w-full">Sign Out</Button>
 
+        {/* Admin Section - only visible to admin */}
+        {user?.email === "levijohnson@gmail.com" && (
+          <AdminSection />
+        )}
+
         {/* Purge All Data */}
         <section>
           <h2 className="text-sm font-medium text-destructive mb-3">Danger Zone</h2>
