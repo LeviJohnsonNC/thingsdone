@@ -55,6 +55,29 @@ export function useSetItemTags() {
   });
 }
 
+export function useAllItemTags() {
+  const { user } = useAuth();
+
+  return useQuery({
+    queryKey: ["item_tags", "all", user?.id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("item_tags")
+        .select("item_id, tag_id");
+      if (error) throw error;
+      const map = new Map<string, string[]>();
+      for (const row of data) {
+        const tags = map.get(row.item_id) ?? [];
+        tags.push(row.tag_id);
+        map.set(row.item_id, tags);
+      }
+      return map;
+    },
+    enabled: !!user,
+  });
+}
+
+
 export function useCreateTag() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
