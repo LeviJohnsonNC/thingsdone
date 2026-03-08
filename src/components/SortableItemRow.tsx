@@ -21,8 +21,8 @@ export function SortableItemRow({ item, showProject, dimmed }: SortableItemRowPr
   } = useSortable({ id: item.id });
 
   const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
+    transform: CSS.Translate.toString(transform),
+    transition: isDragging ? "none" : transition,
     zIndex: isDragging ? 50 : undefined,
     opacity: isDragging ? 0.5 : undefined,
     position: "relative" as const,
