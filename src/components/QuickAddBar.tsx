@@ -4,10 +4,11 @@ import { useCreateItem } from "@/hooks/useItems";
 import { useAppStore } from "@/stores/appStore";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import type { ItemState } from "@/lib/types";
 
 interface QuickAddBarProps {
   placeholder?: string;
-  defaultState?: string;
+  defaultState?: ItemState;
   projectId?: string;
 }
 
