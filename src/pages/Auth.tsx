@@ -68,13 +68,6 @@ export default function Auth() {
           <h1 className="text-2xl font-semibold tracking-tight text-foreground">
             {isSignUp ? "Create your account" : "Sign in"}
           </h1>
-          
-          {/* Supporting text */}
-          <p className="mt-1.5 text-sm text-muted-foreground">
-            {isSignUp
-              ? "Start organizing work and life in one place."
-              : "Welcome back to Things Done."}
-          </p>
 
           {/* Form with proper labels */}
           <form onSubmit={handleSubmit} className="mt-8 space-y-5">
