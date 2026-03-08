@@ -308,7 +308,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
           <div className="p-4 space-y-3">
             {/* Time Estimate + Energy - side by side */}
             <div className="flex gap-4">
-              <PropertyRow icon="⏱" label="TIME EST." className="flex-1">
+              <PropertyRow icon={timeEstIcon} label="TIME EST." className="flex-1">
                 <div className="flex bg-muted rounded-lg p-0.5 gap-0.5">
                   <SegmentButton
                     active={!item.time_estimate}
