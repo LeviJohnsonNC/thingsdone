@@ -355,7 +355,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
             </div>
 
             {/* Due + Scheduled - side by side */}
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <PropertyRow icon={dueIcon} label="DUE" className="flex-1">
                 <Popover>
                   <PopoverTrigger asChild>
