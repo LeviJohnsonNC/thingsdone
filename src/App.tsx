@@ -57,6 +57,7 @@ function ProtectedRoutes() {
         <Route path="/logbook" element={<LogbookView />} />
         <Route path="/settings" element={<SettingsView />} />
         <Route path="/review" element={<ReviewView />} />
+        <Route path="/review/history" element={<ReviewHistoryView />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </AppLayout>
