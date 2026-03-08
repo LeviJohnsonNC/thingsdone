@@ -27,10 +27,14 @@ export default function SettingsView() {
   const { user, signOut } = useAuth();
   const { data: areas } = useAreas();
   const { data: tags } = useTags();
+  const { data: tags } = useTags();
+  const { data: contacts } = useContacts();
   const createArea = useCreateArea();
   const deleteArea = useDeleteArea();
   const createTag = useCreateTag();
   const deleteTag = useDeleteTag();
+  const createContact = useCreateContact();
+  const deleteContact = useDeleteContact();
   const purgeAllData = usePurgeAllData();
   const needsReview = useNeedsReview();
   const { setWeeklyReviewOpen } = useAppStore();
