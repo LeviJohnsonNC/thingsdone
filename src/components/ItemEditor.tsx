@@ -525,6 +525,65 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
   );
 }
 
+// Helper: Waiting On field with inline contact creation
+function WaitingOnField({ value, contacts, onChange }: { value: string; contacts: { id: string; name: string }[]; onChange: (val: string) => void }) {
+  const [newName, setNewName] = useState("");
+  const [showNew, setShowNew] = useState(false);
+  const createContact = useCreateContact();
+
+  const handleCreate = async () => {
+    const trimmed = newName.trim();
+    if (!trimmed) return;
+    await createContact.mutateAsync(trimmed);
+    onChange(trimmed);
+    setNewName("");
+    setShowNew(false);
+  };
+
+  return (
+    <PropertyRow icon={waitingOnIcon} label="WAITING ON" className="flex-1">
+      <Select
+        value={value || "none"}
+        onValueChange={(v) => {
+          if (v === "__new__") {
+            setShowNew(true);
+            return;
+          }
+          onChange(v === "none" ? "" : v);
+        }}
+      >
+        <SelectTrigger className="h-8 text-sm border-0 shadow-none px-2 bg-transparent">
+          <SelectValue placeholder="No one" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="none">No one</SelectItem>
+          {contacts.map((c) => (
+            <SelectItem key={c.id} value={c.name}>{c.name}</SelectItem>
+          ))}
+          <SelectItem value="__new__" className="text-primary">
+            <span className="flex items-center gap-1"><Plus className="h-3 w-3" /> Add contact…</span>
+          </SelectItem>
+        </SelectContent>
+      </Select>
+      {showNew && (
+        <div className="flex items-center gap-1 mt-1">
+          <Input
+            value={newName}
+            onChange={(e) => setNewName(e.target.value)}
+            placeholder="Name…"
+            className="h-7 text-xs flex-1"
+            autoFocus
+            onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); handleCreate(); } if (e.key === "Escape") setShowNew(false); }}
+          />
+          <Button size="sm" variant="ghost" className="h-7 px-2" onClick={handleCreate} disabled={!newName.trim() || createContact.isPending}>
+            <Check className="h-3 w-3" />
+          </Button>
+        </div>
+      )}
+    </PropertyRow>
+  );
+}
+
 // Helper: Property row with label
 function PropertyRow({ icon, label, children, className }: { icon: string; label: string; children: React.ReactNode; className?: string }) {
   return (
