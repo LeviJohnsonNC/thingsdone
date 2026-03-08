@@ -368,11 +368,14 @@ Generate data for a productivity-focused professional who works in tech, exercis
     testData.projects = (testData.projects || []).filter((p: any) => p && (p.title || p.name));
     testData.items = (testData.items || []).filter((i: any) => i && (i.title || i.name));
 
+    const projectTempIds = new Set(testData.projects.map((p: any) => p.temp_id || p.id));
+    const itemsWithProjects = testData.items.filter((i: any) => i.project_temp_id && projectTempIds.has(i.project_temp_id));
     console.log("Sanitized data counts:", {
       areas: testData.areas.length,
       tags: testData.tags.length,
       projects: testData.projects.length,
       items: testData.items.length,
+      itemsLinkedToProjects: itemsWithProjects.length,
     });
 
     // Insert using service role client (bypasses RLS)
