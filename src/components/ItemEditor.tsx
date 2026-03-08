@@ -462,7 +462,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
 
             {/* Google Calendar toggle */}
             {isCalendarConnected && hasDate && (
-              <PropertyRow icon="📆" label="CALENDAR">
+              <PropertyRow icon={scheduledIcon} label="CALENDAR">
                 <div className="flex items-center gap-2 px-2">
                   <Switch
                     id={`gcal-${item.id}`}
