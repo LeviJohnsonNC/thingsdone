@@ -193,8 +193,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
                     : "border-transparent text-muted-foreground " + cfg.bgClass
                 )}
               >
-                <span>{cfg.icon}</span>
-                {cfg.label}
+                <img src={cfg.icon} alt={cfg.label} className="h-4 w-4" />
               </button>
             );
           })}
