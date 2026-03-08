@@ -99,11 +99,17 @@ export default function ReviewView() {
         switch (suggestion.action) {
           case "move":
             if (suggestion.item_id && suggestion.target_state) {
-              await updateItem.mutateAsync({
+              const moveFields: Record<string, unknown> = {
                 id: suggestion.item_id,
                 state: suggestion.target_state,
-                ...suggestion.suggested_fields,
-              } as any);
+              };
+              if (suggestion.suggested_fields) {
+                const allowed = ["energy", "time_estimate", "waiting_on", "project_id", "due_date", "scheduled_date"];
+                for (const [k, v] of Object.entries(suggestion.suggested_fields)) {
+                  if (allowed.includes(k) && v != null) moveFields[k] = v;
+                }
+              }
+              await updateItem.mutateAsync(moveFields as any);
               review.incrementStat("itemsMoved");
             }
             break;
