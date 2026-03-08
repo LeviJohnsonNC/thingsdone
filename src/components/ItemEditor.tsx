@@ -31,6 +31,7 @@ import energyIcon from "@/assets/icons/energy.svg";
 import dueIcon from "@/assets/icons/due.svg";
 import projectIcon from "@/assets/icons/project.svg";
 import areaIcon from "@/assets/icons/area.svg";
+import waitingOnIcon from "@/assets/icons/waiting-on.svg";
 
 // State config with accent colors (HSL values matching design system)
 const STATE_CONFIG: Record<string, { label: string; icon: string; activeClass: string; borderClass: string; bgClass: string }> = {
