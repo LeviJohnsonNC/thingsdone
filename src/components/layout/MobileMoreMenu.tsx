@@ -4,7 +4,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { Separator } from "@/components/ui/separator";
 import { useAppStore } from "@/stores/appStore";
 import { useAuth } from "@/hooks/useAuth";
-import { useNeedsReview } from "@/hooks/useUserSettings";
+import { useAreas } from "@/hooks/useAreas";
 import {
   Select,
   SelectContent,
@@ -22,10 +22,9 @@ const MORE_ITEMS = [
 
 export function MobileMoreMenu() {
   const navigate = useNavigate();
-  const { moreMenuOpen, setMoreMenuOpen, selectedAreaId, setSelectedAreaId, setWeeklyReviewOpen } = useAppStore();
+  const { moreMenuOpen, setMoreMenuOpen, selectedAreaId, setSelectedAreaId } = useAppStore();
   const { signOut, user } = useAuth();
   const { data: areas } = useAreas();
-  const needsReview = useNeedsReview();
 
   const handleNav = (path: string) => {
     navigate(path);
@@ -71,17 +70,6 @@ export function MobileMoreMenu() {
               <span>{item.label}</span>
             </button>
           ))}
-
-          <button
-            onClick={() => { setWeeklyReviewOpen(true); setMoreMenuOpen(false); }}
-            className="flex w-full items-center gap-3 px-4 py-3 text-sm text-foreground hover:bg-accent rounded-md transition-colors min-h-[44px]"
-          >
-            <RefreshCw className="h-5 w-5 text-muted-foreground" />
-            <span>Weekly Review</span>
-            {needsReview && (
-              <Badge variant="destructive" className="ml-auto text-[10px] h-5">Due</Badge>
-            )}
-          </button>
 
           <Separator />
 
