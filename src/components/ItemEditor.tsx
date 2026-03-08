@@ -25,6 +25,11 @@ import nextIcon from "@/assets/icons/next.svg";
 import waitingIcon from "@/assets/icons/waiting.svg";
 import scheduledIcon from "@/assets/icons/scheduled.svg";
 import somedayIcon from "@/assets/icons/someday.svg";
+import timeEstIcon from "@/assets/icons/time-est.svg";
+import energyIcon from "@/assets/icons/energy.svg";
+import dueIcon from "@/assets/icons/due.svg";
+import projectIcon from "@/assets/icons/project.svg";
+import areaIcon from "@/assets/icons/area.svg";
 
 // State config with accent colors (HSL values matching design system)
 const STATE_CONFIG: Record<string, { label: string; icon: string; activeClass: string; borderClass: string; bgClass: string }> = {
