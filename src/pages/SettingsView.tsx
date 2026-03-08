@@ -88,6 +88,13 @@ export default function SettingsView() {
     setNewTag("");
   };
 
+  const handleAddContact = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newContact.trim()) return;
+    await createContact.mutateAsync(newContact.trim());
+    setNewContact("");
+  };
+
   return (
     <div className="flex flex-col h-full">
       <div className="flex items-center gap-2 px-4 py-4 border-b border-border bg-card">
