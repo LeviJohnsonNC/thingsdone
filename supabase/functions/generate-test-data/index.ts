@@ -455,7 +455,7 @@ Generate data for a productivity-focused professional who works in tech, exercis
               area_id: item.area_temp_id ? areaMap.get(item.area_temp_id) || null : null,
               is_focused: !!item.is_focused,
               energy: ["low", "medium", "high"].includes(item.energy) ? item.energy : null,
-              time_estimate: typeof item.time_estimate === "number" && item.time_estimate > 0 ? item.time_estimate : null,
+              time_estimate: (() => { const allowed = [5, 15, 30, 60, 120, 240]; const v = Number(item.time_estimate); if (!v || v <= 0) return null; return allowed.reduce((prev, curr) => Math.abs(curr - v) < Math.abs(prev - v) ? curr : prev); })(),
               due_date: item.due_date || null,
               scheduled_date: item.scheduled_date || null,
               waiting_on: item.waiting_on || null,
