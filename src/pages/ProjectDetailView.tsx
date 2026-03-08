@@ -1,14 +1,12 @@
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Star, Plus } from "lucide-react";
+import { ArrowLeft, Star } from "lucide-react";
 import { useProjects, useUpdateProject } from "@/hooks/useProjects";
-import { useProjectItems, useCreateItem } from "@/hooks/useItems";
+import { useProjectItems } from "@/hooks/useItems";
 import { useAreas } from "@/hooks/useAreas";
 import { SortableItemList } from "@/components/SortableItemList";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { QuickAddBar } from "@/components/QuickAddBar";
 import { Progress } from "@/components/ui/progress";
-
 import { DoneSection } from "@/components/DoneSection";
 import { cn } from "@/lib/utils";
 
@@ -20,8 +18,6 @@ export default function ProjectDetailView() {
   const { data: items } = useProjectItems(id!);
   const { data: areas } = useAreas();
   const updateProject = useUpdateProject();
-  const createItem = useCreateItem();
-  const [addTitle, setAddTitle] = useState("");
 
   const area = areas?.find((a) => a.id === project?.area_id);
   const total = items?.length ?? 0;
@@ -31,7 +27,6 @@ export default function ProjectDetailView() {
   const activeItems = items?.filter((i) => i.state !== "completed") ?? [];
   const completedItems = items?.filter((i) => i.state === "completed") ?? [];
 
-  // For sequential projects, dim all items after the first
   const dimmedIds = useMemo(() => {
     const ids = new Set<string>();
     activeItems.forEach((item, i) => {
@@ -41,17 +36,6 @@ export default function ProjectDetailView() {
   }, [activeItems]);
 
   if (!project) return null;
-
-  const handleAddAction = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!addTitle.trim()) return;
-    await createItem.mutateAsync({
-      title: addTitle.trim(),
-      state: "next",
-      project_id: project.id,
-    });
-    setAddTitle("");
-  };
 
   return (
     <div className="flex flex-col h-full">
@@ -82,6 +66,8 @@ export default function ProjectDetailView() {
         <Progress value={progress} className="h-1.5" />
       </div>
 
+      <QuickAddBar placeholder="Add action…" defaultState="next" projectId={project.id} />
+
       {/* Actions list */}
       <div className="flex-1 overflow-y-auto">
         <SortableItemList
@@ -91,19 +77,6 @@ export default function ProjectDetailView() {
         />
         <DoneSection items={completedItems} restoreState="next" />
       </div>
-
-      {/* Add action */}
-      <form onSubmit={handleAddAction} className="flex gap-2 p-4 border-t border-border bg-card">
-        <Input
-          placeholder="Add action…"
-          value={addTitle}
-          onChange={(e) => setAddTitle(e.target.value)}
-          className="flex-1"
-        />
-        <Button type="submit" size="sm" disabled={!addTitle.trim()}>
-          <Plus className="h-4 w-4" />
-        </Button>
-      </form>
     </div>
   );
 }
