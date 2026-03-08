@@ -342,7 +342,7 @@ Generate data for a productivity-focused professional who works in tech, exercis
             {
               role: "user",
               content:
-                "Return ONLY a valid JSON object (no markdown, no prose) with keys: areas, tags, projects, items. Include 5 areas, 7 tags, 8 projects, 40 items, and tag_temp_ids on each item.",
+                "Return ONLY a valid JSON object (no markdown, no prose) with keys: areas, tags, projects, items. Include 5 areas, 7 tags, 8 projects each with 3-6 items assigned via project_temp_id matching the project's temp_id, plus 5-8 standalone items. Include tag_temp_ids on each item.",
             },
           ],
           temperature: 0.2,
