@@ -260,6 +260,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
               ref={notesRef}
               value={notes}
               onChange={(e) => { setNotes(e.target.value); autoResize(); }}
+              onBlur={handleBlurNotes}
               placeholder="Add notes…"
               className="w-full resize-none bg-transparent text-sm text-muted-foreground placeholder:text-muted-foreground/50 border-0 outline-none focus:ring-0 min-h-[2.5rem]"
               rows={2}
