@@ -42,7 +42,7 @@ export default function WaitingView() {
       <div className="flex-1 overflow-y-auto">
         {grouped.length === 0 ? (
           <EmptyState
-            icon={<Hourglass className="h-12 w-12 text-muted-foreground/30" />}
+            icon={Hourglass}
             title="Nothing waiting"
             description="Items delegated to others will appear here."
           />
