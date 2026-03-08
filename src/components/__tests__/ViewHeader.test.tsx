@@ -20,9 +20,8 @@ describe("ViewHeader", () => {
 
   it("hides count badge when count is undefined", () => {
     render(<ViewHeader title="Next" />);
-    // No numeric badge should appear
-    const heading = screen.getByRole("heading");
-    expect(heading.textContent).toBe("Inbox" || "Next");
+    // Only the heading text should be present, no numeric badge
+    expect(screen.getByRole("heading").textContent).toBe("Next");
   });
 
   it("renders children", () => {
