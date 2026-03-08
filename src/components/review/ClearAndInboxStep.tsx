@@ -6,14 +6,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { SuggestionCard } from "./SuggestionCard";
 import type { ReviewSuggestion } from "@/hooks/useReview";
-import { CheckCircle2, Lightbulb } from "lucide-react";
+import { CheckCircle2, Lightbulb, Sparkles } from "lucide-react";
 
 interface ClearAndInboxStepProps {
   suggestions: ReviewSuggestion[];
   observations: string[];
   onAcceptSuggestion: (s: ReviewSuggestion) => void;
   onDismissSuggestion: (s: ReviewSuggestion) => void;
-  onRequestAI: () => void;
+  onRequestAI: (brainDump?: string) => void;
   aiLoading: boolean;
 }
 
@@ -30,6 +30,8 @@ export function ClearAndInboxStep({
   const { setEditingItemId } = useAppStore();
 
   const isEmpty = !inboxItems?.length;
+  const createSuggestions = suggestions.filter((s) => s.action === "create");
+  const inboxSuggestions = suggestions.filter((s) => s.action !== "create");
 
   return (
     <div className="space-y-6">
@@ -40,15 +42,50 @@ export function ClearAndInboxStep({
           Clear Your Head
         </h3>
         <p className="text-xs text-muted-foreground">
-          Dump anything on your mind. The AI can turn these into tasks.
+          Dump anything on your mind — errands, ideas, follow-ups, worries. Anything.
         </p>
         <Textarea
           value={brainDump}
           onChange={(e) => setBrainDump(e.target.value)}
-          placeholder="Meeting prep for Monday, call dentist, research new laptop..."
+          placeholder="Meeting prep for Monday, call dentist, research new laptop, follow up with Sarah about budget..."
           className="min-h-[80px] text-sm"
         />
+        <Button
+          onClick={() => onRequestAI(brainDump)}
+          disabled={aiLoading || !brainDump.trim()}
+          variant="outline"
+          size="sm"
+          className="w-full"
+        >
+          <Sparkles className="h-3.5 w-3.5 mr-1.5" />
+          {aiLoading ? "Generating tasks..." : "Turn into tasks"}
+        </Button>
       </div>
+
+      {/* AI suggestions from brain dump */}
+      {createSuggestions.length > 0 && (
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <p className="text-xs font-medium text-foreground">Suggested tasks from brain dump:</p>
+            <Button
+              size="sm"
+              variant="outline"
+              className="text-xs h-7"
+              onClick={() => createSuggestions.forEach(onAcceptSuggestion)}
+            >
+              Accept all
+            </Button>
+          </div>
+          {createSuggestions.map((s, i) => (
+            <SuggestionCard
+              key={i}
+              suggestion={s}
+              onAccept={onAcceptSuggestion}
+              onDismiss={onDismissSuggestion}
+            />
+          ))}
+        </div>
+      )}
 
       {/* Observations */}
       {observations.length > 0 && (
@@ -58,23 +95,6 @@ export function ClearAndInboxStep({
               {obs}
             </p>
           ))}
-        </div>
-      )}
-
-      {/* AI suggestions from brain dump */}
-      {suggestions.filter((s) => s.action === "create").length > 0 && (
-        <div className="space-y-2">
-          <p className="text-xs font-medium text-foreground">AI-suggested tasks:</p>
-          {suggestions
-            .filter((s) => s.action === "create")
-            .map((s, i) => (
-              <SuggestionCard
-                key={i}
-                suggestion={s}
-                onAccept={onAcceptSuggestion}
-                onDismiss={onDismissSuggestion}
-              />
-            ))}
         </div>
       )}
 
@@ -109,7 +129,7 @@ export function ClearAndInboxStep({
         )}
 
         {/* AI suggestions for inbox items */}
-        {suggestions.filter((s) => s.action !== "create").length > 0 && (
+        {inboxSuggestions.length > 0 && (
           <div className="space-y-2 mt-4">
             <div className="flex items-center justify-between">
               <p className="text-xs font-medium text-foreground">AI suggestions:</p>
@@ -117,41 +137,37 @@ export function ClearAndInboxStep({
                 size="sm"
                 variant="outline"
                 className="text-xs h-7"
-                onClick={() =>
-                  suggestions
-                    .filter((s) => s.action !== "create")
-                    .forEach(onAcceptSuggestion)
-                }
+                onClick={() => inboxSuggestions.forEach(onAcceptSuggestion)}
               >
                 Accept all
               </Button>
             </div>
-            {suggestions
-              .filter((s) => s.action !== "create")
-              .map((s, i) => (
-                <SuggestionCard
-                  key={i}
-                  suggestion={s}
-                  itemTitle={
-                    inboxItems?.find((item) => item.id === s.item_id)?.title
-                  }
-                  onAccept={onAcceptSuggestion}
-                  onDismiss={onDismissSuggestion}
-                />
-              ))}
+            {inboxSuggestions.map((s, i) => (
+              <SuggestionCard
+                key={i}
+                suggestion={s}
+                itemTitle={
+                  inboxItems?.find((item) => item.id === s.item_id)?.title
+                }
+                onAccept={onAcceptSuggestion}
+                onDismiss={onDismissSuggestion}
+              />
+            ))}
           </div>
         )}
       </div>
 
-      {/* Request AI help button */}
-      <Button
-        onClick={onRequestAI}
-        disabled={aiLoading}
-        variant="outline"
-        className="w-full"
-      >
-        {aiLoading ? "Analyzing..." : "Get AI Suggestions"}
-      </Button>
+      {/* Request AI help for inbox */}
+      {!isEmpty && (
+        <Button
+          onClick={() => onRequestAI()}
+          disabled={aiLoading}
+          variant="outline"
+          className="w-full"
+        >
+          {aiLoading ? "Analyzing..." : "Get AI Suggestions for Inbox"}
+        </Button>
+      )}
     </div>
   );
 }

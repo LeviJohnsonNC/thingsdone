@@ -25,16 +25,18 @@ export function useReviewAI() {
       step: number,
       items: Item[],
       projects: Project[],
-      context: StepContext
+      context: StepContext,
+      brainDump?: string
     ): Promise<AIResponse | null> => {
       setLoading(true);
       setError(null);
       try {
+        const body: Record<string, unknown> = { step, items, projects, context };
+        if (brainDump?.trim()) body.brain_dump = brainDump;
+        
         const { data, error: fnError } = await supabase.functions.invoke(
           "review-ai",
-          {
-            body: { step, items, projects, context },
-          }
+          { body }
         );
         if (fnError) throw fnError;
         return data as AIResponse;
