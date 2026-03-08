@@ -35,7 +35,7 @@ const PRO_FEATURES: PricingFeature[] = [
 
 const FAQ = [
   {
-    q: "Can I use Things Done for free forever?",
+    q: "Can I use Things Done. for free forever?",
     a: "Yes! The free plan includes up to 30 active items, 3 projects, and 3 areas with no time limit.",
   },
   {
