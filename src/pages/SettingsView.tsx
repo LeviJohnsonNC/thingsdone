@@ -32,8 +32,6 @@ export default function SettingsView() {
   const createContact = useCreateContact();
   const deleteContact = useDeleteContact();
   const purgeAllData = usePurgeAllData();
-  const needsReview = useNeedsReview();
-  const { setWeeklyReviewOpen } = useAppStore();
   const { data: calendarToken, refetch: refetchCalendar } = useGoogleCalendarStatus();
   const connectCalendar = useConnectGoogleCalendar();
   const disconnectCalendar = useDisconnectGoogleCalendar();
