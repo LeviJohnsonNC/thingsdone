@@ -424,7 +424,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
             </div>
 
             {/* Project + Area - side by side */}
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <PropertyRow icon={projectIcon} label="PROJECT" className="flex-1">
                 <Select
                   value={item.project_id ?? "none"}
