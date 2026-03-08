@@ -223,6 +223,28 @@ export default function SettingsView() {
           </form>
         </section>
 
+        {/* Contacts */}
+        <section>
+          <h2 className="text-sm font-medium text-foreground mb-3">Contacts</h2>
+          <p className="text-xs text-muted-foreground mb-3">People you delegate tasks to. Used in the "Waiting On" field.</p>
+          <div className="space-y-2 mb-3">
+            {contacts?.map((contact) => (
+              <div key={contact.id} className="flex items-center justify-between bg-card border border-border rounded-md px-3 py-2">
+                <span className="text-sm">{contact.name}</span>
+                <button onClick={() => deleteContact.mutate(contact.id)} className="p-1 text-muted-foreground hover:text-destructive">
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
+            ))}
+          </div>
+          <form onSubmit={handleAddContact} className="flex gap-2">
+            <Input placeholder="New contact…" value={newContact} onChange={(e) => setNewContact(e.target.value)} className="flex-1" />
+            <Button type="submit" size="sm" variant="outline" disabled={!newContact.trim()}>
+              <Plus className="h-4 w-4" />
+            </Button>
+          </form>
+        </section>
+
         <Button variant="outline" onClick={signOut} className="w-full">Sign Out</Button>
 
         {/* Admin Section - only visible to admin */}
