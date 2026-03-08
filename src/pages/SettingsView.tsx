@@ -25,6 +25,8 @@ export default function SettingsView() {
   const createArea = useCreateArea();
   const deleteArea = useDeleteArea();
   const createTag = useCreateTag();
+  const deleteTag = useDeleteTag();
+  const purgeAllData = usePurgeAllData();
   const needsReview = useNeedsReview();
   const { setWeeklyReviewOpen } = useAppStore();
   const { data: calendarToken, refetch: refetchCalendar } = useGoogleCalendarStatus();
