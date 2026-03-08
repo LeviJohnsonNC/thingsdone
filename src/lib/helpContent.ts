@@ -352,7 +352,7 @@ A project is any outcome that requires more than one action. In Things Done:
 - Give it a clear outcome-oriented title
 - Add items to a project from the item detail view
 
-### Inside a project
+## Inside a project
 
 Each project has its own list of actions. You can:
 - **Reorder items** by dragging them — the order matters because Things Done surfaces only the first incomplete action in your Next view
@@ -360,7 +360,7 @@ Each project has its own list of actions. You can:
 - **Set a project type** — sequential (default) or parallel
 - **Set due dates** and **scheduled dates** at the project level
 
-### Project states
+## Project states
 
 Projects can be:
 - **Active** — In progress, with a next action
@@ -435,24 +435,24 @@ Navigate to **Weekly Review** from the sidebar or More menu. If you haven't comp
 
 ## The review steps
 
-### 1. Clear & Brain Dump
+## 1. Clear & Brain Dump
 First, get everything out of your head. The app provides a text area where you can dump loose thoughts, and each one gets captured as a new inbox item. Then, process your inbox to zero.
 
-### 2. State Review
+## 2. State Review
 Review items in each state:
 - **Next** — Are these still relevant? Any completed?
 - **Waiting** — Any items to follow up on?
 - **Scheduled** — Dates still correct?
 - **Someday** — Anything to activate or remove?
 
-### 3. Project Review
+## 3. Project Review
 Go through each active project:
 - Is the project still active?
 - Is the outcome still clear?
 - Does it have a next action?
 - Are the actions in the right order?
 
-### 4. Summary
+## 4. Summary
 See a summary of what you reviewed and any actions taken. Add a reflection note about how the week went.
 
 ## Review history
