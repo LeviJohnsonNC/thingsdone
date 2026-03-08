@@ -12,7 +12,8 @@ import { StateReviewStep } from "@/components/review/StateReviewStep";
 import { ProjectReviewStep } from "@/components/review/ProjectReviewStep";
 import { ReviewSummaryStep } from "@/components/review/ReviewSummaryStep";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, History } from "lucide-react";
+import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
 const STEP_CONFIG: Record<number, { state: string; title: string; description: string }> = {
