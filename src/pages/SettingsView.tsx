@@ -5,15 +5,12 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { ViewHeader } from "@/components/ViewHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { useAreas, useCreateArea, useDeleteArea } from "@/hooks/useAreas";
 import { useTags, useCreateTag, useDeleteTag, usePurgeAllData } from "@/hooks/useTags";
 import { useContacts, useCreateContact, useDeleteContact } from "@/hooks/useContacts";
 import { useAuth } from "@/hooks/useAuth";
-import { useNeedsReview } from "@/hooks/useUserSettings";
 import { useGoogleCalendarStatus, useConnectGoogleCalendar, useDisconnectGoogleCalendar } from "@/hooks/useGoogleCalendar";
-import { useAppStore } from "@/stores/appStore";
 import { AdminSection } from "@/components/AdminSection";
 import { SubscriptionSection } from "@/components/SubscriptionSection";
 import { UpgradePrompt } from "@/components/UpgradePrompt";
@@ -35,8 +32,6 @@ export default function SettingsView() {
   const createContact = useCreateContact();
   const deleteContact = useDeleteContact();
   const purgeAllData = usePurgeAllData();
-  const needsReview = useNeedsReview();
-  const { setWeeklyReviewOpen } = useAppStore();
   const { data: calendarToken, refetch: refetchCalendar } = useGoogleCalendarStatus();
   const connectCalendar = useConnectGoogleCalendar();
   const disconnectCalendar = useDisconnectGoogleCalendar();
@@ -104,22 +99,6 @@ export default function SettingsView() {
       </div>
 
       <div className="flex-1 overflow-y-auto p-4 space-y-8 max-w-lg">
-        {/* Weekly Review */}
-        <section>
-          <h2 className="text-sm font-medium text-foreground mb-3">Weekly Review</h2>
-          <Button
-            variant="outline"
-            className="w-full justify-start gap-2"
-            onClick={() => setWeeklyReviewOpen(true)}
-          >
-            <RefreshCw className="h-4 w-4" />
-            Start Weekly Review
-            {needsReview && (
-              <Badge variant="destructive" className="ml-auto text-[10px] h-5">Due</Badge>
-            )}
-          </Button>
-        </section>
-
         {/* Connected Accounts */}
         <section>
           <h2 className="text-sm font-medium text-foreground mb-3">Connected Accounts</h2>
