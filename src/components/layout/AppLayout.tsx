@@ -6,11 +6,13 @@ import { MobileBottomNav } from "./MobileBottomNav";
 import { QuickAddFAB } from "../QuickAddFAB";
 import { useAppStore } from "@/stores/appStore";
 import { OverLimitBanner } from "../OverLimitBanner";
+import { useActiveTheme } from "@/hooks/useTheme";
 
 export function AppLayout({ children }: { children: ReactNode }) {
   const isMobile = useIsMobile();
   const location = useLocation();
   const setEditingItemId = useAppStore((s) => s.setEditingItemId);
+  useActiveTheme();
 
   useEffect(() => {
     setEditingItemId(null);

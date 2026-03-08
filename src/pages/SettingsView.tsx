@@ -15,6 +15,9 @@ import { AdminSection } from "@/components/AdminSection";
 import { SubscriptionSection } from "@/components/SubscriptionSection";
 import { UpgradePrompt } from "@/components/UpgradePrompt";
 import { useUsageLimits } from "@/hooks/useUsageLimits";
+import { useUserSettings } from "@/hooks/useUserSettings";
+import { useSaveGlobalTheme, useSaveAreaTheme } from "@/hooks/useTheme";
+import { ThemePicker } from "@/components/ThemePicker";
 import { toast } from "sonner";
 
 export default function SettingsView() {
@@ -40,6 +43,9 @@ export default function SettingsView() {
   const [newContact, setNewContact] = useState("");
   const [showUpgrade, setShowUpgrade] = useState(false);
   const { canCreateArea, areaCount, areaLimit } = useUsageLimits();
+  const { data: settings } = useUserSettings();
+  const saveGlobalTheme = useSaveGlobalTheme();
+  const saveAreaTheme = useSaveAreaTheme();
 
   // Handle callback from Google OAuth
   useEffect(() => {
@@ -159,16 +165,37 @@ export default function SettingsView() {
         {/* Subscription */}
         <SubscriptionSection />
 
+        {/* Global Theme */}
+        <section>
+          <h2 className="text-sm font-medium text-foreground mb-2">Theme</h2>
+          <p className="text-xs text-muted-foreground mb-3">Choose a global color palette for the app.</p>
+          <ThemePicker
+            value={settings?.theme ?? "default"}
+            onChange={(id) => saveGlobalTheme.mutate(id)}
+          />
+        </section>
+
         {/* Areas */}
         <section>
           <h2 className="text-sm font-medium text-foreground mb-3">Areas of Focus</h2>
-          <div className="space-y-2 mb-3">
+          <div className="space-y-3 mb-3">
             {areas?.map((area) => (
-              <div key={area.id} className="flex items-center justify-between bg-card border border-border rounded-md px-3 py-2">
-                <span className="text-sm">{area.name}</span>
-                <button onClick={() => deleteArea.mutate(area.id)} className="p-1 text-muted-foreground hover:text-destructive">
-                  <Trash2 className="h-4 w-4" />
-                </button>
+              <div key={area.id} className="bg-card border border-border rounded-md px-3 py-2 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium">{area.name}</span>
+                  <button onClick={() => deleteArea.mutate(area.id)} className="p-1 text-muted-foreground hover:text-destructive">
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </div>
+                <div>
+                  <p className="text-[11px] text-muted-foreground mb-1.5">Area theme</p>
+                  <ThemePicker
+                    value={(area as any).theme}
+                    onChange={(id) => saveAreaTheme.mutate({ areaId: area.id, themeId: id })}
+                    allowNone
+                    onNone={() => saveAreaTheme.mutate({ areaId: area.id, themeId: null })}
+                  />
+                </div>
               </div>
             ))}
           </div>

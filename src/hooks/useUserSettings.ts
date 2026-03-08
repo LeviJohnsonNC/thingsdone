@@ -6,6 +6,7 @@ interface UserSettings {
   id: string;
   user_id: string;
   last_review_at: string | null;
+  theme: string | null;
 }
 
 export function useUserSettings() {

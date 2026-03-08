@@ -85,6 +85,7 @@ export function makeArea(overrides: Partial<Area> = {}): Area {
     name: "Test area",
     sort_order: 0,
     created_at: new Date().toISOString(),
+    theme: null as unknown as string,
     ...overrides,
   };
 }
