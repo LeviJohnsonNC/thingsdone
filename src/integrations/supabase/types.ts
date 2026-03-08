@@ -297,7 +297,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      batch_reorder_items: {
+        Args: { p_field: string; p_ids: string[]; p_orders: number[] }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
