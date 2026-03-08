@@ -27,7 +27,6 @@ export default function SettingsView() {
   const { user, signOut } = useAuth();
   const { data: areas } = useAreas();
   const { data: tags } = useTags();
-  const { data: tags } = useTags();
   const { data: contacts } = useContacts();
   const createArea = useCreateArea();
   const deleteArea = useDeleteArea();
