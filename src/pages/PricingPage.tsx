@@ -211,7 +211,7 @@ export default function PricingPage() {
               <AccordionTrigger className="text-sm text-foreground text-left">
                 {item.q}
               </AccordionTrigger>
-              <AccordionContent className="text-sm text-muted-foreground">
+              <AccordionContent forceMount className="text-sm text-muted-foreground">
                 {item.a}
               </AccordionContent>
             </AccordionItem>

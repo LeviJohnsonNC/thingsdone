@@ -493,7 +493,10 @@ function TwoMinuteRuleArticle() {
   return (
     <div className="prose-custom">
       <p className="lead">
-        Of all the tactics in David Allen's Getting Things Done, the two-minute
+        Of all the tactics in David Allen's{" "}
+        <a href="https://en.wikipedia.org/wiki/Getting_Things_Done" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">
+          Getting Things Done
+        </a>, the two-minute
         rule is the simplest — and possibly the most powerful. It goes like this:
         <strong> if an action takes less than two minutes, do it now.</strong>
       </p>

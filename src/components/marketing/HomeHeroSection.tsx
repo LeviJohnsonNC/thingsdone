@@ -38,7 +38,7 @@ export function HomeHeroSection() {
 
         {/* Product visual */}
         <motion.div
-          initial={{ opacity: 0, y: 24, scale: 0.97 }}
+          initial={{ opacity: 1, y: 0, scale: 1 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.7, delay: 0.15, ease: "easeOut" }}
           className="relative"
