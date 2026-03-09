@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { format } from "date-fns";
-import { Star, CalendarIcon, Trash2, X, Plus, Check, Circle } from "lucide-react";
+import { Star, CalendarIcon, Trash2, X, Plus, Check, Circle, Repeat, Zap } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
