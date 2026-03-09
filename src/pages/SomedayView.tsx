@@ -15,6 +15,7 @@ export default function SomedayView() {
   const { data: items, isLoading } = useItems("someday", selectedAreaId);
   const { data: itemTagMap } = useAllItemTags();
   const { filters, setFilters } = useItemFilters();
+  const isMobile = useIsMobile();
 
   const filteredItems = applyItemFilters(items, filters, itemTagMap);
 
