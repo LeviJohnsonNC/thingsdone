@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { motion, useMotionValue, useTransform, PanInfo, AnimatePresence } from "framer-motion";
-import { Star, Check, GripVertical } from "lucide-react";
+import { Star, Check, GripVertical, Repeat, ListChecks } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Item } from "@/lib/types";
 import { useCompleteItem, useUpdateItem } from "@/hooks/useItems";
 import { useAppStore } from "@/stores/appStore";
 import { ItemEditor } from "./ItemEditor";
 import { toast } from "sonner";
+import type { ChecklistItem } from "@/components/ChecklistEditor";
 
 interface ItemRowProps {
   item: Item;
