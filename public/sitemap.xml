@@ -11,6 +11,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://thingsdone.lovable.app/pricing</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://thingsdone.lovable.app/blog</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -19,10 +24,21 @@
     <loc>https://thingsdone.lovable.app/blog/why-your-to-do-list-doesnt-work</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+  </url>
   <url>
-    <loc>https://thingsdone.lovable.app/pricing</loc>
+    <loc>https://thingsdone.lovable.app/blog/the-hidden-cost-of-open-loops</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://thingsdone.lovable.app/blog/from-chaos-to-calm</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://thingsdone.lovable.app/blog/the-two-minute-rule</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://thingsdone.lovable.app/auth</loc>
