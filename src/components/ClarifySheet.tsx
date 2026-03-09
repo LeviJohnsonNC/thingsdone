@@ -317,6 +317,24 @@ export function ClarifySheet() {
             </Select>
           </div>
 
+          {/* Recurrence */}
+          <div>
+            <p className="text-xs text-muted-foreground mb-1.5">Repeat</p>
+            <RecurrenceSelector
+              value={(item as any).recurrence_rule ?? null}
+              onChange={(v) => saveField("recurrence_rule", v)}
+            />
+          </div>
+
+          {/* Checklist */}
+          <div>
+            <p className="text-xs text-muted-foreground mb-2">Checklist</p>
+            <ChecklistEditor
+              checklist={((item as any).checklist as ChecklistItem[]) ?? []}
+              onChange={(cl) => saveField("checklist", cl)}
+            />
+          </div>
+
           {/* Notes */}
           <div>
             <p className="text-xs text-muted-foreground mb-1.5">Notes</p>

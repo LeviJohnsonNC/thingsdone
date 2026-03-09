@@ -506,6 +506,17 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
               />
             </div>
 
+            {/* Recurrence */}
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+              <PropertyRow icon={scheduledIcon} label="REPEAT" className="flex-1">
+                <RecurrenceSelector
+                  value={(item as any).recurrence_rule ?? null}
+                  onChange={(v) => saveField("recurrence_rule", v)}
+                  compact
+                />
+              </PropertyRow>
+            </div>
+
             {/* Google Calendar toggle */}
             {isCalendarConnected && hasDate && (
               <PropertyRow icon={scheduledIcon} label="CALENDAR">
