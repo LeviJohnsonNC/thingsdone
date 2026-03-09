@@ -23,6 +23,8 @@ import { TIME_ESTIMATE_OPTIONS, ENERGY_OPTIONS } from "@/lib/types";
 import type { ItemState, EnergyLevel } from "@/lib/types";
 import { ChecklistEditor, type ChecklistItem } from "@/components/ChecklistEditor";
 import { RecurrenceSelector } from "@/components/RecurrenceSelector";
+import { UpgradePrompt } from "@/components/UpgradePrompt";
+import { useSubscription } from "@/hooks/useSubscription";
 import { toast } from "sonner";
 import inboxIcon from "@/assets/icons/inbox.svg";
 import nextIcon from "@/assets/icons/next.svg";
