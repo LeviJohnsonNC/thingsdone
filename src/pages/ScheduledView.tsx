@@ -109,9 +109,9 @@ export default function ScheduledView() {
   return (
     <div className="flex flex-col h-full">
       <ViewHeader title="Scheduled" count={totalCount} />
-      <ItemFilterBar filters={filters} onChange={setFilters} />
+      {totalCount > 0 && <ItemFilterBar filters={filters} onChange={setFilters} />}
       <div className="flex-1">
-        {isLoading ? null : groups.length === 0 ? (
+        {isLoading ? <ItemListSkeleton /> : groups.length === 0 ? (
           <EmptyState
             icon={Calendar}
             title="Nothing scheduled"
