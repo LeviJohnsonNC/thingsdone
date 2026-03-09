@@ -73,6 +73,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
   const [notes, setNotes] = useState("");
   const [waitingOn, setWaitingOn] = useState("");
   const [addToCalendar, setAddToCalendar] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const notesRef = useRef<HTMLTextAreaElement>(null);
 
   const isCalendarConnected = !!calendarToken;
