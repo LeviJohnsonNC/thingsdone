@@ -6,7 +6,7 @@ export type Area = Tables<"areas">;
 export type Tag = Tables<"tags">;
 export type ItemTag = Tables<"item_tags">;
 
-export type ItemState = "inbox" | "next" | "scheduled" | "someday" | "waiting" | "completed" | "trash";
+export type ItemState = "inbox" | "next" | "scheduled" | "someday" | "waiting" | "reference" | "completed" | "trash";
 export type ProjectState = "active" | "someday" | "scheduled" | "completed";
 
 export type TimeEstimate = 5 | 15 | 30 | 60 | 120 | 240;
