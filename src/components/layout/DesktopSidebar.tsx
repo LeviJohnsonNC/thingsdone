@@ -60,7 +60,7 @@ export function DesktopSidebar() {
   const { data: inboxItems } = useItems("inbox");
   const { data: areas } = useAreas();
   const { data: settings } = useUserSettings();
-  const { selectedAreaId, setSelectedAreaId } = useAppStore();
+  const { selectedAreaId, setSelectedAreaId, setSearchOpen } = useAppStore();
   const { isPro } = useSubscription();
   const { activeItemCount, activeItemLimit, isApproachingLimit } = useUsageLimits();
 
