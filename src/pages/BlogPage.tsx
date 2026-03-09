@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { SEOHead } from "@/components/SEOHead";
+import { SEOHead, SITE_URL } from "@/components/SEOHead";
 import { BLOG_ARTICLES } from "@/lib/blogData";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight } from "lucide-react";
@@ -11,7 +11,7 @@ export default function BlogPage() {
       <SEOHead
         title="Blog — Things Done. | Productivity Tips & GTD Guides"
         description="Practical guides on Getting Things Done, task management, and building a productivity system you actually trust."
-        canonical="https://thingsdone.lovable.app/blog"
+        canonical={`${SITE_URL}/blog`}
       />
 
       {/* Hero */}
@@ -36,7 +36,7 @@ export default function BlogPage() {
           {BLOG_ARTICLES.map((article, i) => (
             <motion.article
               key={article.slug}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 1, y: 0 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1 }}

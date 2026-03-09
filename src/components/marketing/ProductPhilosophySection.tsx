@@ -25,7 +25,7 @@ export function ProductPhilosophySection() {
       <div className="mx-auto max-w-5xl">
         {/* Heading */}
         <motion.h2
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 1, y: 0 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.5 }}
@@ -39,7 +39,7 @@ export function ProductPhilosophySection() {
           {BLOCKS.map((block, i) => (
             <motion.div
               key={block.heading}
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ opacity: 1, y: 0 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.45, delay: i * 0.08 }}

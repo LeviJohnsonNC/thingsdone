@@ -5,15 +5,16 @@ interface SEOHeadProps {
   description: string;
   canonical: string;
   ogImage?: string;
-  jsonLd?: object;
+  jsonLd?: object | object[];
 }
 
+export const SITE_URL = "https://things-done.app";
 const SITE_NAME = "Things Done.";
-const DEFAULT_OG_IMAGE = "https://thingsdone.lovable.app/og-image.png";
+const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.png`;
 
 /**
  * Sets <title>, meta description, canonical, OG / Twitter tags,
- * and optional JSON-LD structured data for the current route.
+ * robots, og:locale, and optional JSON-LD structured data for the current route.
  */
 export function SEOHead({
   title,
@@ -50,6 +51,7 @@ export function SEOHead({
 
     // Core meta
     setMeta("name", "description", description);
+    setMeta("name", "robots", "index, follow");
     setLink("canonical", canonical);
 
     // Open Graph
@@ -59,6 +61,7 @@ export function SEOHead({
     setMeta("property", "og:image", ogImage);
     setMeta("property", "og:type", "website");
     setMeta("property", "og:site_name", SITE_NAME);
+    setMeta("property", "og:locale", "en_US");
 
     // Twitter
     setMeta("name", "twitter:card", "summary_large_image");

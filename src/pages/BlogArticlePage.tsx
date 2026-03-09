@@ -1,6 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { SEOHead } from "@/components/SEOHead";
+import { SEOHead, SITE_URL } from "@/components/SEOHead";
 import { getArticleBySlug } from "@/lib/blogData";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft } from "lucide-react";
@@ -37,7 +37,12 @@ function WhyYourToDoListArticle() {
       <p>
         This is called <strong>decision fatigue</strong>. Every time you look at your
         list and ask "what should I do next?", you're spending cognitive energy that
-        could go toward the actual work.
+        could go toward the actual work. The phenomenon is closely related to what
+        psychologists call{" "}
+        <Link to="/blog/the-hidden-cost-of-open-loops" className="text-primary hover:underline font-medium">
+          open loops — unfinished commitments that drain your mental bandwidth
+        </Link>{" "}
+        even when you're not consciously thinking about them.
       </p>
 
       <h2>What GTD gets right</h2>
@@ -95,7 +100,12 @@ function WhyYourToDoListArticle() {
       </p>
 
       <h2>What a better system looks like</h2>
-      <p>A task manager built for GTD should:</p>
+      <p>
+        A task manager built for GTD should do more than store tasks — it should{" "}
+        <Link to="/features" className="text-primary hover:underline font-medium">
+          guide you through each stage of the workflow
+        </Link>:
+      </p>
       <ul>
         <li>
           <strong>Make capture instant.</strong> If adding a task takes more than a
@@ -203,7 +213,10 @@ function OpenLoopsArticle() {
       <p>
         This isn't a willpower problem. It's a design flaw in how most of us
         manage our commitments — and understanding it might be the most important
-        productivity insight you ever learn.
+        productivity insight you ever learn. If you've ever wondered{" "}
+        <Link to="/blog/why-your-to-do-list-doesnt-work" className="text-primary hover:underline font-medium">
+          why your to-do list doesn't actually work
+        </Link>, open loops are a big part of the answer.
       </p>
 
       <h2>What is an "open loop"?</h2>
@@ -270,7 +283,11 @@ function OpenLoopsArticle() {
       <p>
         This is the core insight behind GTD's capture habit: the faster you get
         something out of your head and into a trusted system, the faster your
-        mind can let go of it.
+        mind can let go of it. Things Done is{" "}
+        <Link to="/features" className="text-primary hover:underline font-medium">
+          designed around this principle
+        </Link>{" "}
+        — instant capture, guided clarification, and a system you can trust.
       </p>
 
       <h2>How to close your open loops</h2>
@@ -370,7 +387,10 @@ function ChaosToCalm() {
       </p>
       <p>
         Some items I'd been carrying for years turned out to be trash. Others
-        needed just one two-minute action to complete. A few revealed themselves
+        needed just one two-minute action to complete — a concept David Allen calls{" "}
+        <Link to="/blog/the-two-minute-rule" className="text-primary hover:underline font-medium">
+          the two-minute rule
+        </Link>. A few revealed themselves
         as major projects I'd been avoiding.
       </p>
       <p>
@@ -441,7 +461,11 @@ function ChaosToCalm() {
         <Link to="/auth" className="text-primary hover:underline font-medium">
           Start with Things Done.
         </Link>{" "}
-        Give it 30 days. See what changes.
+        Give it 30 days. See what changes. And when you're ready to commit,{" "}
+        <Link to="/pricing" className="text-primary hover:underline font-medium">
+          check out our simple pricing
+        </Link>{" "}
+        — the free plan is enough to get started.
       </p>
     </div>
   );
@@ -536,7 +560,12 @@ function TwoMinuteRuleArticle() {
       <p>
         Over a week, that's 70 small wins. Over a month, 300. The backlog that
         used to feel insurmountable starts to shrink — not through heroic effort,
-        but through consistent, frictionless action.
+        but through consistent, frictionless action. The two-minute rule pairs
+        perfectly with the mindset shift described in{" "}
+        <Link to="/blog/from-chaos-to-calm" className="text-primary hover:underline font-medium">
+          From Chaos to Calm
+        </Link>{" "}
+        — small, consistent habits that compound over time.
       </p>
 
       <h2>Try it today</h2>
@@ -565,7 +594,10 @@ function TwoMinuteRuleArticle() {
         <Link to="/auth" className="text-primary hover:underline font-medium">
           Try Things Done.
         </Link>{" "}
-        — built for the way GTD actually works.
+        — built for the way GTD actually works. Explore all the{" "}
+        <Link to="/features" className="text-primary hover:underline font-medium">
+          features designed to support your workflow
+        </Link>.
       </p>
     </div>
   );
@@ -595,7 +627,17 @@ export default function BlogArticlePage() {
     datePublished: article.date,
     author: { "@type": "Organization", name: article.author },
     publisher: { "@type": "Organization", name: "Things Done." },
-    url: `https://thingsdone.lovable.app/blog/${article.slug}`,
+    url: `${SITE_URL}/blog/${article.slug}`,
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
+      { "@type": "ListItem", position: 2, name: "Blog", item: `${SITE_URL}/blog` },
+      { "@type": "ListItem", position: 3, name: article.title },
+    ],
   };
 
   return (
@@ -603,8 +645,8 @@ export default function BlogArticlePage() {
       <SEOHead
         title={`${article.title} — Things Done.`}
         description={article.description}
-        canonical={`https://thingsdone.lovable.app/blog/${article.slug}`}
-        jsonLd={articleJsonLd}
+        canonical={`${SITE_URL}/blog/${article.slug}`}
+        jsonLd={[articleJsonLd, breadcrumbJsonLd]}
       />
 
       <article className="mx-auto max-w-2xl px-6 py-16 md:py-24">
