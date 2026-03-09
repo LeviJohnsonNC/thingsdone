@@ -20,6 +20,8 @@ import { useGoogleCalendarStatus, usePushItemToCalendar, useDeleteCalendarEvent 
 import { cn } from "@/lib/utils";
 import { ITEM_STATE_OPTIONS, TIME_ESTIMATE_OPTIONS } from "@/lib/types";
 import type { ItemState } from "@/lib/types";
+import { ChecklistEditor, type ChecklistItem } from "@/components/ChecklistEditor";
+import { RecurrenceSelector } from "@/components/RecurrenceSelector";
 import { toast } from "sonner";
 
 export function ClarifySheet() {
