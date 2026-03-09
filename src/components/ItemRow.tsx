@@ -113,7 +113,16 @@ export function ItemRow({ item, showProject, dimmed, dragHandleProps }: ItemRowP
                   setCompleting(true);
                   setTimeout(() => {
                     completeItem.mutate({ id: item.id, recurrence_rule: (item as any).recurrence_rule, title: item.title, user_id: item.user_id, scheduled_date: item.scheduled_date, project_id: item.project_id, area_id: item.area_id, energy: item.energy, time_estimate: item.time_estimate });
-                    toast.success("Completed!", { duration: 1500 });
+                    toast.success("Completed!", {
+                      duration: 4000,
+                      action: {
+                        label: "Undo",
+                        onClick: () => {
+                          updateItem.mutate({ id: item.id, state: item.state, completed_at: null } as any);
+                          setCompleting(false);
+                        },
+                      },
+                    });
                   }, 200);
                 }}
                 className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 border-border hover:border-success-green hover:bg-success-green/10 transition-colors"
