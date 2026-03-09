@@ -32,5 +32,6 @@ export const ITEM_STATE_OPTIONS: { value: ItemState; label: string }[] = [
   { value: "scheduled", label: "Scheduled" },
   { value: "someday", label: "Someday" },
   { value: "waiting", label: "Waiting" },
+  { value: "reference", label: "Reference" },
   { value: "trash", label: "Trash" },
 ];

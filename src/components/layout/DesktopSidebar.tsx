@@ -45,6 +45,7 @@ const NAV_GROUPS = [
   {
     label: "Archive",
     items: [
+      { path: "/reference", icon: FileText, label: "Reference" },
       { path: "/logbook", icon: BookOpen, label: "Logbook" },
     ],
   },

@@ -17,6 +17,7 @@ const MORE_ITEMS = [
   { path: "/scheduled", icon: Calendar, label: "Scheduled" },
   { path: "/waiting", icon: Hourglass, label: "Waiting" },
   { path: "/someday", icon: Cloud, label: "Someday" },
+  { path: "/reference", icon: FileText, label: "Reference" },
   { path: "/review", icon: ClipboardList, label: "Weekly Review" },
   { path: "/logbook", icon: BookOpen, label: "Logbook" },
 ];
