@@ -99,6 +99,13 @@ export function useUsageLimits(): UsageLimits & { isLoading: boolean } {
       activeProjectCount >= FREE_LIMITS.activeProjects ||
       areaCount >= FREE_LIMITS.areas);
 
+  const isApproachingLimit =
+    !isUnlimited &&
+    !isOverAnyLimit &&
+    (activeItemCount >= FREE_LIMITS.activeItems * 0.8 ||
+      activeProjectCount >= FREE_LIMITS.activeProjects * 0.8 ||
+      areaCount >= FREE_LIMITS.areas * 0.8);
+
   return {
     activeItemCount,
     activeItemLimit,
@@ -113,6 +120,7 @@ export function useUsageLimits(): UsageLimits & { isLoading: boolean } {
     aiReviewLimit,
     canUseAI,
     isOverAnyLimit,
+    isApproachingLimit,
     isLoading,
   };
 }
