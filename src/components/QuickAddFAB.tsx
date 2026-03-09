@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Plus } from "lucide-react";
+import { useState, useMemo } from "react";
+import { Plus, Calendar } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { useCreateItem } from "@/hooks/useItems";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -8,6 +8,8 @@ import { UpgradePrompt } from "@/components/UpgradePrompt";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { parseNaturalDate } from "@/lib/parseNaturalDate";
 import type { ItemState } from "@/lib/types";
 
 const ROUTE_CONTEXT: Record<string, { state: ItemState; label: string; placeholder: string }> = {
@@ -30,6 +32,7 @@ export function QuickAddFAB() {
   const { canCreateItem, activeItemCount, activeItemLimit } = useUsageLimits();
 
   const context = ROUTE_CONTEXT[location.pathname] ?? ROUTE_CONTEXT["/inbox"];
+  const parsed = useMemo(() => parseNaturalDate(title), [title]);
 
   const handleFabClick = () => {
     if (!canCreateItem) {
@@ -42,7 +45,11 @@ export function QuickAddFAB() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim()) return;
-    await createItem.mutateAsync({ title: title.trim(), state: context.state });
+    await createItem.mutateAsync({
+      title: parsed.cleanTitle,
+      state: context.state,
+      ...(parsed.scheduledDate && { scheduled_date: parsed.scheduledDate }),
+    });
     setTitle("");
     setOpen(false);
   };
@@ -65,17 +72,27 @@ export function QuickAddFAB() {
           <DialogHeader>
             <DialogTitle>Add to {context.label}</DialogTitle>
           </DialogHeader>
-          <form onSubmit={handleSubmit} className="flex gap-2">
-            <Input
-              placeholder={context.placeholder}
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              autoFocus
-              className="flex-1"
-            />
-            <Button type="submit" disabled={!title.trim() || createItem.isPending}>
-              Add
-            </Button>
+          <form onSubmit={handleSubmit} className="space-y-2">
+            <div className="relative">
+              <Input
+                placeholder={context.placeholder}
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                autoFocus
+                className="pr-24"
+              />
+              {parsed.dateLabel && (
+                <Badge variant="secondary" className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] gap-1 pointer-events-none">
+                  <Calendar className="h-3 w-3" />
+                  {parsed.dateLabel}
+                </Badge>
+              )}
+            </div>
+            <div className="flex justify-end">
+              <Button type="submit" disabled={!title.trim() || createItem.isPending}>
+                Add
+              </Button>
+            </div>
           </form>
         </DialogContent>
       </Dialog>

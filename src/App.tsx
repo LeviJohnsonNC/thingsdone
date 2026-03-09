@@ -63,6 +63,7 @@ function ProtectedRoutes() {
         <Route path="/logbook" element={<LogbookView />} />
         <Route path="/reference" element={<ReferenceView />} />
         <Route path="/help" element={<HelpView />} />
+        <Route path="/stats" element={<StatsView />} />
         <Route path="/settings" element={<SettingsView />} />
         <Route path="/review" element={<ReviewView />} />
         <Route path="/review/history" element={<ReviewHistoryView />} />
