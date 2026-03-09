@@ -1,5 +1,6 @@
-import { ReactNode, useEffect } from "react";
+import { ReactNode } from "react";
 import { motion } from "framer-motion";
+import { SEOHead } from "@/components/SEOHead";
 import { Inbox, SlidersHorizontal, FolderKanban, Star, Calendar, Bot } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
