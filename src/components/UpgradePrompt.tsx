@@ -80,7 +80,7 @@ export function UpgradePrompt({ open, onOpenChange, trigger, currentUsage, limit
               </li>
             ))}
           </ul>
-          <p className="text-[10px] text-muted-foreground">* coming soon</p>
+          {/* no coming-soon footnote needed */}
         </div>
 
         <div className="flex flex-col gap-2 mt-2">

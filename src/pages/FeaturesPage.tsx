@@ -68,10 +68,9 @@ const FEATURES = [
   },
   {
     title: "An assistant that keeps you unstuck",
-    body: "Weekly reviews powered by AI. Project planning with suggestions. A coach that knows your system.",
+    body: "AI-powered weekly reviews surface stale tasks, suggest next actions, and keep your system fresh — automatically.",
     icon: <Bot className="h-16 w-16" />,
     reverse: true,
-    badge: "Coming Soon",
   },
 ];
 

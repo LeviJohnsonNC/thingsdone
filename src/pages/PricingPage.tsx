@@ -22,15 +22,15 @@ const FREE_FEATURES: PricingFeature[] = [
   { text: "Up to 3 areas" },
   { text: "Google Calendar sync" },
   { text: "All GTD views" },
+  { text: "Weekly Review wizard" },
 ];
 
 const PRO_FEATURES: PricingFeature[] = [
   { text: "Unlimited items" },
   { text: "Unlimited projects" },
   { text: "Unlimited areas" },
-  { text: "AI weekly reviews", comingSoon: true },
-  { text: "AI coach", comingSoon: true },
-  { text: "Review history", comingSoon: true },
+  { text: "AI-powered weekly reviews" },
+  { text: "Recurring tasks" },
   { text: "Priority support" },
 ];
 
