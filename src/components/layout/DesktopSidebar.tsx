@@ -1,6 +1,6 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import {
-  Inbox, Star, ArrowRight, Calendar, Hourglass, Cloud,
+  Inbox, Star, ArrowRight, Calendar, Hourglass, Cloud, FileText,
   FolderOpen, BookOpen, Settings, LogOut, ClipboardList, HelpCircle
 } from "lucide-react";
 import { differenceInDays } from "date-fns";
