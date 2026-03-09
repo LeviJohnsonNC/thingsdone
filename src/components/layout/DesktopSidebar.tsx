@@ -10,6 +10,8 @@ import { useItems } from "@/hooks/useItems";
 import { useAreas } from "@/hooks/useAreas";
 import { useUserSettings } from "@/hooks/useUserSettings";
 import { useAppStore } from "@/stores/appStore";
+import { useUsageLimits } from "@/hooks/useUsageLimits";
+import { useSubscription } from "@/hooks/useSubscription";
 import {
   Select,
   SelectContent,
