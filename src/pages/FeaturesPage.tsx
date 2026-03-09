@@ -1,16 +1,18 @@
 import { ReactNode } from "react";
 import { motion } from "framer-motion";
 import { SEOHead } from "@/components/SEOHead";
-import { Inbox, SlidersHorizontal, FolderKanban, Star, Calendar, Bot } from "lucide-react";
+import { ProductMockup } from "@/components/marketing/ProductMockup";
+
+type MockupVariant = "tasks" | "inbox" | "editor" | "projects" | "review";
 
 interface FeatureBlockProps {
   title: string;
   body: string;
-  icon: ReactNode;
+  mockup: MockupVariant;
   reverse?: boolean;
 }
 
-function FeatureBlock({ title, body, icon, reverse }: FeatureBlockProps) {
+function FeatureBlock({ title, body, mockup, reverse }: FeatureBlockProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 24 }}
@@ -23,46 +25,45 @@ function FeatureBlock({ title, body, icon, reverse }: FeatureBlockProps) {
         <h3 className="text-2xl font-semibold text-foreground sm:text-3xl">{title}</h3>
         <p className="text-[15px] leading-relaxed text-muted-foreground max-w-md">{body}</p>
       </div>
-      {/* Placeholder visual */}
-      <div className="flex flex-1 items-center justify-center rounded-xl border border-border bg-feature-card-bg p-12">
-        <div className="text-muted-foreground/30">{icon}</div>
+      <div className="flex-1">
+        <ProductMockup variant={mockup} compact className="mx-auto max-w-sm md:max-w-none" />
       </div>
     </motion.div>
   );
 }
 
-const FEATURES = [
+const FEATURES: Omit<FeatureBlockProps, "">[] = [
   {
     title: "Get it out of your head",
     body: "Quick capture to your Inbox. Brain dump freely — organize later. Nothing gets lost.",
-    icon: <Inbox className="h-16 w-16" />,
+    mockup: "inbox",
   },
   {
     title: "Everything in its place",
     body: "Sort tasks by state — Next, Waiting, Scheduled, Someday. Tag them with energy level, time estimates, and areas of focus.",
-    icon: <SlidersHorizontal className="h-16 w-16" />,
+    mockup: "editor",
     reverse: true,
   },
   {
     title: "Break big things into small steps",
     body: "Sequential and parallel projects. Drag to reorder. The system surfaces the right next action automatically.",
-    icon: <FolderKanban className="h-16 w-16" />,
+    mockup: "projects",
   },
   {
     title: "See only what matters right now",
     body: "Focus mode cuts through the noise. Star what's important today and ignore the rest.",
-    icon: <Star className="h-16 w-16" />,
+    mockup: "tasks",
     reverse: true,
   },
   {
     title: "Your tasks and your calendar, together",
     body: "Connect Google Calendar to see events alongside your actions. Never double-book your time.",
-    icon: <Calendar className="h-16 w-16" />,
+    mockup: "tasks",
   },
   {
     title: "An assistant that keeps you unstuck",
     body: "AI-powered weekly reviews surface stale tasks, suggest next actions, and keep your system fresh. Free users get 3 AI reviews per month — Pro unlocks unlimited AI plus brain dump capture.",
-    icon: <Bot className="h-16 w-16" />,
+    mockup: "review",
     reverse: true,
   },
 ];
@@ -100,7 +101,7 @@ export default function FeaturesPage() {
             key={f.title}
             title={f.title}
             body={f.body}
-            icon={f.icon}
+            mockup={f.mockup}
             reverse={f.reverse}
           />
         ))}
