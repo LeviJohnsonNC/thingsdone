@@ -516,13 +516,34 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
             {/* Recurrence */}
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <PropertyRow icon={scheduledIcon} label="REPEAT" className="flex-1">
-                <RecurrenceSelector
-                  value={(item as any).recurrence_rule ?? null}
-                  onChange={(v) => saveField("recurrence_rule", v)}
-                  compact
-                />
+                {isPro ? (
+                  <RecurrenceSelector
+                    value={(item as any).recurrence_rule ?? null}
+                    onChange={(v) => saveField("recurrence_rule", v)}
+                    compact
+                  />
+                ) : (
+                  <button
+                    onClick={() => setShowRecurrenceUpgrade(true)}
+                    className="flex items-center gap-2 px-2 h-8 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    <span>No repeat</span>
+                    <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 border-focus text-focus font-semibold">
+                      PRO
+                    </Badge>
+                  </button>
+                )}
               </PropertyRow>
             </div>
+            {showRecurrenceUpgrade && (
+              <UpgradePrompt
+                open={showRecurrenceUpgrade}
+                onOpenChange={setShowRecurrenceUpgrade}
+                trigger="recurring"
+                currentUsage={0}
+                limit={0}
+              />
+            )}
 
             {/* Google Calendar toggle */}
             {isCalendarConnected && hasDate && (
