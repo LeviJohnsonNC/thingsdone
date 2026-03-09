@@ -44,6 +44,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
         <OnboardingModal open={showOnboarding} onComplete={() => setShowOnboarding(false)} />
         <SearchModal />
         <GlobalQuickAdd />
+        <BatchActionBar />
       </div>
     );
   }
