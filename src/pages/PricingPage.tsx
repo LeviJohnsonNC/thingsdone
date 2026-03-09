@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { SEOHead } from "@/components/SEOHead";
+import { SEOHead, SITE_URL } from "@/components/SEOHead";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Check, Loader2, Zap } from "lucide-react";
@@ -37,8 +37,24 @@ const PRO_FEATURES: PricingFeature[] = [
 
 const FAQ = [
   {
-    q: "Can I really use Things Done. for free forever?",
-    a: "Yes — no trial, no expiration. The free plan gives you up to 30 active items, 3 projects, 3 areas, and 3 AI-assisted reviews per month. Use it as long as you like.",
+    q: "Is there really a free plan?",
+    a: "Yes — the free plan includes up to 30 active tasks, 3 projects, 3 areas, and 3 AI-powered reviews per month. No credit card required, no trial period, no expiration. Use it as long as you like.",
+  },
+  {
+    q: "What happens if I go over the free plan limits?",
+    a: "You'll be prompted to upgrade to Pro. Your existing tasks, projects, and data won't be deleted — you just won't be able to add new items beyond the free limits until you upgrade or archive some existing ones.",
+  },
+  {
+    q: "Can I cancel my Pro subscription anytime?",
+    a: "Yes, you can cancel anytime from your account settings. You'll keep Pro access until the end of your current billing period. No questions asked.",
+  },
+  {
+    q: "What payment methods do you accept?",
+    a: "We accept all major credit cards (Visa, Mastercard, American Express) securely processed through Stripe. Your payment information is never stored on our servers.",
+  },
+  {
+    q: "Is my data secure?",
+    a: "Yes, all data is encrypted in transit and at rest, stored in a secure cloud database, and never sold or shared with third parties. AI suggestions are generated per-request and not stored for training.",
   },
   {
     q: "What is GTD, and do I need to know it?",
@@ -53,16 +69,8 @@ const FAQ = [
     a: "During a weekly review, you can dump everything on your mind into a text box. The AI turns each thought into a ready-to-file task — complete with suggested state, energy, and time estimate. It's a Pro-only feature.",
   },
   {
-    q: "What happens to my data if I cancel Pro?",
-    a: "Nothing — it's all still there. You just won't be able to add items, projects, or areas beyond the free limits, and AI reviews drop to 3/month. Re-subscribe anytime to unlock everything again.",
-  },
-  {
     q: "Can I connect Google Calendar?",
     a: "Yes, on both plans. Link your Google Calendar in Settings to see events alongside your tasks and push scheduled items to your calendar.",
-  },
-  {
-    q: "Is my data private and secure?",
-    a: "Absolutely. Your data is encrypted at rest and in transit, stored in a secure cloud database, and never shared with or sold to third parties. AI suggestions are generated per-request and not stored for training.",
   },
   {
     q: "Do AI features cost extra?",
@@ -147,7 +155,7 @@ export default function PricingPage() {
       <SEOHead
         title="Pricing — Things Done. | Free & Pro Plans"
         description="Start free with up to 30 tasks, 3 projects, and 3 AI reviews/month. Upgrade to Pro for $4/mo for unlimited items, AI reviews, and brain dump capture."
-        canonical="https://thingsdone.lovable.app/pricing"
+        canonical={`${SITE_URL}/pricing`}
         jsonLd={PRICING_JSONLD}
       />
       {/* Hero */}
@@ -169,7 +177,7 @@ export default function PricingPage() {
       {/* Pricing cards */}
       <section className="mx-auto max-w-3xl px-6 -mt-4 pb-16">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 1, y: 0 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
@@ -195,7 +203,7 @@ export default function PricingPage() {
       {/* FAQ */}
       <section className="mx-auto max-w-2xl px-6 pb-24">
         <h2 className="mb-8 text-center text-xl font-semibold text-foreground">
-          Frequently asked questions
+          Frequently Asked Questions
         </h2>
         <Accordion type="single" collapsible className="w-full">
           {FAQ.map((item, i) => (

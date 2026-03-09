@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { motion } from "framer-motion";
-import { SEOHead } from "@/components/SEOHead";
+import { SEOHead, SITE_URL } from "@/components/SEOHead";
 import { ProductMockup } from "@/components/marketing/ProductMockup";
 
 type MockupVariant = "tasks" | "inbox" | "editor" | "projects" | "review";
@@ -15,7 +15,7 @@ interface FeatureBlockProps {
 function FeatureBlock({ title, body, mockup, reverse }: FeatureBlockProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 1, y: 0 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.5 }}
@@ -32,37 +32,45 @@ function FeatureBlock({ title, body, mockup, reverse }: FeatureBlockProps) {
   );
 }
 
-const FEATURES: Omit<FeatureBlockProps, "">[] = [
+/* ── Feature groups ── */
+
+const CAPTURE_FEATURES: Omit<FeatureBlockProps, "">[] = [
   {
-    title: "Get it out of your head",
-    body: "Quick capture to your Inbox. Brain dump freely — organize later. Nothing gets lost.",
+    title: "Instant Inbox Capture",
+    body: "Drop any task, reminder, or half-formed idea into your inbox in under a second. Use the quick-add bar, the floating action button, or the global keyboard shortcut (Ctrl+K) — whichever is fastest in the moment. Things Done also supports natural language dates, so typing 'Call dentist next Tuesday at 2pm' automatically sets the scheduled date for you. Your inbox is a holding pen, not a to-do list — capture freely and organize later.",
     mockup: "inbox",
   },
   {
-    title: "Everything in its place",
-    body: "Sort tasks by state — Next, Waiting, Scheduled, Someday. Tag them with energy level, time estimates, and areas of focus.",
+    title: "Clarify with Context",
+    body: "When you process your inbox, the clarify sheet guides you through the GTD decision tree: Is this actionable? What's the very next step? Does it belong to a project? Add energy level (low, medium, high), time estimates, areas of responsibility, and tags so you can filter by context later. Attach notes and checklists to keep supporting information right where you need it — no switching apps.",
     mockup: "editor",
     reverse: true,
   },
+];
+
+const ORGANIZE_FEATURES: Omit<FeatureBlockProps, "">[] = [
   {
-    title: "Break big things into small steps",
-    body: "Sequential and parallel projects. Drag to reorder. The system surfaces the right next action automatically.",
+    title: "Sequential & Parallel Projects",
+    body: "In GTD, a project is any outcome requiring more than one action step. Things Done supports both sequential projects — where only the first incomplete action appears in your Next view — and parallel projects where all actions are available at once. Drag to reorder steps, set project-level due dates, and track progress with a visual completion indicator. Each project can belong to an area of responsibility so your commitments stay organized by life context.",
     mockup: "projects",
   },
   {
-    title: "See only what matters right now",
-    body: "Focus mode cuts through the noise. Star what's important today and ignore the rest.",
+    title: "Focus Mode",
+    body: "Star the tasks that matter most today to surface them in Focus view. When you have 20 minutes between meetings, Focus mode shows only what you've committed to right now — not your entire backlog. Swipe right on any item to star it, swipe left to un-star. It's a deliberate, distraction-free workspace designed to keep you moving on your highest-priority work without decision fatigue.",
     mockup: "tasks",
     reverse: true,
   },
+];
+
+const REVIEW_FEATURES: Omit<FeatureBlockProps, "">[] = [
   {
-    title: "Your tasks and your calendar, together",
-    body: "Connect Google Calendar to see events alongside your actions. Never double-book your time.",
+    title: "Google Calendar Sync",
+    body: "Connect your Google Calendar to see events alongside your action lists in a unified daily view. Push scheduled tasks to your calendar with one tap so time-blocked commitments show up where your team expects them. Things Done never double-books you — when you schedule a task for a specific date, it respects your existing calendar events. Calendar sync is available on both the Free and Pro plans.",
     mockup: "tasks",
   },
   {
-    title: "An assistant that keeps you unstuck",
-    body: "AI-powered weekly reviews surface stale tasks, suggest next actions, and keep your system fresh. Free users get 3 AI reviews per month — Pro unlocks unlimited AI plus brain dump capture.",
+    title: "AI-Powered Weekly Reviews",
+    body: "The weekly review is the heartbeat of GTD — and the habit most people skip. Things Done makes it effortless with a guided, step-by-step review wizard. Clear your inbox, review each project for a clear next action, check your Waiting For list, and scan Someday/Maybe for anything that sparks energy. On Pro, the AI assistant surfaces stale tasks, suggests next actions, and even converts a free-form brain dump into ready-to-file tasks with suggested state, energy, and time estimates.",
     mockup: "review",
     reverse: true,
   },
@@ -74,7 +82,7 @@ export default function FeaturesPage() {
       <SEOHead
         title="Features — Things Done. | GTD Task Manager"
         description="Inbox capture, Next actions, Focus mode, Google Calendar sync, sequential projects, and AI-powered weekly reviews. Everything you need to stay on top of everything."
-        canonical="https://thingsdone.lovable.app/features"
+        canonical={`${SITE_URL}/features`}
       />
       {/* Hero */}
       <section className="bg-hero-bg px-6 py-24 text-center">
@@ -94,16 +102,27 @@ export default function FeaturesPage() {
         </motion.div>
       </section>
 
-      {/* Feature blocks */}
+      {/* Capture & Organize */}
       <section className="mx-auto max-w-4xl px-6">
-        {FEATURES.map((f) => (
-          <FeatureBlock
-            key={f.title}
-            title={f.title}
-            body={f.body}
-            mockup={f.mockup}
-            reverse={f.reverse}
-          />
+        <h2 className="pt-16 text-xl font-semibold text-foreground sm:text-2xl">Capture &amp; Organize</h2>
+        {CAPTURE_FEATURES.map((f) => (
+          <FeatureBlock key={f.title} title={f.title} body={f.body} mockup={f.mockup} reverse={f.reverse} />
+        ))}
+      </section>
+
+      {/* Focus & Execute */}
+      <section className="mx-auto max-w-4xl px-6">
+        <h2 className="pt-4 text-xl font-semibold text-foreground sm:text-2xl">Focus &amp; Execute</h2>
+        {ORGANIZE_FEATURES.map((f) => (
+          <FeatureBlock key={f.title} title={f.title} body={f.body} mockup={f.mockup} reverse={f.reverse} />
+        ))}
+      </section>
+
+      {/* Review & Improve */}
+      <section className="mx-auto max-w-4xl px-6 pb-16">
+        <h2 className="pt-4 text-xl font-semibold text-foreground sm:text-2xl">Review &amp; Improve</h2>
+        {REVIEW_FEATURES.map((f) => (
+          <FeatureBlock key={f.title} title={f.title} body={f.body} mockup={f.mockup} reverse={f.reverse} />
         ))}
       </section>
     </>

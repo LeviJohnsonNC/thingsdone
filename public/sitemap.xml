@@ -1,48 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://thingsdone.lovable.app/</loc>
+    <loc>https://things-done.app/</loc>
+    <lastmod>2026-03-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://thingsdone.lovable.app/features</loc>
+    <loc>https://things-done.app/features</loc>
+    <lastmod>2026-03-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://thingsdone.lovable.app/pricing</loc>
+    <loc>https://things-done.app/pricing</loc>
+    <lastmod>2026-03-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://thingsdone.lovable.app/blog</loc>
+    <loc>https://things-done.app/blog</loc>
+    <lastmod>2026-03-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://thingsdone.lovable.app/blog/why-your-to-do-list-doesnt-work</loc>
+    <loc>https://things-done.app/blog/why-your-to-do-list-doesnt-work</loc>
+    <lastmod>2026-03-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://thingsdone.lovable.app/blog/the-hidden-cost-of-open-loops</loc>
+    <loc>https://things-done.app/blog/the-hidden-cost-of-open-loops</loc>
+    <lastmod>2026-03-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://thingsdone.lovable.app/blog/from-chaos-to-calm</loc>
+    <loc>https://things-done.app/blog/from-chaos-to-calm</loc>
+    <lastmod>2026-03-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://thingsdone.lovable.app/blog/the-two-minute-rule</loc>
+    <loc>https://things-done.app/blog/the-two-minute-rule</loc>
+    <lastmod>2026-03-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://thingsdone.lovable.app/auth</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
   </url>
 </urlset>
