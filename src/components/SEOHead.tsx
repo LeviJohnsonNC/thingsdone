@@ -5,7 +5,7 @@ interface SEOHeadProps {
   description: string;
   canonical: string;
   ogImage?: string;
-  jsonLd?: Record<string, unknown>;
+  jsonLd?: object;
 }
 
 const SITE_NAME = "Things Done.";
