@@ -247,7 +247,10 @@ function OpenLoopsArticle() {
         served. Once the task was complete, the details vanished.
       </p>
       <p>
-        This became known as the <strong>Zeigarnik Effect</strong>: incomplete
+        This became known as the{" "}
+        <a href="https://en.wikipedia.org/wiki/Zeigarnik_effect" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">
+          Zeigarnik Effect
+        </a>: incomplete
         tasks occupy mental space far more than completed ones. Your brain keeps
         them "loaded" because it assumes you still need to act.
       </p>
