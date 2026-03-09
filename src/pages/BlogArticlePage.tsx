@@ -372,7 +372,10 @@ function ChaosToCalm() {
       <p>
         I wasn't unproductive — I was <em>busy</em>. But busy and effective are
         not the same thing. I decided to try something different: one month of
-        committing fully to GTD. Here's what happened.
+        committing fully to{" "}
+        <a href="https://gettingthingsdone.com" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">
+          GTD
+        </a>. Here's what happened.
       </p>
 
       <h2>Week 1: The brain dump that broke me</h2>
