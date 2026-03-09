@@ -17,6 +17,7 @@ export default function FocusView() {
   const { data: completedItems } = useCompletedItems(selectedAreaId);
   const { data: itemTagMap } = useAllItemTags();
   const { filters, setFilters } = useItemFilters();
+  const isMobile = useIsMobile();
 
   const filteredItems = applyItemFilters(items, filters, itemTagMap);
   const focusedCompleted = completedItems?.filter(i => i.is_focused) ?? [];
