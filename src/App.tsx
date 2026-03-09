@@ -23,6 +23,7 @@ import LogbookView from "@/pages/LogbookView";
 import ReferenceView from "@/pages/ReferenceView";
 import SettingsView from "@/pages/SettingsView";
 import HelpView from "@/pages/HelpView";
+import StatsView from "@/pages/StatsView";
 import NotFound from "@/pages/NotFound";
 
 const HomePage = lazy(() => import("@/pages/HomePage"));
