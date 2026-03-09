@@ -120,7 +120,7 @@ export default function ScheduledView() {
           <EmptyState
             icon={Calendar}
             title="Nothing scheduled"
-            description="Schedule items to plan ahead."
+            description="Set a date on any item to schedule it for later."
           />
         ) : (
           groups.map((group) => (

@@ -13,9 +13,13 @@ interface AppState {
   setSearchOpen: (open: boolean) => void;
   globalQuickAddOpen: boolean;
   setGlobalQuickAddOpen: (open: boolean) => void;
+  selectedItemIds: string[];
+  toggleSelectedItem: (id: string) => void;
+  clearSelectedItems: () => void;
+  selectMultipleItems: (ids: string[]) => void;
 }
 
-export const useAppStore = create<AppState>((set) => ({
+export const useAppStore = create<AppState>((set, get) => ({
   selectedAreaId: null,
   setSelectedAreaId: (id) => set({ selectedAreaId: id }),
   editingItemId: null,
@@ -28,4 +32,11 @@ export const useAppStore = create<AppState>((set) => ({
   setSearchOpen: (open) => set({ searchOpen: open }),
   globalQuickAddOpen: false,
   setGlobalQuickAddOpen: (open) => set({ globalQuickAddOpen: open }),
+  selectedItemIds: [],
+  toggleSelectedItem: (id) => {
+    const current = get().selectedItemIds;
+    set({ selectedItemIds: current.includes(id) ? current.filter((i) => i !== id) : [...current, id] });
+  },
+  clearSelectedItems: () => set({ selectedItemIds: [] }),
+  selectMultipleItems: (ids) => set({ selectedItemIds: ids }),
 }));

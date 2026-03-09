@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { SortableItemList } from "@/components/SortableItemList";
 import { EmptyState } from "@/components/EmptyState";
@@ -15,6 +16,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { useQueryClient } from "@tanstack/react-query";
 
 export default function NextView() {
+  const navigate = useNavigate();
   const { selectedAreaId } = useAppStore();
   const { data: items, isLoading } = useNextItems(selectedAreaId);
   const { data: completedItems } = useCompletedItems(selectedAreaId);
@@ -41,7 +43,9 @@ export default function NextView() {
             <EmptyState
               icon={ArrowRight}
               title="No next actions"
-              description="No actionable items — inbox is empty, nothing scheduled for today."
+              description="Process your inbox to surface next actions."
+              actionLabel="Go to Inbox"
+              onAction={() => navigate("/inbox")}
             />
           ) : (
             <SortableItemList items={filteredItems} />

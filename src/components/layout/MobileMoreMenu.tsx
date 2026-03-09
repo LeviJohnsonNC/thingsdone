@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Calendar, Hourglass, Cloud, BookOpen, Settings, LogOut, ClipboardList, HelpCircle, FileText } from "lucide-react";
+import { Calendar, Hourglass, Cloud, BookOpen, Settings, LogOut, ClipboardList, HelpCircle, FileText, BarChart3 } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import { useAppStore } from "@/stores/appStore";
@@ -20,6 +20,7 @@ const MORE_ITEMS = [
   { path: "/reference", icon: FileText, label: "Reference" },
   { path: "/review", icon: ClipboardList, label: "Weekly Review" },
   { path: "/logbook", icon: BookOpen, label: "Logbook" },
+  { path: "/stats", icon: BarChart3, label: "Stats" },
 ];
 
 export function MobileMoreMenu() {

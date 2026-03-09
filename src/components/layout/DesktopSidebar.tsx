@@ -1,7 +1,7 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import {
   Inbox, Star, ArrowRight, Calendar, Hourglass, Cloud, FileText,
-  FolderOpen, BookOpen, Settings, LogOut, ClipboardList, HelpCircle, Search
+  FolderOpen, BookOpen, Settings, LogOut, ClipboardList, HelpCircle, Search, BarChart3
 } from "lucide-react";
 import { differenceInDays } from "date-fns";
 import { cn } from "@/lib/utils";
@@ -49,6 +49,12 @@ const NAV_GROUPS = [
     items: [
       { path: "/reference", icon: FileText, label: "Reference" },
       { path: "/logbook", icon: BookOpen, label: "Logbook" },
+    ],
+  },
+  {
+    label: "Insights",
+    items: [
+      { path: "/stats", icon: BarChart3, label: "Stats" },
     ],
   },
 ];

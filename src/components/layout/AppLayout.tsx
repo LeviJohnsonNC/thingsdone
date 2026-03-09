@@ -11,6 +11,7 @@ import { useOnboarding } from "@/hooks/useOnboarding";
 import { OnboardingModal } from "../onboarding/OnboardingModal";
 import { SearchModal } from "../SearchModal";
 import { GlobalQuickAdd } from "../GlobalQuickAdd";
+import { BatchActionBar } from "../BatchActionBar";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 
 export function AppLayout({ children }: { children: ReactNode }) {
@@ -43,6 +44,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
         <OnboardingModal open={showOnboarding} onComplete={() => setShowOnboarding(false)} />
         <SearchModal />
         <GlobalQuickAdd />
+        <BatchActionBar />
       </div>
     );
   }
@@ -58,6 +60,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
       <OnboardingModal open={showOnboarding} onComplete={() => setShowOnboarding(false)} />
       <SearchModal />
       <GlobalQuickAdd />
+      <BatchActionBar />
     </div>
   );
 }
