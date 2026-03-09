@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { SEOHead } from "@/components/SEOHead";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Check, Loader2, Zap } from "lucide-react";
@@ -107,13 +108,37 @@ function PricingCard({
   );
 }
 
-export default function PricingPage() {
-  useEffect(() => {
-    document.title = "Pricing — Things Don.e";
-  }, []);
+const PRICING_JSONLD = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: "Things Done.",
+    description: "A calm GTD task manager. Free plan available, Pro at $4/mo.",
+    offers: [
+      { "@type": "Offer", price: "0", priceCurrency: "USD", name: "Free" },
+      { "@type": "Offer", price: "4.00", priceCurrency: "USD", name: "Pro", billingPeriod: "month" },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: FAQ.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: { "@type": "Answer", text: item.a },
+    })),
+  },
+];
 
+export default function PricingPage() {
   return (
     <>
+      <SEOHead
+        title="Pricing — Things Done. | Free & Pro Plans"
+        description="Start free with up to 30 tasks, 3 projects, and Google Calendar sync. Upgrade to Pro for $4/mo for unlimited items, AI reviews, and priority support."
+        canonical="https://thingsdone.lovable.app/pricing"
+        jsonLd={PRICING_JSONLD}
+      />
       {/* Hero */}
       <section className="bg-hero-bg px-6 py-24 text-center">
         <motion.div

@@ -1,5 +1,6 @@
-import { ReactNode, useEffect } from "react";
+import { ReactNode } from "react";
 import { motion } from "framer-motion";
+import { SEOHead } from "@/components/SEOHead";
 import { Inbox, SlidersHorizontal, FolderKanban, Star, Calendar, Bot } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
@@ -75,12 +76,13 @@ const FEATURES = [
 ];
 
 export default function FeaturesPage() {
-  useEffect(() => {
-    document.title = "Features — Things Done.";
-  }, []);
-
   return (
     <>
+      <SEOHead
+        title="Features — Things Done. | GTD Task Manager"
+        description="Inbox capture, Next actions, Focus mode, Google Calendar sync, sequential projects, and AI-powered weekly reviews. Everything you need to stay on top of everything."
+        canonical="https://thingsdone.lovable.app/features"
+      />
       {/* Hero */}
       <section className="bg-hero-bg px-6 py-24 text-center">
         <motion.div
