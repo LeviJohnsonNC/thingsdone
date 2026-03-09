@@ -1,7 +1,7 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import {
   Inbox, Star, ArrowRight, Calendar, Hourglass, Cloud, FileText,
-  FolderOpen, BookOpen, Settings, LogOut, ClipboardList, HelpCircle
+  FolderOpen, BookOpen, Settings, LogOut, ClipboardList, HelpCircle, Search
 } from "lucide-react";
 import { differenceInDays } from "date-fns";
 import { cn } from "@/lib/utils";
@@ -60,7 +60,7 @@ export function DesktopSidebar() {
   const { data: inboxItems } = useItems("inbox");
   const { data: areas } = useAreas();
   const { data: settings } = useUserSettings();
-  const { selectedAreaId, setSelectedAreaId } = useAppStore();
+  const { selectedAreaId, setSelectedAreaId, setSearchOpen } = useAppStore();
   const { isPro } = useSubscription();
   const { activeItemCount, activeItemLimit, isApproachingLimit } = useUsageLimits();
 
@@ -89,6 +89,16 @@ export function DesktopSidebar() {
             </SelectContent>
           </Select>
         </div>
+        <button
+          onClick={() => setSearchOpen(true)}
+          className="mt-2 flex w-full items-center gap-2 rounded-md border border-border bg-muted/50 px-3 py-1.5 text-xs text-muted-foreground hover:bg-muted transition-colors"
+        >
+          <Search className="h-3.5 w-3.5" />
+          <span className="flex-1 text-left">Search…</span>
+          <kbd className="hidden sm:inline-flex h-5 items-center gap-0.5 rounded border border-border bg-background px-1.5 text-[10px] font-medium text-muted-foreground">
+            ⌘K
+          </kbd>
+        </button>
       </div>
 
       <nav className="flex-1 overflow-y-auto py-2">
