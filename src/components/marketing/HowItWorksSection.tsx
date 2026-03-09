@@ -119,10 +119,6 @@ export function HowItWorksSection() {
             className="rounded-xl w-full object-cover aspect-video"
           />
         </div>
-              </motion.div>
-            );
-          })}
-        </div>
       </div>
     </section>
   );
