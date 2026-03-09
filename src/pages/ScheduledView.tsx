@@ -113,6 +113,7 @@ export default function ScheduledView() {
   return (
     <div className="flex flex-col h-full">
       <ViewHeader title="Scheduled" count={totalCount} />
+      {!isMobile && <QuickAddBar placeholder="Add scheduled item…" defaultState="scheduled" />}
       {totalCount > 0 && <ItemFilterBar filters={filters} onChange={setFilters} />}
       <div className="flex-1">
         {isLoading ? <ItemListSkeleton /> : groups.length === 0 ? (

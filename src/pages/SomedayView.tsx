@@ -22,6 +22,7 @@ export default function SomedayView() {
   return (
     <div className="flex flex-col h-full">
       <ViewHeader title="Someday" count={filteredItems.length} />
+      {!isMobile && <QuickAddBar placeholder="Add someday item…" defaultState="someday" />}
       {filteredItems.length > 0 && <ItemFilterBar filters={filters} onChange={setFilters} />}
       <div className="flex-1">
         {isLoading ? <ItemListSkeleton /> : filteredItems.length === 0 ? (

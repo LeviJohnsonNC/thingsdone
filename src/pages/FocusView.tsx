@@ -25,6 +25,7 @@ export default function FocusView() {
   return (
     <div className="flex flex-col h-full">
       <ViewHeader title="Focus" count={filteredItems.length} />
+      {!isMobile && <QuickAddBar placeholder="Add focused item…" defaultState="next" />}
       {filteredItems.length > 0 && <ItemFilterBar filters={filters} onChange={setFilters} />}
       <div className="flex-1">
         {isLoading ? <ItemListSkeleton /> : filteredItems.length === 0 ? (

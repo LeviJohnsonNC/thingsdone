@@ -24,6 +24,7 @@ export default function NextView() {
   return (
     <div className="flex flex-col h-full">
       <ViewHeader title="Next" count={filteredItems.length} />
+      {!isMobile && <QuickAddBar placeholder="Add next action…" defaultState="next" />}
       {filteredItems.length > 0 && <ItemFilterBar filters={filters} onChange={setFilters} />}
 
       <div className="flex-1">

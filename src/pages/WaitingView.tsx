@@ -40,6 +40,7 @@ export default function WaitingView() {
   return (
     <div className="flex flex-col h-full">
       <ViewHeader title="Waiting" count={items?.length} />
+      {!isMobile && <QuickAddBar placeholder="Add waiting item…" defaultState="waiting" />}
 
       <div className="flex-1 overflow-y-auto">
         {grouped.length === 0 ? (
