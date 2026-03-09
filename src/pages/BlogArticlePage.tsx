@@ -45,6 +45,14 @@ function WhyYourToDoListArticle() {
         even when you're not consciously thinking about them.
       </p>
 
+      <p>
+        David Allen's{" "}
+        <a href="https://en.wikipedia.org/wiki/Getting_Things_Done" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">
+          Getting Things Done
+        </a>{" "}
+        methodology addresses this head-on with a structured approach to capturing and organizing work.
+      </p>
+
       <h2>What GTD gets right</h2>
       <p>
         David Allen's <em>Getting Things Done</em> methodology, often called GTD,
@@ -239,7 +247,10 @@ function OpenLoopsArticle() {
         served. Once the task was complete, the details vanished.
       </p>
       <p>
-        This became known as the <strong>Zeigarnik Effect</strong>: incomplete
+        This became known as the{" "}
+        <a href="https://en.wikipedia.org/wiki/Zeigarnik_effect" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">
+          Zeigarnik Effect
+        </a>: incomplete
         tasks occupy mental space far more than completed ones. Your brain keeps
         them "loaded" because it assumes you still need to act.
       </p>
@@ -361,7 +372,10 @@ function ChaosToCalm() {
       <p>
         I wasn't unproductive — I was <em>busy</em>. But busy and effective are
         not the same thing. I decided to try something different: one month of
-        committing fully to GTD. Here's what happened.
+        committing fully to{" "}
+        <a href="https://gettingthingsdone.com" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">
+          GTD
+        </a>. Here's what happened.
       </p>
 
       <h2>Week 1: The brain dump that broke me</h2>
@@ -479,7 +493,10 @@ function TwoMinuteRuleArticle() {
   return (
     <div className="prose-custom">
       <p className="lead">
-        Of all the tactics in David Allen's Getting Things Done, the two-minute
+        Of all the tactics in David Allen's{" "}
+        <a href="https://en.wikipedia.org/wiki/Getting_Things_Done" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">
+          Getting Things Done
+        </a>, the two-minute
         rule is the simplest — and possibly the most powerful. It goes like this:
         <strong> if an action takes less than two minutes, do it now.</strong>
       </p>

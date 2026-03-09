@@ -9,7 +9,7 @@ export function HomeHeroSection() {
       <div className="mx-auto grid max-w-5xl items-center gap-12 md:grid-cols-2 md:gap-16">
         {/* Text */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 1, y: 0 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
@@ -38,7 +38,7 @@ export function HomeHeroSection() {
 
         {/* Product visual */}
         <motion.div
-          initial={{ opacity: 0, y: 24, scale: 0.97 }}
+          initial={{ opacity: 1, y: 0, scale: 1 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.7, delay: 0.15, ease: "easeOut" }}
           className="relative"
