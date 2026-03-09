@@ -6,6 +6,7 @@ import { ItemRow } from "@/components/ItemRow";
 import { EmptyState } from "@/components/EmptyState";
 import { useItems } from "@/hooks/useItems";
 import { useAppStore } from "@/stores/appStore";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export default function WaitingView() {
   const { selectedAreaId } = useAppStore();
