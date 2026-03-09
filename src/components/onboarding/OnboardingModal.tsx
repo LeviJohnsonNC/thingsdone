@@ -26,6 +26,7 @@ export function OnboardingModal({ open, onComplete }: OnboardingModalProps) {
   const createItem = useCreateItem();
   const { completeOnboarding } = useOnboarding();
   const setClarifyItemId = useAppStore((s) => s.setClarifyItemId);
+  const { user } = useAuth();
 
   const filledThoughts = thoughts.filter((t) => t.trim().length > 0);
   const canContinueCapture = filledThoughts.length >= 1;
