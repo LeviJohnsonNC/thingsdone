@@ -29,6 +29,7 @@ export function ReviewSummaryStep({
   canUseAI,
   aiReviewsUsed,
   aiReviewLimit,
+  isPro,
 }: ReviewSummaryStepProps) {
   const statItems = [
     { label: "Inbox items processed", value: stats.inboxProcessed },
