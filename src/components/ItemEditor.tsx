@@ -23,6 +23,8 @@ import { TIME_ESTIMATE_OPTIONS, ENERGY_OPTIONS } from "@/lib/types";
 import type { ItemState, EnergyLevel } from "@/lib/types";
 import { ChecklistEditor, type ChecklistItem } from "@/components/ChecklistEditor";
 import { RecurrenceSelector } from "@/components/RecurrenceSelector";
+import { UpgradePrompt } from "@/components/UpgradePrompt";
+import { useSubscription } from "@/hooks/useSubscription";
 import { toast } from "sonner";
 import inboxIcon from "@/assets/icons/inbox.svg";
 import nextIcon from "@/assets/icons/next.svg";
@@ -54,6 +56,8 @@ interface ItemEditorProps {
 
 export function ItemEditor({ itemId }: ItemEditorProps) {
   const { setEditingItemId } = useAppStore();
+  const { isPro } = useSubscription();
+  const [showRecurrenceUpgrade, setShowRecurrenceUpgrade] = useState(false);
   const { data: allItems } = useItems();
   const item = allItems?.find((i) => i.id === itemId);
   const updateItem = useUpdateItem();
@@ -516,13 +520,34 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
             {/* Recurrence */}
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <PropertyRow icon={scheduledIcon} label="REPEAT" className="flex-1">
-                <RecurrenceSelector
-                  value={(item as any).recurrence_rule ?? null}
-                  onChange={(v) => saveField("recurrence_rule", v)}
-                  compact
-                />
+                {isPro ? (
+                  <RecurrenceSelector
+                    value={(item as any).recurrence_rule ?? null}
+                    onChange={(v) => saveField("recurrence_rule", v)}
+                    compact
+                  />
+                ) : (
+                  <button
+                    onClick={() => setShowRecurrenceUpgrade(true)}
+                    className="flex items-center gap-2 px-2 h-8 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    <span>No repeat</span>
+                    <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 border-focus text-focus font-semibold">
+                      PRO
+                    </Badge>
+                  </button>
+                )}
               </PropertyRow>
             </div>
+            {showRecurrenceUpgrade && (
+              <UpgradePrompt
+                open={showRecurrenceUpgrade}
+                onOpenChange={setShowRecurrenceUpgrade}
+                trigger="recurring"
+                currentUsage={0}
+                limit={0}
+              />
+            )}
 
             {/* Google Calendar toggle */}
             {isCalendarConnected && hasDate && (
