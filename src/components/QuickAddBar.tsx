@@ -17,7 +17,6 @@ interface QuickAddBarProps {
 export function QuickAddBar({ placeholder = "Add to inbox…", defaultState, projectId }: QuickAddBarProps) {
   const [title, setTitle] = useState("");
   const createItem = useCreateItem();
-  const { setEditingItemId } = useAppStore();
   const { canCreateItem, activeItemCount, activeItemLimit } = useUsageLimits();
   const [showUpgrade, setShowUpgrade] = useState(false);
 
