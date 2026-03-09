@@ -11,6 +11,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 export default function WaitingView() {
   const { selectedAreaId } = useAppStore();
   const { data: items, isLoading } = useItems("waiting", selectedAreaId);
+  const isMobile = useIsMobile();
 
   const grouped = useMemo(() => {
     if (!items) return [];
