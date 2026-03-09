@@ -59,6 +59,16 @@ export function OnboardingModal({ open, onComplete }: OnboardingModalProps) {
   };
 
   const handleFinish = async () => {
+    // Pre-seed GTD contexts as tags
+    if (user) {
+      const contexts = ["@phone", "@computer", "@errands", "@home", "@office"];
+      const inserts = contexts.map((name, i) => ({
+        name,
+        user_id: user.id,
+        sort_order: i,
+      }));
+      await supabase.from("tags").insert(inserts);
+    }
     await completeOnboarding.mutateAsync();
     onComplete();
   };
