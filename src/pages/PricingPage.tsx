@@ -37,24 +37,36 @@ const PRO_FEATURES: PricingFeature[] = [
 
 const FAQ = [
   {
-    q: "Can I use Things Done.. for free forever?",
-    a: "Yes! The free plan includes up to 30 active items, 3 projects, 3 areas, and 3 AI reviews per month with no time limit.",
+    q: "Can I really use Things Done. for free forever?",
+    a: "Yes — no trial, no expiration. The free plan gives you up to 30 active items, 3 projects, 3 areas, and 3 AI-assisted reviews per month. Use it as long as you like.",
+  },
+  {
+    q: "What is GTD, and do I need to know it?",
+    a: "GTD (Getting Things Done) is a productivity method by David Allen. You don't need to study it — Things Done. is built on its principles so you get the benefits just by using the app. Capture, clarify, organize, review, do.",
   },
   {
     q: "What counts as an AI review?",
-    a: "Each time you click 'Get AI Suggestions' or 'Generate AI Summary' during a weekly review, that counts as one AI review. Free users get 3 per month.",
+    a: "Each time you tap 'Get AI Suggestions' or 'Generate AI Summary' during a weekly review, that's one AI review. Free users get 3 per calendar month; Pro users get unlimited.",
   },
   {
-    q: "What happens if I cancel Pro?",
-    a: "You keep all your data. You just won't be able to create new items beyond the free limits until you re-subscribe.",
+    q: "What's AI brain dump?",
+    a: "During a weekly review, you can dump everything on your mind into a text box. The AI turns each thought into a ready-to-file task — complete with suggested state, energy, and time estimate. It's a Pro-only feature.",
   },
   {
-    q: "Is my data private?",
-    a: "Absolutely. All data is stored securely and is never shared with third parties.",
+    q: "What happens to my data if I cancel Pro?",
+    a: "Nothing — it's all still there. You just won't be able to add items, projects, or areas beyond the free limits, and AI reviews drop to 3/month. Re-subscribe anytime to unlock everything again.",
   },
   {
-    q: "Will AI features cost extra?",
-    a: "No. Unlimited AI reviews and AI brain dump capture are included in the Pro plan at no additional cost.",
+    q: "Can I connect Google Calendar?",
+    a: "Yes, on both plans. Link your Google Calendar in Settings to see events alongside your tasks and push scheduled items to your calendar.",
+  },
+  {
+    q: "Is my data private and secure?",
+    a: "Absolutely. Your data is encrypted at rest and in transit, stored in a secure cloud database, and never shared with or sold to third parties. AI suggestions are generated per-request and not stored for training.",
+  },
+  {
+    q: "Do AI features cost extra?",
+    a: "No. Unlimited AI reviews and brain dump capture are included in Pro at $4/month — no usage fees, no surprises.",
   },
 ];
 
