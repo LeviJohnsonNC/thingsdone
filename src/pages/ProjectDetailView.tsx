@@ -1,6 +1,6 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Star } from "lucide-react";
+import { ArrowLeft, Star, Target } from "lucide-react";
 import { useProjects, useUpdateProject } from "@/hooks/useProjects";
 import { useProjectItems } from "@/hooks/useItems";
 import { useAreas } from "@/hooks/useAreas";
