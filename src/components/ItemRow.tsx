@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, useMotionValue, useTransform, PanInfo, AnimatePresence } from "framer-motion";
 import { Star, Check, GripVertical, Repeat, ListChecks } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Item } from "@/lib/types";
 import { useCompleteItem, useUpdateItem } from "@/hooks/useItems";
 import { useAppStore } from "@/stores/appStore";
-import { ItemEditor } from "./ItemEditor";
+import { ItemEditorDrawer } from "./ItemEditorDrawer";
 import { toast } from "sonner";
 import type { ChecklistItem } from "@/components/ChecklistEditor";
 
@@ -14,20 +14,36 @@ interface ItemRowProps {
   showProject?: boolean;
   dimmed?: boolean;
   dragHandleProps?: Record<string, any>;
+  showSwipeHint?: boolean;
 }
 
-export function ItemRow({ item, showProject, dimmed, dragHandleProps }: ItemRowProps) {
+export function ItemRow({ item, showProject, dimmed, dragHandleProps, showSwipeHint }: ItemRowProps) {
   const { editingItemId, setEditingItemId } = useAppStore();
   const completeItem = useCompleteItem();
   const updateItem = useUpdateItem();
   const x = useMotionValue(0);
   const [swiping, setSwiping] = useState<"left" | "right" | null>(null);
   const [completing, setCompleting] = useState(false);
+  const hapticFiredRef = useRef(false);
 
   const isEditing = editingItemId === item.id;
 
   const bgRight = useTransform(x, [0, 80], ["hsl(96 60% 48% / 0)", "hsl(96 60% 48% / 1)"]);
   const bgLeft = useTransform(x, [-80, 0], ["hsl(36 90% 55% / 1)", "hsl(36 90% 55% / 0)"]);
+
+  // Haptic feedback when crossing swipe threshold
+  useEffect(() => {
+    const unsubscribe = x.on("change", (latest) => {
+      const crossedThreshold = Math.abs(latest) >= 80;
+      if (crossedThreshold && !hapticFiredRef.current) {
+        hapticFiredRef.current = true;
+        if (navigator.vibrate) navigator.vibrate(10);
+      } else if (!crossedThreshold) {
+        hapticFiredRef.current = false;
+      }
+    });
+    return unsubscribe;
+  }, [x]);
 
   const handleDragEnd = (_: any, info: PanInfo) => {
     if (info.offset.x > 80) {
@@ -92,6 +108,11 @@ export function ItemRow({ item, showProject, dimmed, dragHandleProps }: ItemRowP
                 isEditing && "bg-accent/50"
               )}
               onClick={() => setEditingItemId(isEditing ? null : item.id)}
+              // Swipe hint animation for first-time users
+              {...(showSwipeHint ? {
+                animate: { x: [0, 50, 0, -40, 0] },
+                transition: { duration: 1.8, delay: 0.8, ease: "easeInOut" },
+              } : {})}
             >
               {/* Drag handle */}
               {dragHandleProps ? (
@@ -177,9 +198,9 @@ export function ItemRow({ item, showProject, dimmed, dragHandleProps }: ItemRowP
         )}
       </AnimatePresence>
 
-      {/* Inline editor */}
+      {/* Editor — drawer on mobile, inline on desktop */}
       <AnimatePresence>
-        {isEditing && <ItemEditor itemId={item.id} />}
+        {isEditing && <ItemEditorDrawer itemId={item.id} />}
       </AnimatePresence>
     </div>
   );

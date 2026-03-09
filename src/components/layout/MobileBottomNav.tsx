@@ -1,14 +1,15 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { Inbox, Star, ArrowRight, FolderOpen, MoreHorizontal } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useItems } from "@/hooks/useItems";
+import { useItems, useNextItems } from "@/hooks/useItems";
 import { useAppStore } from "@/stores/appStore";
 import { MobileMoreMenu } from "./MobileMoreMenu";
+import { useMemo } from "react";
 
 const TABS = [
   { path: "/inbox", icon: Inbox, label: "Inbox", badge: true },
   { path: "/focus", icon: Star, label: "Focus" },
-  { path: "/next", icon: ArrowRight, label: "Next" },
+  { path: "/next", icon: ArrowRight, label: "Next", overdueDot: true },
   { path: "/projects", icon: FolderOpen, label: "Projects" },
 ];
 
@@ -16,9 +17,16 @@ export function MobileBottomNav() {
   const navigate = useNavigate();
   const location = useLocation();
   const { data: inboxItems } = useItems("inbox");
+  const { data: nextItems } = useNextItems();
   const { moreMenuOpen, setMoreMenuOpen } = useAppStore();
 
   const inboxCount = inboxItems?.length ?? 0;
+
+  const hasOverdue = useMemo(() => {
+    if (!nextItems) return false;
+    const today = new Date().toISOString().split("T")[0];
+    return nextItems.some((item) => item.due_date && item.due_date < today);
+  }, [nextItems]);
 
   return (
     <>
@@ -42,6 +50,9 @@ export function MobileBottomNav() {
                     <span className="absolute -right-2.5 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary text-[10px] font-medium text-primary-foreground px-1">
                       {inboxCount}
                     </span>
+                  )}
+                  {(tab as any).overdueDot && hasOverdue && (
+                    <span className="absolute -right-1 -top-0.5 h-2 w-2 rounded-full bg-overdue-red" />
                   )}
                 </div>
                 <span>{tab.label}</span>

@@ -27,6 +27,7 @@ interface SortableItemListProps {
   showProject?: boolean;
   dimmedIds?: Set<string>;
   orderField?: "sort_order" | "sort_order_project";
+  showSwipeHintOnFirst?: boolean;
 }
 
 const measuring = {
@@ -38,6 +39,7 @@ export function SortableItemList({
   showProject,
   dimmedIds,
   orderField = "sort_order",
+  showSwipeHintOnFirst,
 }: SortableItemListProps) {
   const reorderItems = useReorderItems();
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -94,12 +96,13 @@ export function SortableItemList({
         items={items.map((i) => i.id)}
         strategy={verticalListSortingStrategy}
       >
-        {items.map((item) => (
+        {items.map((item, index) => (
           <SortableItemRow
             key={item.id}
             item={item}
             showProject={showProject}
             dimmed={dimmedIds?.has(item.id)}
+            showSwipeHint={showSwipeHintOnFirst && index === 0}
           />
         ))}
       </SortableContext>
