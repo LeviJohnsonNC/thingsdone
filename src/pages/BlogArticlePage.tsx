@@ -45,6 +45,14 @@ function WhyYourToDoListArticle() {
         even when you're not consciously thinking about them.
       </p>
 
+      <p>
+        David Allen's{" "}
+        <a href="https://en.wikipedia.org/wiki/Getting_Things_Done" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">
+          Getting Things Done
+        </a>{" "}
+        methodology addresses this head-on with a structured approach to capturing and organizing work.
+      </p>
+
       <h2>What GTD gets right</h2>
       <p>
         David Allen's <em>Getting Things Done</em> methodology, often called GTD,
