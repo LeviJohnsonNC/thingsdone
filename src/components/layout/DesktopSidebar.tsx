@@ -61,6 +61,8 @@ export function DesktopSidebar() {
   const { data: areas } = useAreas();
   const { data: settings } = useUserSettings();
   const { selectedAreaId, setSelectedAreaId } = useAppStore();
+  const { isPro } = useSubscription();
+  const { activeItemCount, activeItemLimit, isApproachingLimit } = useUsageLimits();
 
   const inboxCount = inboxItems?.length ?? 0;
   const daysSinceReview = settings?.last_review_at
