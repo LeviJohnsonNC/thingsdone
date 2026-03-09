@@ -103,6 +103,7 @@ export default function ScheduledView() {
   const { data: gcalEvents = [] } = useGoogleCalendarEvents();
   const { data: itemTagMap } = useAllItemTags();
   const { filters, setFilters } = useItemFilters();
+  const isMobile = useIsMobile();
 
   const filteredItems = applyItemFilters(items, filters, itemTagMap);
   const merged = getMergedItems(filteredItems, gcalEvents);
