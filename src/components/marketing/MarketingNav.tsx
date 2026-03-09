@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 const NAV_LINKS = [
   { path: "/features", label: "Features" },
   { path: "/pricing", label: "Pricing" },
+  { path: "/blog", label: "Blog" },
 ];
 
 export function MarketingNav() {
