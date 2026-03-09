@@ -40,9 +40,10 @@ const STATE_CONFIG: Record<string, { label: string; icon: string; activeClass: s
   waiting: { label: "Waiting", icon: waitingIcon, activeClass: "bg-focus-gold/10 text-focus-gold border-focus-gold", borderClass: "border-focus-gold", bgClass: "hover:bg-focus-gold/5" },
   someday: { label: "Someday", icon: somedayIcon, activeClass: "bg-purple-100 text-purple-700 border-purple-400 dark:bg-purple-900/30 dark:text-purple-300 dark:border-purple-500", borderClass: "border-purple-400 dark:border-purple-500", bgClass: "hover:bg-purple-50 dark:hover:bg-purple-900/20" },
   scheduled: { label: "Scheduled", icon: scheduledIcon, activeClass: "bg-emerald-100 text-emerald-700 border-emerald-400 dark:bg-emerald-900/30 dark:text-emerald-300 dark:border-emerald-500", borderClass: "border-emerald-400 dark:border-emerald-500", bgClass: "hover:bg-emerald-50 dark:hover:bg-emerald-900/20" },
+  reference: { label: "Reference", icon: somedayIcon, activeClass: "bg-slate-100 text-slate-700 border-slate-400 dark:bg-slate-900/30 dark:text-slate-300 dark:border-slate-500", borderClass: "border-slate-400 dark:border-slate-500", bgClass: "hover:bg-slate-50 dark:hover:bg-slate-900/20" },
 };
 
-const GTD_STATES = ["inbox", "next", "waiting", "scheduled", "someday"] as const;
+const GTD_STATES = ["inbox", "next", "waiting", "scheduled", "someday", "reference"] as const;
 
 interface ItemEditorProps {
   itemId: string;
