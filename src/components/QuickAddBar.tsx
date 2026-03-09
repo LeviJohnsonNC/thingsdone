@@ -30,15 +30,12 @@ export function QuickAddBar({ placeholder = "Add to inbox…", defaultState, pro
       return;
     }
 
-    const item = await createItem.mutateAsync({
+    await createItem.mutateAsync({
       title: title.trim(),
       ...(defaultState && { state: defaultState }),
       ...(projectId && { project_id: projectId }),
     });
     setTitle("");
-    if (item?.id) {
-      setEditingItemId(item.id);
-    }
   };
 
   return (

@@ -140,7 +140,16 @@ export function ItemRow({ item, showProject, dimmed, dragHandleProps }: ItemRowP
                   )}
                   {item.time_estimate && (
                     <span className="text-xs text-muted-foreground">
-                      {item.time_estimate >= 60 ? `${item.time_estimate / 60}h` : `${item.time_estimate}m`}
+                      {item.time_estimate >= 60 ? `${Math.round(item.time_estimate / 60 * 10) / 10}h` : `${item.time_estimate}m`}
+                    </span>
+                  )}
+                  {hasRecurrence && (
+                    <Repeat className="h-3 w-3 text-muted-foreground/60" />
+                  )}
+                  {checklistTotal > 0 && (
+                    <span className={cn("text-xs flex items-center gap-0.5", checklistDone === checklistTotal ? "text-success-green" : "text-muted-foreground")}>
+                      <ListChecks className="h-3 w-3" />
+                      {checklistDone}/{checklistTotal}
                     </span>
                   )}
                 </div>

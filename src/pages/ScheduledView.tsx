@@ -1,4 +1,5 @@
-import { Calendar, ExternalLink } from "lucide-react";
+import { Calendar } from "lucide-react";
+import { ItemListSkeleton } from "@/components/ItemListSkeleton";
 import { ItemRow } from "@/components/ItemRow";
 import { EmptyState } from "@/components/EmptyState";
 import { ViewHeader } from "@/components/ViewHeader";

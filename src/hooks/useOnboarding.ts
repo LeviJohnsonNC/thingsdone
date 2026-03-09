@@ -20,7 +20,22 @@ export function useOnboarding() {
     enabled: !!user,
   });
 
-  const needsOnboarding = !isLoading && settings?.has_completed_onboarding !== true;
+  // Check if user has existing items (skip onboarding for pre-existing users)
+  const { data: existingItemCount } = useQuery({
+    queryKey: ["item_count_check", user?.id],
+    queryFn: async () => {
+      const { count, error } = await supabase
+        .from("items")
+        .select("id", { count: "exact", head: true })
+        .eq("user_id", user!.id)
+        .limit(1);
+      if (error) throw error;
+      return count ?? 0;
+    },
+    enabled: !!user && !settings?.has_completed_onboarding,
+  });
+
+  const needsOnboarding = !isLoading && settings?.has_completed_onboarding !== true && (existingItemCount === 0);
 
   const completeOnboarding = useMutation({
     mutationFn: async () => {

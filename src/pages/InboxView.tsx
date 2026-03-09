@@ -47,7 +47,7 @@ export default function InboxView() {
       <ViewHeader title="Inbox" count={items?.length} />
       {!isMobile && <QuickAddBar />}
       <div className="flex-1">
-        {isLoading ? null : stableItems.length === 0 ? (
+        {isLoading ? <ItemListSkeleton /> : stableItems.length === 0 ? (
           <EmptyState
             icon={InboxIcon}
             title="Your mind is clear"
