@@ -43,33 +43,45 @@ export default function BlogPage() {
             >
               <Link
                 to={`/blog/${article.slug}`}
-                className="group block rounded-xl border border-border bg-card p-8 transition-all hover:border-primary/30 hover:shadow-md"
+                className="group block rounded-xl border border-border bg-card overflow-hidden transition-all hover:border-primary/30 hover:shadow-md"
               >
-                <div className="flex flex-wrap items-center gap-2 mb-3">
-                  {article.tags.map((tag) => (
-                    <Badge key={tag} variant="secondary" className="text-xs font-normal">
-                      {tag}
-                    </Badge>
-                  ))}
+                {/* Hero image */}
+                <div className="aspect-[16/9] overflow-hidden">
+                  <img
+                    src={article.heroImage}
+                    alt={article.title}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
+                  />
                 </div>
-                <h2 className="text-xl font-semibold text-foreground sm:text-2xl group-hover:text-primary transition-colors">
-                  {article.title}
-                </h2>
-                <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">
-                  {article.description}
-                </p>
-                <div className="mt-5 flex items-center justify-between text-sm text-muted-foreground">
-                  <span>
-                    {new Date(article.date).toLocaleDateString("en-US", {
-                      month: "long",
-                      day: "numeric",
-                      year: "numeric",
-                    })}{" "}
-                    · {article.readingTime}
-                  </span>
-                  <span className="flex items-center gap-1 font-medium text-primary opacity-0 transition-opacity group-hover:opacity-100">
-                    Read <ArrowRight className="h-3.5 w-3.5" />
-                  </span>
+
+                <div className="p-8">
+                  <div className="flex flex-wrap items-center gap-2 mb-3">
+                    {article.tags.map((tag) => (
+                      <Badge key={tag} variant="secondary" className="text-xs font-normal">
+                        {tag}
+                      </Badge>
+                    ))}
+                  </div>
+                  <h2 className="text-xl font-semibold text-foreground sm:text-2xl group-hover:text-primary transition-colors">
+                    {article.title}
+                  </h2>
+                  <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">
+                    {article.description}
+                  </p>
+                  <div className="mt-5 flex items-center justify-between text-sm text-muted-foreground">
+                    <span>
+                      {new Date(article.date).toLocaleDateString("en-US", {
+                        month: "long",
+                        day: "numeric",
+                        year: "numeric",
+                      })}{" "}
+                      · {article.readingTime}
+                    </span>
+                    <span className="flex items-center gap-1 font-medium text-primary opacity-0 transition-opacity group-hover:opacity-100">
+                      Read <ArrowRight className="h-3.5 w-3.5" />
+                    </span>
+                  </div>
                 </div>
               </Link>
             </motion.article>

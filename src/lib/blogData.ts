@@ -1,3 +1,8 @@
+import heroTodoList from "@/assets/blog/hero-todo-list.jpg";
+import heroOpenLoops from "@/assets/blog/hero-open-loops.jpg";
+import heroChaosToCalm from "@/assets/blog/hero-chaos-to-calm.jpg";
+import heroTwoMinuteRule from "@/assets/blog/hero-two-minute-rule.jpg";
+
 export interface BlogArticle {
   slug: string;
   title: string;
@@ -6,7 +11,7 @@ export interface BlogArticle {
   readingTime: string;
   author: string;
   tags: string[];
-  heroImage?: string;
+  heroImage: string;
 }
 
 export const BLOG_ARTICLES: BlogArticle[] = [
@@ -19,6 +24,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
     readingTime: "8 min read",
     author: "Things Done.",
     tags: ["Productivity", "GTD", "Getting Started"],
+    heroImage: heroTodoList,
   },
   {
     slug: "the-hidden-cost-of-open-loops",
@@ -29,6 +35,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
     readingTime: "7 min read",
     author: "Things Done.",
     tags: ["Psychology", "Productivity", "Deep Dive"],
+    heroImage: heroOpenLoops,
   },
   {
     slug: "from-chaos-to-calm",
@@ -39,6 +46,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
     readingTime: "6 min read",
     author: "Things Done.",
     tags: ["Personal Story", "Inspiration"],
+    heroImage: heroChaosToCalm,
   },
   {
     slug: "the-two-minute-rule",
@@ -49,6 +57,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
     readingTime: "5 min read",
     author: "Things Done.",
     tags: ["GTD", "Quick Tips", "Tactics"],
+    heroImage: heroTwoMinuteRule,
   },
 ];
 

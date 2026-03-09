@@ -622,6 +622,22 @@ export default function BlogArticlePage() {
           </Link>
         </motion.div>
 
+        {/* Hero image */}
+        {article.heroImage && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6 }}
+            className="mb-10 -mx-6 md:mx-0 md:rounded-xl overflow-hidden"
+          >
+            <img
+              src={article.heroImage}
+              alt={article.title}
+              className="w-full aspect-[16/9] object-cover"
+            />
+          </motion.div>
+        )}
+
         {/* Header */}
         <motion.header
           initial={{ opacity: 0, y: 16 }}
