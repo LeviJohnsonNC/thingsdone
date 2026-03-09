@@ -384,6 +384,8 @@ export type Database = {
       }
       user_settings: {
         Row: {
+          ai_reviews_reset_at: string
+          ai_reviews_used: number
           created_at: string | null
           has_completed_onboarding: boolean | null
           id: string
@@ -393,6 +395,8 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          ai_reviews_reset_at?: string
+          ai_reviews_used?: number
           created_at?: string | null
           has_completed_onboarding?: boolean | null
           id?: string
@@ -402,6 +406,8 @@ export type Database = {
           user_id: string
         }
         Update: {
+          ai_reviews_reset_at?: string
+          ai_reviews_used?: number
           created_at?: string | null
           has_completed_onboarding?: boolean | null
           id?: string

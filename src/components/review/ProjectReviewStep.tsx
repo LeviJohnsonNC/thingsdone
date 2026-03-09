@@ -12,6 +12,9 @@ interface ProjectReviewStepProps {
   onDismissSuggestion: (s: ReviewSuggestion) => void;
   onRequestAI: () => void;
   aiLoading: boolean;
+  canUseAI: boolean;
+  aiReviewsUsed: number;
+  aiReviewLimit: number;
 }
 
 export function ProjectReviewStep({
@@ -21,6 +24,9 @@ export function ProjectReviewStep({
   onDismissSuggestion,
   onRequestAI,
   aiLoading,
+  canUseAI,
+  aiReviewsUsed,
+  aiReviewLimit,
 }: ProjectReviewStepProps) {
   const { data: projects, isLoading: projectsLoading } = useProjects("active");
   const { data: nextItems } = useItems("next");
@@ -31,6 +37,10 @@ export function ProjectReviewStep({
   );
 
   const isEmpty = !projects?.length;
+
+  const aiCountLabel = aiReviewLimit !== Infinity
+    ? ` (${aiReviewsUsed}/${aiReviewLimit} used)`
+    : "";
 
   return (
     <div className="space-y-4">
@@ -118,11 +128,15 @@ export function ProjectReviewStep({
 
       <Button
         onClick={onRequestAI}
-        disabled={aiLoading || isEmpty}
+        disabled={aiLoading || isEmpty || !canUseAI}
         variant="outline"
         className="w-full"
       >
-        {aiLoading ? "Analyzing..." : "Get AI Suggestions"}
+        {aiLoading
+          ? "Analyzing..."
+          : !canUseAI
+          ? `AI limit reached${aiCountLabel}`
+          : `Get AI Suggestions${aiCountLabel}`}
       </Button>
     </div>
   );

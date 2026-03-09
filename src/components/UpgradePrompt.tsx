@@ -31,7 +31,8 @@ const triggerMessages: Record<UpgradeTrigger, (used: number, limit: number) => s
 const PRO_FEATURES = [
   "Unlimited items & projects",
   "Unlimited areas of focus",
-  "AI-powered weekly reviews",
+  "Unlimited AI-powered reviews",
+  "AI brain dump capture",
   "Recurring tasks",
   "Priority support",
 ];
@@ -80,7 +81,6 @@ export function UpgradePrompt({ open, onOpenChange, trigger, currentUsage, limit
               </li>
             ))}
           </ul>
-          {/* no coming-soon footnote needed */}
         </div>
 
         <div className="flex flex-col gap-2 mt-2">

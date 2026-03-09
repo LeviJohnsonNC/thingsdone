@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { SuggestionCard } from "./SuggestionCard";
 import type { ReviewSuggestion } from "@/hooks/useReview";
-import { CheckCircle2, Lightbulb, Sparkles } from "lucide-react";
+import { CheckCircle2, Lightbulb, Lock, Sparkles } from "lucide-react";
 
 interface ClearAndInboxStepProps {
   suggestions: ReviewSuggestion[];
@@ -15,6 +15,10 @@ interface ClearAndInboxStepProps {
   onDismissSuggestion: (s: ReviewSuggestion) => void;
   onRequestAI: (brainDump?: string) => void;
   aiLoading: boolean;
+  canUseAI: boolean;
+  isPro: boolean;
+  aiReviewsUsed: number;
+  aiReviewLimit: number;
 }
 
 export function ClearAndInboxStep({
@@ -24,6 +28,10 @@ export function ClearAndInboxStep({
   onDismissSuggestion,
   onRequestAI,
   aiLoading,
+  canUseAI,
+  isPro,
+  aiReviewsUsed,
+  aiReviewLimit,
 }: ClearAndInboxStepProps) {
   const [brainDump, setBrainDump] = useState("");
   const { data: inboxItems, isLoading } = useItems("inbox");
@@ -32,6 +40,10 @@ export function ClearAndInboxStep({
   const isEmpty = !inboxItems?.length;
   const createSuggestions = suggestions.filter((s) => s.action === "create");
   const inboxSuggestions = suggestions.filter((s) => s.action !== "create");
+
+  const aiCountLabel = !isPro && aiReviewLimit !== Infinity
+    ? ` (${aiReviewsUsed}/${aiReviewLimit} used)`
+    : "";
 
   return (
     <div className="space-y-6">
@@ -50,16 +62,23 @@ export function ClearAndInboxStep({
           placeholder="Meeting prep for Monday, call dentist, research new laptop, follow up with Sarah about budget..."
           className="min-h-[80px] text-sm"
         />
-        <Button
-          onClick={() => onRequestAI(brainDump)}
-          disabled={aiLoading || !brainDump.trim()}
-          variant="outline"
-          size="sm"
-          className="w-full"
-        >
-          <Sparkles className="h-3.5 w-3.5 mr-1.5" />
-          {aiLoading ? "Generating tasks..." : "Turn into tasks"}
-        </Button>
+        {isPro ? (
+          <Button
+            onClick={() => onRequestAI(brainDump)}
+            disabled={aiLoading || !brainDump.trim()}
+            variant="outline"
+            size="sm"
+            className="w-full"
+          >
+            <Sparkles className="h-3.5 w-3.5 mr-1.5" />
+            {aiLoading ? "Generating tasks..." : "Turn into tasks"}
+          </Button>
+        ) : (
+          <div className="flex items-center gap-2 rounded-md border border-border bg-muted/50 px-3 py-2 text-xs text-muted-foreground">
+            <Lock className="h-3.5 w-3.5 shrink-0" />
+            <span>AI brain dump is a Pro feature. Upgrade to turn thoughts into tasks automatically.</span>
+          </div>
+        )}
       </div>
 
       {/* AI suggestions from brain dump */}
@@ -161,11 +180,15 @@ export function ClearAndInboxStep({
       {!isEmpty && (
         <Button
           onClick={() => onRequestAI()}
-          disabled={aiLoading}
+          disabled={aiLoading || !canUseAI}
           variant="outline"
           className="w-full"
         >
-          {aiLoading ? "Analyzing..." : "Get AI Suggestions for Inbox"}
+          {aiLoading
+            ? "Analyzing..."
+            : !canUseAI
+            ? `AI limit reached${aiCountLabel}`
+            : `Get AI Suggestions for Inbox${aiCountLabel}`}
         </Button>
       )}
     </div>

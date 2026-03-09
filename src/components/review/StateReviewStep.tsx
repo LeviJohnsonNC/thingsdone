@@ -17,6 +17,9 @@ interface StateReviewStepProps {
   onDismissSuggestion: (s: ReviewSuggestion) => void;
   onRequestAI: () => void;
   aiLoading: boolean;
+  canUseAI: boolean;
+  aiReviewsUsed: number;
+  aiReviewLimit: number;
 }
 
 export function StateReviewStep({
@@ -29,11 +32,18 @@ export function StateReviewStep({
   onDismissSuggestion,
   onRequestAI,
   aiLoading,
+  canUseAI,
+  aiReviewsUsed,
+  aiReviewLimit,
 }: StateReviewStepProps) {
   const { data: items, isLoading } = useItems(state);
   const { setEditingItemId } = useAppStore();
 
   const isEmpty = !items?.length;
+
+  const aiCountLabel = aiReviewLimit !== Infinity
+    ? ` (${aiReviewsUsed}/${aiReviewLimit} used)`
+    : "";
 
   return (
     <div className="space-y-4">
@@ -97,11 +107,15 @@ export function StateReviewStep({
 
       <Button
         onClick={onRequestAI}
-        disabled={aiLoading || isEmpty}
+        disabled={aiLoading || isEmpty || !canUseAI}
         variant="outline"
         className="w-full"
       >
-        {aiLoading ? "Analyzing..." : "Get AI Suggestions"}
+        {aiLoading
+          ? "Analyzing..."
+          : !canUseAI
+          ? `AI limit reached${aiCountLabel}`
+          : `Get AI Suggestions${aiCountLabel}`}
       </Button>
     </div>
   );

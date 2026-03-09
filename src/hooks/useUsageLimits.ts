@@ -7,6 +7,7 @@ const FREE_LIMITS = {
   activeItems: 30,
   activeProjects: 3,
   areas: 3,
+  aiReviews: 3,
 };
 
 export interface UsageLimits {
@@ -19,6 +20,9 @@ export interface UsageLimits {
   areaCount: number;
   areaLimit: number;
   canCreateArea: boolean;
+  aiReviewsUsed: number;
+  aiReviewLimit: number;
+  canUseAI: boolean;
   isOverAnyLimit: boolean;
 }
 
@@ -47,10 +51,27 @@ export function useUsageLimits(): UsageLimits & { isLoading: boolean } {
         .from("areas")
         .select("*", { count: "exact", head: true });
 
+      // Get AI usage from user_settings
+      const { data: settings } = await supabase
+        .from("user_settings")
+        .select("ai_reviews_used, ai_reviews_reset_at")
+        .maybeSingle();
+
+      let aiReviewsUsed = (settings as any)?.ai_reviews_used ?? 0;
+      const resetAt = (settings as any)?.ai_reviews_reset_at ? new Date((settings as any).ai_reviews_reset_at) : null;
+      const now = new Date();
+      const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+
+      // If reset_at is before this month, the count should be considered 0
+      if (resetAt && resetAt < monthStart) {
+        aiReviewsUsed = 0;
+      }
+
       return {
         activeItemCount: itemCount ?? 0,
         activeProjectCount: projectCount ?? 0,
         areaCount: areaCount ?? 0,
+        aiReviewsUsed,
       };
     },
     enabled: !!user,
@@ -60,14 +81,17 @@ export function useUsageLimits(): UsageLimits & { isLoading: boolean } {
   const activeItemCount = data?.activeItemCount ?? 0;
   const activeProjectCount = data?.activeProjectCount ?? 0;
   const areaCount = data?.areaCount ?? 0;
+  const aiReviewsUsed = data?.aiReviewsUsed ?? 0;
 
   const activeItemLimit = isUnlimited ? Infinity : FREE_LIMITS.activeItems;
   const activeProjectLimit = isUnlimited ? Infinity : FREE_LIMITS.activeProjects;
   const areaLimit = isUnlimited ? Infinity : FREE_LIMITS.areas;
+  const aiReviewLimit = isUnlimited ? Infinity : FREE_LIMITS.aiReviews;
 
   const canCreateItem = isUnlimited || activeItemCount < FREE_LIMITS.activeItems;
   const canCreateProject = isUnlimited || activeProjectCount < FREE_LIMITS.activeProjects;
   const canCreateArea = isUnlimited || areaCount < FREE_LIMITS.areas;
+  const canUseAI = isUnlimited || aiReviewsUsed < FREE_LIMITS.aiReviews;
 
   const isOverAnyLimit =
     !isUnlimited &&
@@ -85,6 +109,9 @@ export function useUsageLimits(): UsageLimits & { isLoading: boolean } {
     areaCount,
     areaLimit,
     canCreateArea,
+    aiReviewsUsed,
+    aiReviewLimit,
+    canUseAI,
     isOverAnyLimit,
     isLoading,
   };

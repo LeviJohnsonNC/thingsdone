@@ -2,17 +2,15 @@ import { ReactNode } from "react";
 import { motion } from "framer-motion";
 import { SEOHead } from "@/components/SEOHead";
 import { Inbox, SlidersHorizontal, FolderKanban, Star, Calendar, Bot } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 
 interface FeatureBlockProps {
   title: string;
   body: string;
   icon: ReactNode;
   reverse?: boolean;
-  badge?: string;
 }
 
-function FeatureBlock({ title, body, icon, reverse, badge }: FeatureBlockProps) {
+function FeatureBlock({ title, body, icon, reverse }: FeatureBlockProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 24 }}
@@ -22,12 +20,7 @@ function FeatureBlock({ title, body, icon, reverse, badge }: FeatureBlockProps) 
       className={`flex flex-col gap-8 py-16 md:flex-row md:items-center md:gap-16 ${reverse ? "md:flex-row-reverse" : ""}`}
     >
       <div className="flex-1 space-y-4">
-        <div className="flex items-center gap-3">
-          <h3 className="text-2xl font-semibold text-foreground sm:text-3xl">{title}</h3>
-          {badge && (
-            <Badge variant="secondary" className="text-xs font-normal">{badge}</Badge>
-          )}
-        </div>
+        <h3 className="text-2xl font-semibold text-foreground sm:text-3xl">{title}</h3>
         <p className="text-[15px] leading-relaxed text-muted-foreground max-w-md">{body}</p>
       </div>
       {/* Placeholder visual */}
@@ -68,7 +61,7 @@ const FEATURES = [
   },
   {
     title: "An assistant that keeps you unstuck",
-    body: "AI-powered weekly reviews surface stale tasks, suggest next actions, and keep your system fresh — automatically.",
+    body: "AI-powered weekly reviews surface stale tasks, suggest next actions, and keep your system fresh. Free users get 3 AI reviews per month — Pro unlocks unlimited AI plus brain dump capture.",
     icon: <Bot className="h-16 w-16" />,
     reverse: true,
   },
@@ -109,7 +102,6 @@ export default function FeaturesPage() {
             body={f.body}
             icon={f.icon}
             reverse={f.reverse}
-            badge={(f as any).badge}
           />
         ))}
       </section>

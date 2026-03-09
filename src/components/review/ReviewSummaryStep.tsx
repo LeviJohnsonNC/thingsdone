@@ -10,6 +10,9 @@ interface ReviewSummaryStepProps {
   onFinish: () => void;
   aiLoading: boolean;
   isCompleting: boolean;
+  canUseAI: boolean;
+  aiReviewsUsed: number;
+  aiReviewLimit: number;
 }
 
 export function ReviewSummaryStep({
@@ -20,6 +23,9 @@ export function ReviewSummaryStep({
   onFinish,
   aiLoading,
   isCompleting,
+  canUseAI,
+  aiReviewsUsed,
+  aiReviewLimit,
 }: ReviewSummaryStepProps) {
   const statItems = [
     { label: "Inbox items processed", value: stats.inboxProcessed },
@@ -29,6 +35,10 @@ export function ReviewSummaryStep({
     { label: "New items created", value: stats.itemsCreated },
     { label: "Projects flagged", value: stats.projectsFlagged },
   ];
+
+  const aiCountLabel = aiReviewLimit !== Infinity
+    ? ` (${aiReviewsUsed}/${aiReviewLimit} used)`
+    : "";
 
   return (
     <div className="space-y-6">
@@ -83,11 +93,15 @@ export function ReviewSummaryStep({
         {!summaryText && (
           <Button
             onClick={onGenerateSummary}
-            disabled={aiLoading}
+            disabled={aiLoading || !canUseAI}
             variant="outline"
             className="w-full"
           >
-            {aiLoading ? "Generating summary..." : "Generate AI Summary"}
+            {aiLoading
+              ? "Generating summary..."
+              : !canUseAI
+              ? `AI limit reached${aiCountLabel}`
+              : `Generate AI Summary${aiCountLabel}`}
           </Button>
         )}
         <Button

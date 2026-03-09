@@ -99,6 +99,7 @@ export function SubscriptionSection() {
           <UsageBar label="Items" used={limits.activeItemCount} max={limits.activeItemLimit} />
           <UsageBar label="Projects" used={limits.activeProjectCount} max={limits.activeProjectLimit} />
           <UsageBar label="Areas" used={limits.areaCount} max={limits.areaLimit} />
+          <UsageBar label="AI Reviews" used={limits.aiReviewsUsed} max={limits.aiReviewLimit} suffix="/month" />
         </div>
         <Button size="sm" className="w-full gap-2" onClick={handleUpgrade} disabled={checkoutLoading}>
           {checkoutLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Zap className="h-4 w-4" />}
@@ -109,7 +110,7 @@ export function SubscriptionSection() {
   );
 }
 
-function UsageBar({ label, used, max }: { label: string; used: number; max: number }) {
+function UsageBar({ label, used, max, suffix }: { label: string; used: number; max: number; suffix?: string }) {
   const pct = max === Infinity ? 0 : Math.min((used / max) * 100, 100);
   const atLimit = max !== Infinity && used >= max;
   return (
@@ -117,7 +118,7 @@ function UsageBar({ label, used, max }: { label: string; used: number; max: numb
       <div className="flex justify-between text-xs text-muted-foreground">
         <span>{label}</span>
         <span className={atLimit ? "text-destructive font-medium" : ""}>
-          {used} / {max === Infinity ? "∞" : max}
+          {used} / {max === Infinity ? "∞" : max}{suffix ?? ""}
         </span>
       </div>
       <Progress value={pct} className="h-1.5" />
