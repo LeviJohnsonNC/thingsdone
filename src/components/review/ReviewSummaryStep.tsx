@@ -15,6 +15,7 @@ interface ReviewSummaryStepProps {
   canUseAI: boolean;
   aiReviewsUsed: number;
   aiReviewLimit: number;
+  isPro: boolean;
 }
 
 export function ReviewSummaryStep({
