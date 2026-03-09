@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./useAuth";
 import type { Item, ItemState } from "@/lib/types";
+import { getNextOccurrence } from "@/components/RecurrenceSelector";
 
 export function useItems(state?: ItemState | ItemState[], areaId?: string | null) {
   const { user } = useAuth();
