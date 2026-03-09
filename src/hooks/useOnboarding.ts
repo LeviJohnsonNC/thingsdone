@@ -2,18 +2,11 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./useAuth";
 
-interface UserSettings {
-  id: string;
-  user_id: string;
-  last_review_at: string | null;
-  theme: string | null;
-  has_completed_onboarding: boolean | null;
-}
-
-export function useUserSettings() {
+export function useOnboarding() {
   const { user } = useAuth();
+  const queryClient = useQueryClient();
 
-  return useQuery({
+  const { data: settings, isLoading } = useQuery({
     queryKey: ["user_settings", user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -22,27 +15,15 @@ export function useUserSettings() {
         .eq("user_id", user!.id)
         .maybeSingle();
       if (error) throw error;
-      return data as UserSettings | null;
+      return data;
     },
     enabled: !!user,
   });
-}
 
-export function useNeedsReview() {
-  const { data: settings } = useUserSettings();
-  if (!settings?.last_review_at) return true;
-  const lastReview = new Date(settings.last_review_at);
-  const daysSince = (Date.now() - lastReview.getTime()) / (1000 * 60 * 60 * 24);
-  return daysSince >= 7;
-}
+  const needsOnboarding = !isLoading && settings?.has_completed_onboarding !== true;
 
-export function useSaveReviewTimestamp() {
-  const { user } = useAuth();
-  const queryClient = useQueryClient();
-
-  return useMutation({
+  const completeOnboarding = useMutation({
     mutationFn: async () => {
-      const now = new Date().toISOString();
       const { data: existing } = await supabase
         .from("user_settings")
         .select("id")
@@ -52,13 +33,13 @@ export function useSaveReviewTimestamp() {
       if (existing) {
         const { error } = await supabase
           .from("user_settings")
-          .update({ last_review_at: now })
+          .update({ has_completed_onboarding: true })
           .eq("user_id", user!.id);
         if (error) throw error;
       } else {
         const { error } = await supabase
           .from("user_settings")
-          .insert({ user_id: user!.id, last_review_at: now });
+          .insert({ user_id: user!.id, has_completed_onboarding: true });
         if (error) throw error;
       }
     },
@@ -66,4 +47,10 @@ export function useSaveReviewTimestamp() {
       queryClient.invalidateQueries({ queryKey: ["user_settings"] });
     },
   });
+
+  return {
+    needsOnboarding,
+    isLoading,
+    completeOnboarding,
+  };
 }

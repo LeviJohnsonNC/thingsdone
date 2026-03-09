@@ -376,6 +376,7 @@ export type Database = {
       user_settings: {
         Row: {
           created_at: string | null
+          has_completed_onboarding: boolean | null
           id: string
           last_review_at: string | null
           theme: string | null
@@ -384,6 +385,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string | null
+          has_completed_onboarding?: boolean | null
           id?: string
           last_review_at?: string | null
           theme?: string | null
@@ -392,6 +394,7 @@ export type Database = {
         }
         Update: {
           created_at?: string | null
+          has_completed_onboarding?: boolean | null
           id?: string
           last_review_at?: string | null
           theme?: string | null
