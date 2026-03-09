@@ -5,6 +5,7 @@ import { SortableItemList } from "@/components/SortableItemList";
 import { EmptyState } from "@/components/EmptyState";
 import { ViewHeader } from "@/components/ViewHeader";
 import { DoneSection } from "@/components/DoneSection";
+import { ItemListSkeleton } from "@/components/ItemListSkeleton";
 import { useItems, useCompletedItems } from "@/hooks/useItems";
 import { useAppStore } from "@/stores/appStore";
 import { useIsMobile } from "@/hooks/use-mobile";
