@@ -20,6 +20,8 @@ import { useGoogleCalendarStatus, usePushItemToCalendar, useDeleteCalendarEvent 
 import { cn } from "@/lib/utils";
 import { ITEM_STATE_OPTIONS, TIME_ESTIMATE_OPTIONS } from "@/lib/types";
 import type { ItemState } from "@/lib/types";
+import { ChecklistEditor, type ChecklistItem } from "@/components/ChecklistEditor";
+import { RecurrenceSelector } from "@/components/RecurrenceSelector";
 import { toast } from "sonner";
 
 export function ClarifySheet() {
@@ -91,7 +93,11 @@ export function ClarifySheet() {
     if (item.google_event_id) {
       deleteCalendarEvent.mutate({ item_id: item.id, google_event_id: item.google_event_id });
     }
-    completeItem.mutate(item.id);
+    completeItem.mutate({
+      id: item.id, recurrence_rule: (item as any).recurrence_rule, title: item.title,
+      user_id: item.user_id, scheduled_date: item.scheduled_date, project_id: item.project_id,
+      area_id: item.area_id, energy: item.energy, time_estimate: item.time_estimate,
+    });
     setClarifyItemId(null);
   };
 
@@ -313,6 +319,24 @@ export function ClarifySheet() {
                 ))}
               </SelectContent>
             </Select>
+          </div>
+
+          {/* Recurrence */}
+          <div>
+            <p className="text-xs text-muted-foreground mb-1.5">Repeat</p>
+            <RecurrenceSelector
+              value={(item as any).recurrence_rule ?? null}
+              onChange={(v) => saveField("recurrence_rule", v)}
+            />
+          </div>
+
+          {/* Checklist */}
+          <div>
+            <p className="text-xs text-muted-foreground mb-2">Checklist</p>
+            <ChecklistEditor
+              checklist={((item as any).checklist as ChecklistItem[]) ?? []}
+              onChange={(cl) => saveField("checklist", cl)}
+            />
           </div>
 
           {/* Notes */}

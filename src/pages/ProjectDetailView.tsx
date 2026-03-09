@@ -1,6 +1,6 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Star } from "lucide-react";
+import { ArrowLeft, Star, Target } from "lucide-react";
 import { useProjects, useUpdateProject } from "@/hooks/useProjects";
 import { useProjectItems } from "@/hooks/useItems";
 import { useAreas } from "@/hooks/useAreas";
@@ -22,6 +22,7 @@ export default function ProjectDetailView() {
   const updateProject = useUpdateProject();
   const { data: itemTagMap } = useAllItemTags();
   const { filters, setFilters } = useItemFilters();
+  const [outcome, setOutcome] = useState("");
 
   const area = areas?.find((a) => a.id === project?.area_id);
   const total = items?.length ?? 0;
@@ -69,6 +70,24 @@ export default function ProjectDetailView() {
         </div>
 
         <Progress value={progress} className="h-1.5" />
+
+        {/* Desired Outcome */}
+        <div className="mt-3 flex items-start gap-2">
+          <Target className="h-4 w-4 text-muted-foreground mt-1 shrink-0" />
+          <input
+            value={outcome || (project as any).desired_outcome || ""}
+            onChange={(e) => setOutcome(e.target.value)}
+            onFocus={() => setOutcome((project as any).desired_outcome || "")}
+            onBlur={() => {
+              const val = outcome.trim();
+              if (val !== ((project as any).desired_outcome || "")) {
+                updateProject.mutate({ id: project.id, desired_outcome: val || null } as any);
+              }
+            }}
+            placeholder="What does 'done' look like for this project?"
+            className="flex-1 bg-transparent text-sm text-muted-foreground placeholder:text-muted-foreground/50 border-0 outline-none focus:text-foreground"
+          />
+        </div>
       </div>
 
       <ItemFilterBar filters={filters} onChange={setFilters} />

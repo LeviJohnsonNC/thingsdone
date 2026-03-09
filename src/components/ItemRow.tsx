@@ -32,7 +32,7 @@ export function ItemRow({ item, showProject, dimmed, dragHandleProps }: ItemRowP
     if (info.offset.x > 80) {
       setCompleting(true);
       setTimeout(() => {
-        completeItem.mutate(item.id);
+        completeItem.mutate({ id: item.id, recurrence_rule: (item as any).recurrence_rule, title: item.title, user_id: item.user_id, scheduled_date: item.scheduled_date, project_id: item.project_id, area_id: item.area_id, energy: item.energy, time_estimate: item.time_estimate });
         toast.success("Completed!", { duration: 1500 });
       }, 200);
     } else if (info.offset.x < -80) {
@@ -96,7 +96,7 @@ export function ItemRow({ item, showProject, dimmed, dragHandleProps }: ItemRowP
                   e.stopPropagation();
                   setCompleting(true);
                   setTimeout(() => {
-                    completeItem.mutate(item.id);
+                    completeItem.mutate({ id: item.id, recurrence_rule: (item as any).recurrence_rule, title: item.title, user_id: item.user_id, scheduled_date: item.scheduled_date, project_id: item.project_id, area_id: item.area_id, energy: item.energy, time_estimate: item.time_estimate });
                     toast.success("Completed!", { duration: 1500 });
                   }, 200);
                 }}

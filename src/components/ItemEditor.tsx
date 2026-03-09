@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { format } from "date-fns";
-import { Star, CalendarIcon, Trash2, X, Plus, Check, Circle } from "lucide-react";
+import { Star, CalendarIcon, Trash2, X, Plus, Check, Circle, Repeat, Zap } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -20,6 +20,8 @@ import { useAppStore } from "@/stores/appStore";
 import { cn } from "@/lib/utils";
 import { TIME_ESTIMATE_OPTIONS, ENERGY_OPTIONS } from "@/lib/types";
 import type { ItemState, EnergyLevel } from "@/lib/types";
+import { ChecklistEditor, type ChecklistItem } from "@/components/ChecklistEditor";
+import { RecurrenceSelector } from "@/components/RecurrenceSelector";
 import { toast } from "sonner";
 import inboxIcon from "@/assets/icons/inbox.svg";
 import nextIcon from "@/assets/icons/next.svg";
@@ -40,9 +42,10 @@ const STATE_CONFIG: Record<string, { label: string; icon: string; activeClass: s
   waiting: { label: "Waiting", icon: waitingIcon, activeClass: "bg-focus-gold/10 text-focus-gold border-focus-gold", borderClass: "border-focus-gold", bgClass: "hover:bg-focus-gold/5" },
   someday: { label: "Someday", icon: somedayIcon, activeClass: "bg-purple-100 text-purple-700 border-purple-400 dark:bg-purple-900/30 dark:text-purple-300 dark:border-purple-500", borderClass: "border-purple-400 dark:border-purple-500", bgClass: "hover:bg-purple-50 dark:hover:bg-purple-900/20" },
   scheduled: { label: "Scheduled", icon: scheduledIcon, activeClass: "bg-emerald-100 text-emerald-700 border-emerald-400 dark:bg-emerald-900/30 dark:text-emerald-300 dark:border-emerald-500", borderClass: "border-emerald-400 dark:border-emerald-500", bgClass: "hover:bg-emerald-50 dark:hover:bg-emerald-900/20" },
+  reference: { label: "Reference", icon: somedayIcon, activeClass: "bg-slate-100 text-slate-700 border-slate-400 dark:bg-slate-900/30 dark:text-slate-300 dark:border-slate-500", borderClass: "border-slate-400 dark:border-slate-500", bgClass: "hover:bg-slate-50 dark:hover:bg-slate-900/20" },
 };
 
-const GTD_STATES = ["inbox", "next", "waiting", "scheduled", "someday"] as const;
+const GTD_STATES = ["inbox", "next", "waiting", "scheduled", "someday", "reference"] as const;
 
 interface ItemEditorProps {
   itemId: string;
@@ -122,7 +125,11 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
     if (item.google_event_id) {
       deleteCalendarEvent.mutate({ item_id: item.id, google_event_id: item.google_event_id });
     }
-    completeItem.mutate(item.id);
+    completeItem.mutate({
+      id: item.id, recurrence_rule: (item as any).recurrence_rule, title: item.title,
+      user_id: item.user_id, scheduled_date: item.scheduled_date, project_id: item.project_id,
+      area_id: item.area_id, energy: item.energy, time_estimate: item.time_estimate,
+    });
     setEditingItemId(null);
   };
 
@@ -266,6 +273,24 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
               rows={2}
             />
           </div>
+
+          {/* Checklist */}
+          <div className="px-4 pl-[52px] pb-2">
+            <ChecklistEditor
+              checklist={((item as any).checklist as ChecklistItem[]) ?? []}
+              onChange={(cl) => saveField("checklist", cl)}
+            />
+          </div>
+
+          {/* Two-Minute Rule Nudge */}
+          {item.time_estimate && item.time_estimate <= 5 && currentState === "inbox" && (
+            <div className="mx-4 mb-2 px-3 py-2 rounded-lg bg-focus-gold/10 border border-focus-gold/30 flex items-center gap-2">
+              <Zap className="h-4 w-4 text-focus-gold shrink-0" />
+              <p className="text-xs text-foreground">
+                <strong>Two-minute rule:</strong> This is quick — do it now instead of filing it!
+              </p>
+            </div>
+          )}
 
           {/* Context Tags */}
           <div className="px-4 pl-[52px] pb-3">
@@ -483,6 +508,17 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
                   }
                 }}
               />
+            </div>
+
+            {/* Recurrence */}
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+              <PropertyRow icon={scheduledIcon} label="REPEAT" className="flex-1">
+                <RecurrenceSelector
+                  value={(item as any).recurrence_rule ?? null}
+                  onChange={(v) => saveField("recurrence_rule", v)}
+                  compact
+                />
+              </PropertyRow>
             </div>
 
             {/* Google Calendar toggle */}

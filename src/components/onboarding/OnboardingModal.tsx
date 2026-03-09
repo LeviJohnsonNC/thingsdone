@@ -7,6 +7,8 @@ import { Sparkles, ArrowRight, Check, Brain, ListTodo, Zap } from "lucide-react"
 import { useCreateItem } from "@/hooks/useItems";
 import { useOnboarding } from "@/hooks/useOnboarding";
 import { useAppStore } from "@/stores/appStore";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 
 type Step = "welcome" | "capture" | "clarify" | "celebrate";
@@ -24,6 +26,7 @@ export function OnboardingModal({ open, onComplete }: OnboardingModalProps) {
   const createItem = useCreateItem();
   const { completeOnboarding } = useOnboarding();
   const setClarifyItemId = useAppStore((s) => s.setClarifyItemId);
+  const { user } = useAuth();
 
   const filledThoughts = thoughts.filter((t) => t.trim().length > 0);
   const canContinueCapture = filledThoughts.length >= 1;
@@ -56,6 +59,16 @@ export function OnboardingModal({ open, onComplete }: OnboardingModalProps) {
   };
 
   const handleFinish = async () => {
+    // Pre-seed GTD contexts as tags
+    if (user) {
+      const contexts = ["@phone", "@computer", "@errands", "@home", "@office"];
+      const inserts = contexts.map((name, i) => ({
+        name,
+        user_id: user.id,
+        sort_order: i,
+      }));
+      await supabase.from("tags").insert(inserts);
+    }
     await completeOnboarding.mutateAsync();
     onComplete();
   };

@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./useAuth";
 import type { Item, ItemState } from "@/lib/types";
+import { getNextOccurrence } from "@/components/RecurrenceSelector";
 
 export function useItems(state?: ItemState | ItemState[], areaId?: string | null) {
   const { user } = useAuth();
@@ -231,12 +232,32 @@ export function useCompleteItem() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (id: string) => {
+    mutationFn: async (item: { id: string; recurrence_rule?: string | null; title?: string; user_id?: string; scheduled_date?: string | null; project_id?: string | null; area_id?: string | null; energy?: string | null; time_estimate?: number | null }) => {
+      // Complete the current item
       const { error } = await supabase
         .from("items")
         .update({ state: "completed", completed_at: new Date().toISOString() })
-        .eq("id", id);
+        .eq("id", item.id);
       if (error) throw error;
+
+      // If recurring, create the next occurrence
+      if (item.recurrence_rule) {
+        const nextDate = getNextOccurrence(item.recurrence_rule, item.scheduled_date ?? undefined);
+        const { error: createError } = await supabase
+          .from("items")
+          .insert({
+            title: item.title ?? "Recurring item",
+            user_id: item.user_id!,
+            state: "scheduled" as string,
+            scheduled_date: nextDate,
+            recurrence_rule: item.recurrence_rule,
+            project_id: item.project_id ?? null,
+            area_id: item.area_id ?? null,
+            energy: item.energy ?? null,
+            time_estimate: item.time_estimate ?? null,
+          });
+        if (createError) throw createError;
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["items"] });
