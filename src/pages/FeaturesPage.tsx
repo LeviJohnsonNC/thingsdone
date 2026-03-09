@@ -109,7 +109,7 @@ export default function FeaturesPage() {
             body={f.body}
             icon={f.icon}
             reverse={f.reverse}
-            badge={f.badge}
+            badge={(f as any).badge}
           />
         ))}
       </section>
