@@ -7,6 +7,8 @@ import { Sparkles, ArrowRight, Check, Brain, ListTodo, Zap } from "lucide-react"
 import { useCreateItem } from "@/hooks/useItems";
 import { useOnboarding } from "@/hooks/useOnboarding";
 import { useAppStore } from "@/stores/appStore";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 
 type Step = "welcome" | "capture" | "clarify" | "celebrate";
