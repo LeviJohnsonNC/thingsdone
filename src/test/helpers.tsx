@@ -54,6 +54,8 @@ export function makeItem(overrides: Partial<Item> = {}): Item {
     energy: null,
     waiting_on: null,
     google_event_id: null,
+    checklist: [],
+    recurrence_rule: null,
     ...overrides,
   };
 }
@@ -74,6 +76,7 @@ export function makeProject(overrides: Partial<Project> = {}): Project {
     updated_at: new Date().toISOString(),
     sort_order: 0,
     is_focused: false,
+    desired_outcome: null,
     ...overrides,
   };
 }
