@@ -7,6 +7,8 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+const FREE_AI_LIMIT = 3;
+
 const SYSTEM_PROMPT = `You are a GTD (Getting Things Done) coach helping a user with their weekly review.
 Your job is to analyze their tasks, projects, and patterns, then suggest specific actions to keep their system clean and trustworthy.
 
@@ -118,11 +120,13 @@ serve(async (req) => {
       });
     }
 
-    const supabase = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_ANON_KEY")!,
-      { global: { headers: { Authorization: authHeader } } }
-    );
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
+    const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+
+    const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+      global: { headers: { Authorization: authHeader } },
+    });
 
     const { data: claimsData, error: claimsError } = await supabase.auth.getClaims(
       authHeader.replace("Bearer ", "")
@@ -134,6 +138,7 @@ serve(async (req) => {
       });
     }
 
+    const userId = claimsData.claims.sub as string;
     const { step, items, projects, context, brain_dump } = await req.json();
     const stepPrompt = STEP_PROMPTS[step];
     if (!stepPrompt) {
@@ -141,6 +146,64 @@ serve(async (req) => {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
+    }
+
+    // --- Subscription & AI limit check ---
+    const adminClient = createClient(supabaseUrl, serviceRoleKey);
+
+    // Check subscription status
+    const { data: subData } = await adminClient
+      .from("subscriptions")
+      .select("status")
+      .eq("user_id", userId)
+      .in("status", ["active", "past_due"])
+      .limit(1)
+      .maybeSingle();
+
+    const isPro = !!subData;
+
+    // Hardcoded admin emails that bypass limits
+    const { data: userData } = await supabase.auth.getUser();
+    const userEmail = userData?.user?.email;
+    const isAdmin = userEmail === "levijohnson@gmail.com" || userEmail === "christyj@gmail.com";
+    const isUnlimited = isPro || isAdmin;
+
+    if (!isUnlimited) {
+      // Brain dump is Pro-only
+      if (step === 1 && brain_dump?.trim()) {
+        return new Response(JSON.stringify({ error: "pro_only_feature" }), {
+          status: 403,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      // Check AI usage limits
+      const { data: settings } = await adminClient
+        .from("user_settings")
+        .select("ai_reviews_used, ai_reviews_reset_at")
+        .eq("user_id", userId)
+        .maybeSingle();
+
+      let usedCount = settings?.ai_reviews_used ?? 0;
+      const resetAt = settings?.ai_reviews_reset_at ? new Date(settings.ai_reviews_reset_at) : null;
+      const now = new Date();
+      const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+
+      // Reset counter if we're in a new month
+      if (!resetAt || resetAt < monthStart) {
+        usedCount = 0;
+        await adminClient
+          .from("user_settings")
+          .update({ ai_reviews_used: 0, ai_reviews_reset_at: now.toISOString() })
+          .eq("user_id", userId);
+      }
+
+      if (usedCount >= FREE_AI_LIMIT) {
+        return new Response(JSON.stringify({ error: "ai_limit_reached", used: usedCount, limit: FREE_AI_LIMIT }), {
+          status: 403,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
     }
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
@@ -211,6 +274,17 @@ ${step === 7 ? `Review stats:\n${JSON.stringify(context, null, 2)}` : ""}`;
         JSON.stringify({ observations: [], suggestions: [] }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
+    }
+
+    // Increment AI usage for free users on success
+    if (!isUnlimited) {
+      await adminClient.rpc("increment_ai_usage", { p_user_id: userId }).catch(() => {
+        // Fallback: direct update
+        adminClient
+          .from("user_settings")
+          .update({ ai_reviews_used: (await adminClient.from("user_settings").select("ai_reviews_used").eq("user_id", userId).single()).data?.ai_reviews_used + 1 })
+          .eq("user_id", userId);
+      });
     }
 
     const result = JSON.parse(toolCall.function.arguments);
