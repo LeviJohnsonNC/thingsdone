@@ -270,6 +270,24 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
             />
           </div>
 
+          {/* Checklist */}
+          <div className="px-4 pl-[52px] pb-2">
+            <ChecklistEditor
+              checklist={((item as any).checklist as ChecklistItem[]) ?? []}
+              onChange={(cl) => saveField("checklist", cl)}
+            />
+          </div>
+
+          {/* Two-Minute Rule Nudge */}
+          {item.time_estimate && item.time_estimate <= 5 && currentState === "inbox" && (
+            <div className="mx-4 mb-2 px-3 py-2 rounded-lg bg-focus-gold/10 border border-focus-gold/30 flex items-center gap-2">
+              <Zap className="h-4 w-4 text-focus-gold shrink-0" />
+              <p className="text-xs text-foreground">
+                <strong>Two-minute rule:</strong> This is quick — do it now instead of filing it!
+              </p>
+            </div>
+          )}
+
           {/* Context Tags */}
           <div className="px-4 pl-[52px] pb-3">
             <div className="flex flex-wrap items-center gap-1.5">
