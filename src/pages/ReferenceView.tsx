@@ -3,6 +3,7 @@ import { SortableItemList } from "@/components/SortableItemList";
 import { EmptyState } from "@/components/EmptyState";
 import { ViewHeader } from "@/components/ViewHeader";
 import { ItemFilterBar, useItemFilters, applyItemFilters } from "@/components/ItemFilterBar";
+import { ItemListSkeleton } from "@/components/ItemListSkeleton";
 import { useItems } from "@/hooks/useItems";
 import { useAllItemTags } from "@/hooks/useTags";
 import { useAppStore } from "@/stores/appStore";
@@ -18,9 +19,9 @@ export default function ReferenceView() {
   return (
     <div className="flex flex-col h-full">
       <ViewHeader title="Reference" count={filteredItems.length} />
-      <ItemFilterBar filters={filters} onChange={setFilters} />
+      {filteredItems.length > 0 && <ItemFilterBar filters={filters} onChange={setFilters} />}
       <div className="flex-1">
-        {isLoading ? null : filteredItems.length === 0 ? (
+        {isLoading ? <ItemListSkeleton /> : filteredItems.length === 0 ? (
           <EmptyState
             icon={FileText}
             title="No reference material"

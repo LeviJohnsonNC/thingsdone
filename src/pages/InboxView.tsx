@@ -5,6 +5,7 @@ import { SortableItemList } from "@/components/SortableItemList";
 import { EmptyState } from "@/components/EmptyState";
 import { ViewHeader } from "@/components/ViewHeader";
 import { DoneSection } from "@/components/DoneSection";
+import { ItemListSkeleton } from "@/components/ItemListSkeleton";
 import { useItems, useCompletedItems } from "@/hooks/useItems";
 import { useAppStore } from "@/stores/appStore";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -46,7 +47,7 @@ export default function InboxView() {
       <ViewHeader title="Inbox" count={items?.length} />
       {!isMobile && <QuickAddBar />}
       <div className="flex-1">
-        {isLoading ? null : stableItems.length === 0 ? (
+        {isLoading ? <ItemListSkeleton /> : stableItems.length === 0 ? (
           <EmptyState
             icon={InboxIcon}
             title="Your mind is clear"

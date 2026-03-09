@@ -4,6 +4,7 @@ import { EmptyState } from "@/components/EmptyState";
 import { ViewHeader } from "@/components/ViewHeader";
 import { DoneSection } from "@/components/DoneSection";
 import { ItemFilterBar, useItemFilters, applyItemFilters } from "@/components/ItemFilterBar";
+import { ItemListSkeleton } from "@/components/ItemListSkeleton";
 import { useFocusedItems, useCompletedItems } from "@/hooks/useItems";
 import { useAllItemTags } from "@/hooks/useTags";
 import { useAppStore } from "@/stores/appStore";
@@ -21,9 +22,9 @@ export default function FocusView() {
   return (
     <div className="flex flex-col h-full">
       <ViewHeader title="Focus" count={filteredItems.length} />
-      <ItemFilterBar filters={filters} onChange={setFilters} />
+      {filteredItems.length > 0 && <ItemFilterBar filters={filters} onChange={setFilters} />}
       <div className="flex-1">
-        {isLoading ? null : filteredItems.length === 0 ? (
+        {isLoading ? <ItemListSkeleton /> : filteredItems.length === 0 ? (
           <EmptyState
             icon={Star}
             title="Nothing focused right now"

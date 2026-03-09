@@ -1,4 +1,5 @@
-import { Calendar, ExternalLink } from "lucide-react";
+import { Calendar } from "lucide-react";
+import { ItemListSkeleton } from "@/components/ItemListSkeleton";
 import { ItemRow } from "@/components/ItemRow";
 import { EmptyState } from "@/components/EmptyState";
 import { ViewHeader } from "@/components/ViewHeader";
@@ -109,9 +110,9 @@ export default function ScheduledView() {
   return (
     <div className="flex flex-col h-full">
       <ViewHeader title="Scheduled" count={totalCount} />
-      <ItemFilterBar filters={filters} onChange={setFilters} />
+      {totalCount > 0 && <ItemFilterBar filters={filters} onChange={setFilters} />}
       <div className="flex-1">
-        {isLoading ? null : groups.length === 0 ? (
+        {isLoading ? <ItemListSkeleton /> : groups.length === 0 ? (
           <EmptyState
             icon={Calendar}
             title="Nothing scheduled"

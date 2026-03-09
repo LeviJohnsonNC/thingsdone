@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { motion, useMotionValue, useTransform, PanInfo, AnimatePresence } from "framer-motion";
-import { Star, Check, GripVertical } from "lucide-react";
+import { Star, Check, GripVertical, Repeat, ListChecks } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Item } from "@/lib/types";
 import { useCompleteItem, useUpdateItem } from "@/hooks/useItems";
 import { useAppStore } from "@/stores/appStore";
 import { ItemEditor } from "./ItemEditor";
 import { toast } from "sonner";
+import type { ChecklistItem } from "@/components/ChecklistEditor";
 
 interface ItemRowProps {
   item: Item;
@@ -33,7 +34,16 @@ export function ItemRow({ item, showProject, dimmed, dragHandleProps }: ItemRowP
       setCompleting(true);
       setTimeout(() => {
         completeItem.mutate({ id: item.id, recurrence_rule: (item as any).recurrence_rule, title: item.title, user_id: item.user_id, scheduled_date: item.scheduled_date, project_id: item.project_id, area_id: item.area_id, energy: item.energy, time_estimate: item.time_estimate });
-        toast.success("Completed!", { duration: 1500 });
+        toast.success("Completed!", {
+          duration: 4000,
+          action: {
+            label: "Undo",
+            onClick: () => {
+              updateItem.mutate({ id: item.id, state: item.state, completed_at: null } as any);
+              setCompleting(false);
+            },
+          },
+        });
       }, 200);
     } else if (info.offset.x < -80) {
       updateItem.mutate({ id: item.id, is_focused: !item.is_focused });
@@ -42,7 +52,13 @@ export function ItemRow({ item, showProject, dimmed, dragHandleProps }: ItemRowP
     setSwiping(null);
   };
 
-  const isOverdue = item.due_date && new Date(item.due_date) < new Date();
+  const todayStr = new Date().toISOString().split("T")[0];
+  const isOverdue = item.due_date && item.due_date < todayStr;
+
+  const checklist = (item as any).checklist as ChecklistItem[] | null;
+  const checklistTotal = checklist?.length ?? 0;
+  const checklistDone = checklist?.filter(c => c.checked).length ?? 0;
+  const hasRecurrence = !!(item as any).recurrence_rule;
 
   return (
     <div>
@@ -97,7 +113,16 @@ export function ItemRow({ item, showProject, dimmed, dragHandleProps }: ItemRowP
                   setCompleting(true);
                   setTimeout(() => {
                     completeItem.mutate({ id: item.id, recurrence_rule: (item as any).recurrence_rule, title: item.title, user_id: item.user_id, scheduled_date: item.scheduled_date, project_id: item.project_id, area_id: item.area_id, energy: item.energy, time_estimate: item.time_estimate });
-                    toast.success("Completed!", { duration: 1500 });
+                    toast.success("Completed!", {
+                      duration: 4000,
+                      action: {
+                        label: "Undo",
+                        onClick: () => {
+                          updateItem.mutate({ id: item.id, state: item.state, completed_at: null } as any);
+                          setCompleting(false);
+                        },
+                      },
+                    });
                   }, 200);
                 }}
                 className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 border-border hover:border-success-green hover:bg-success-green/10 transition-colors"
@@ -115,7 +140,16 @@ export function ItemRow({ item, showProject, dimmed, dragHandleProps }: ItemRowP
                   )}
                   {item.time_estimate && (
                     <span className="text-xs text-muted-foreground">
-                      {item.time_estimate >= 60 ? `${item.time_estimate / 60}h` : `${item.time_estimate}m`}
+                      {item.time_estimate >= 60 ? `${Math.round(item.time_estimate / 60 * 10) / 10}h` : `${item.time_estimate}m`}
+                    </span>
+                  )}
+                  {hasRecurrence && (
+                    <Repeat className="h-3 w-3 text-muted-foreground/60" />
+                  )}
+                  {checklistTotal > 0 && (
+                    <span className={cn("text-xs flex items-center gap-0.5", checklistDone === checklistTotal ? "text-success-green" : "text-muted-foreground")}>
+                      <ListChecks className="h-3 w-3" />
+                      {checklistDone}/{checklistTotal}
                     </span>
                   )}
                 </div>

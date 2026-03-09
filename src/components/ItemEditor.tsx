@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { format } from "date-fns";
-import { Star, CalendarIcon, Trash2, X, Plus, Check, Circle, Repeat, Zap } from "lucide-react";
+import { Star, CalendarIcon, Trash2, X, Plus, Check, Repeat, Zap } from "lucide-react";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { motion, AnimatePresence } from "framer-motion";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -72,6 +73,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
   const [notes, setNotes] = useState("");
   const [waitingOn, setWaitingOn] = useState("");
   const [addToCalendar, setAddToCalendar] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const notesRef = useRef<HTMLTextAreaElement>(null);
 
   const isCalendarConnected = !!calendarToken;
@@ -132,6 +134,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
     });
     setEditingItemId(null);
   };
+
 
   const handleDelete = () => {
     if (item.google_event_id) {
@@ -542,15 +545,32 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
 
           {/* Footer */}
           <div className="flex items-center justify-end px-4 py-3 bg-muted/40 border-t border-border/60 rounded-b-xl">
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={handleDelete}
-              className="text-destructive/60 hover:text-destructive hover:bg-destructive/10 border border-transparent hover:border-destructive/30 transition-all duration-150"
-            >
-              <Trash2 className="h-3.5 w-3.5 mr-1" />
-              Delete
-            </Button>
+            <AlertDialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
+              <AlertDialogTrigger asChild>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="text-destructive/60 hover:text-destructive hover:bg-destructive/10 border border-transparent hover:border-destructive/30 transition-all duration-150"
+                >
+                  <Trash2 className="h-3.5 w-3.5 mr-1" />
+                  Delete
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Delete item?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This will permanently delete "{item.title}". This action cannot be undone.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                    Delete
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { useCreateItem } from "@/hooks/useItems";
-import { useAppStore } from "@/stores/appStore";
+// Zustand store no longer needed for quick-add
 import { useUsageLimits } from "@/hooks/useUsageLimits";
 import { UpgradePrompt } from "@/components/UpgradePrompt";
 import { Input } from "@/components/ui/input";
@@ -17,7 +17,6 @@ interface QuickAddBarProps {
 export function QuickAddBar({ placeholder = "Add to inbox…", defaultState, projectId }: QuickAddBarProps) {
   const [title, setTitle] = useState("");
   const createItem = useCreateItem();
-  const { setEditingItemId } = useAppStore();
   const { canCreateItem, activeItemCount, activeItemLimit } = useUsageLimits();
   const [showUpgrade, setShowUpgrade] = useState(false);
 
@@ -30,15 +29,12 @@ export function QuickAddBar({ placeholder = "Add to inbox…", defaultState, pro
       return;
     }
 
-    const item = await createItem.mutateAsync({
+    await createItem.mutateAsync({
       title: title.trim(),
       ...(defaultState && { state: defaultState }),
       ...(projectId && { project_id: projectId }),
     });
     setTitle("");
-    if (item?.id) {
-      setEditingItemId(item.id);
-    }
   };
 
   return (
