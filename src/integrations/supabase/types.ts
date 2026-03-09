@@ -131,6 +131,7 @@ export type Database = {
       items: {
         Row: {
           area_id: string | null
+          checklist: Json | null
           completed_at: string | null
           created_at: string | null
           due_date: string | null
@@ -140,6 +141,7 @@ export type Database = {
           is_focused: boolean | null
           notes: string | null
           project_id: string | null
+          recurrence_rule: string | null
           scheduled_date: string | null
           sort_order: number | null
           sort_order_project: number | null
@@ -152,6 +154,7 @@ export type Database = {
         }
         Insert: {
           area_id?: string | null
+          checklist?: Json | null
           completed_at?: string | null
           created_at?: string | null
           due_date?: string | null
@@ -161,6 +164,7 @@ export type Database = {
           is_focused?: boolean | null
           notes?: string | null
           project_id?: string | null
+          recurrence_rule?: string | null
           scheduled_date?: string | null
           sort_order?: number | null
           sort_order_project?: number | null
@@ -173,6 +177,7 @@ export type Database = {
         }
         Update: {
           area_id?: string | null
+          checklist?: Json | null
           completed_at?: string | null
           created_at?: string | null
           due_date?: string | null
@@ -182,6 +187,7 @@ export type Database = {
           is_focused?: boolean | null
           notes?: string | null
           project_id?: string | null
+          recurrence_rule?: string | null
           scheduled_date?: string | null
           sort_order?: number | null
           sort_order_project?: number | null
@@ -214,6 +220,7 @@ export type Database = {
           area_id: string | null
           completed_at: string | null
           created_at: string | null
+          desired_outcome: string | null
           due_date: string | null
           id: string
           is_focused: boolean | null
@@ -230,6 +237,7 @@ export type Database = {
           area_id?: string | null
           completed_at?: string | null
           created_at?: string | null
+          desired_outcome?: string | null
           due_date?: string | null
           id?: string
           is_focused?: boolean | null
@@ -246,6 +254,7 @@ export type Database = {
           area_id?: string | null
           completed_at?: string | null
           created_at?: string | null
+          desired_outcome?: string | null
           due_date?: string | null
           id?: string
           is_focused?: boolean | null
