@@ -51,6 +51,12 @@ const NAV_GROUPS = [
       { path: "/logbook", icon: BookOpen, label: "Logbook" },
     ],
   },
+  {
+    label: "Insights",
+    items: [
+      { path: "/stats", icon: BarChart3, label: "Stats" },
+    ],
+  },
 ];
 
 export function DesktopSidebar() {
