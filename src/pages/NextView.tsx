@@ -17,6 +17,7 @@ export default function NextView() {
   const { data: completedItems } = useCompletedItems(selectedAreaId);
   const { data: itemTagMap } = useAllItemTags();
   const { filters, setFilters } = useItemFilters();
+  const isMobile = useIsMobile();
 
   const filteredItems = applyItemFilters(items, filters, itemTagMap);
 
