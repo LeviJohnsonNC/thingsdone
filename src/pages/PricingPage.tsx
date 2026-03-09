@@ -108,16 +108,27 @@ function PricingCard({
   );
 }
 
-const PRICING_JSONLD = {
-  "@context": "https://schema.org",
-  "@type": "Product",
-  name: "Things Done.",
-  description: "A calm GTD task manager. Free plan available, Pro at $4/mo.",
-  offers: [
-    { "@type": "Offer", price: "0", priceCurrency: "USD", name: "Free" },
-    { "@type": "Offer", price: "4.00", priceCurrency: "USD", name: "Pro", billingPeriod: "month" },
-  ],
-};
+const PRICING_JSONLD = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: "Things Done.",
+    description: "A calm GTD task manager. Free plan available, Pro at $4/mo.",
+    offers: [
+      { "@type": "Offer", price: "0", priceCurrency: "USD", name: "Free" },
+      { "@type": "Offer", price: "4.00", priceCurrency: "USD", name: "Pro", billingPeriod: "month" },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: FAQ.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: { "@type": "Answer", text: item.a },
+    })),
+  },
+];
 
 export default function PricingPage() {
   return (
