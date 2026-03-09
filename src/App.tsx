@@ -101,6 +101,8 @@ const App = () => (
               <Route path="/" element={<PublicRoute><MarketingLayout><HomePage /></MarketingLayout></PublicRoute>} />
               <Route path="/features" element={<PublicRoute><MarketingLayout><FeaturesPage /></MarketingLayout></PublicRoute>} />
               <Route path="/pricing" element={<PublicRoute><MarketingLayout><PricingPage /></MarketingLayout></PublicRoute>} />
+              <Route path="/blog" element={<PublicRoute><MarketingLayout><BlogPage /></MarketingLayout></PublicRoute>} />
+              <Route path="/blog/:slug" element={<PublicRoute><MarketingLayout><BlogArticlePage /></MarketingLayout></PublicRoute>} />
               <Route path="/auth" element={<AuthPage />} />
               {/* Protected app routes */}
               <Route path="/*" element={<ProtectedRoutes />} />

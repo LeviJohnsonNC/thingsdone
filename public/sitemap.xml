@@ -11,6 +11,15 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://thingsdone.lovable.app/blog</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://thingsdone.lovable.app/blog/why-your-to-do-list-doesnt-work</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  <url>
     <loc>https://thingsdone.lovable.app/pricing</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
