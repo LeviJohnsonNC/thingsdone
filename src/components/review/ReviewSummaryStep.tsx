@@ -115,6 +115,35 @@ export function ReviewSummaryStep({
         >
           {isCompleting ? "Saving..." : "Save & Finish Review"}
         </Button>
+
+        {!isPro && (
+          <div className="rounded-lg border border-focus-gold/20 bg-focus-gold/5 p-3 mt-2">
+            <p className="text-sm text-foreground font-medium flex items-center gap-1.5">
+              <Zap className="h-4 w-4 text-focus-gold" />
+              Great review! Want unlimited AI suggestions?
+            </p>
+            <p className="text-xs text-muted-foreground mt-1">
+              Upgrade to Pro for unlimited AI reviews, recurring tasks, and more — just $4/mo.
+            </p>
+            <Button
+              size="sm"
+              variant="outline"
+              className="mt-2 text-xs border-focus-gold/30 text-focus-gold hover:bg-focus-gold/10"
+              onClick={async () => {
+                try {
+                  const { data, error } = await supabase.functions.invoke("create-checkout");
+                  if (error) throw error;
+                  if (data?.url) window.open(data.url, "_blank");
+                } catch {
+                  toast.error("Failed to start checkout");
+                }
+              }}
+            >
+              <Zap className="h-3 w-3 mr-1" />
+              Upgrade to Pro
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );

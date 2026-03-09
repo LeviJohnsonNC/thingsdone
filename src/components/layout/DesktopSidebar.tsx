@@ -133,6 +133,25 @@ export function DesktopSidebar() {
         ))}
       </nav>
 
+      {!isPro && activeItemLimit !== Infinity && (
+        <div className="px-4 py-2 border-t border-border">
+          <div className="flex items-center justify-between text-[11px] text-muted-foreground mb-1">
+            <span>Items</span>
+            <span className={isApproachingLimit ? "text-focus-gold font-medium" : ""}>
+              {activeItemCount}/{activeItemLimit}
+            </span>
+          </div>
+          <div className="h-1 rounded-full bg-muted overflow-hidden">
+            <div
+              className={cn(
+                "h-full rounded-full transition-all",
+                isApproachingLimit ? "bg-focus-gold" : "bg-primary/40"
+              )}
+              style={{ width: `${Math.min((activeItemCount / activeItemLimit) * 100, 100)}%` }}
+            />
+          </div>
+        </div>
+      )}
       <div className="border-t border-border p-2">
         <button
           onClick={() => navigate("/help")}

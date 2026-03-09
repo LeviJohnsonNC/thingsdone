@@ -24,6 +24,7 @@ export interface UsageLimits {
   aiReviewLimit: number;
   canUseAI: boolean;
   isOverAnyLimit: boolean;
+  isApproachingLimit: boolean;
 }
 
 export function useUsageLimits(): UsageLimits & { isLoading: boolean } {

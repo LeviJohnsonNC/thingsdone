@@ -56,6 +56,8 @@ interface ItemEditorProps {
 
 export function ItemEditor({ itemId }: ItemEditorProps) {
   const { setEditingItemId } = useAppStore();
+  const { isPro } = useSubscription();
+  const [showRecurrenceUpgrade, setShowRecurrenceUpgrade] = useState(false);
   const { data: allItems } = useItems();
   const item = allItems?.find((i) => i.id === itemId);
   const updateItem = useUpdateItem();
