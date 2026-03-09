@@ -7,6 +7,7 @@ interface UserSettings {
   user_id: string;
   last_review_at: string | null;
   theme: string | null;
+  has_completed_onboarding: boolean | null;
 }
 
 export function useUserSettings() {

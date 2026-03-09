@@ -1,4 +1,4 @@
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { DesktopSidebar } from "./DesktopSidebar";
@@ -7,16 +7,28 @@ import { QuickAddFAB } from "../QuickAddFAB";
 import { useAppStore } from "@/stores/appStore";
 import { OverLimitBanner } from "../OverLimitBanner";
 import { useActiveTheme } from "@/hooks/useTheme";
+import { useOnboarding } from "@/hooks/useOnboarding";
+import { OnboardingModal } from "../onboarding/OnboardingModal";
 
 export function AppLayout({ children }: { children: ReactNode }) {
   const isMobile = useIsMobile();
   const location = useLocation();
   const setEditingItemId = useAppStore((s) => s.setEditingItemId);
+  const { needsOnboarding, isLoading: onboardingLoading } = useOnboarding();
+  const [showOnboarding, setShowOnboarding] = useState(false);
   useActiveTheme();
 
   useEffect(() => {
     setEditingItemId(null);
   }, [location.pathname, setEditingItemId]);
+
+  // Show onboarding after a brief delay to let the app render
+  useEffect(() => {
+    if (!onboardingLoading && needsOnboarding) {
+      const timer = setTimeout(() => setShowOnboarding(true), 300);
+      return () => clearTimeout(timer);
+    }
+  }, [needsOnboarding, onboardingLoading]);
 
   if (isMobile) {
     return (
@@ -25,6 +37,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
         <main className="flex-1 overflow-y-auto pb-20">{children}</main>
         <MobileBottomNav />
         <QuickAddFAB />
+        <OnboardingModal open={showOnboarding} onComplete={() => setShowOnboarding(false)} />
       </div>
     );
   }
@@ -37,6 +50,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
         <main className="flex-1 overflow-y-auto">{children}</main>
       </div>
       <QuickAddFAB />
+      <OnboardingModal open={showOnboarding} onComplete={() => setShowOnboarding(false)} />
     </div>
   );
 }
