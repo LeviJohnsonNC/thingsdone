@@ -135,7 +135,6 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
     setEditingItemId(null);
   };
 
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const handleDelete = () => {
     if (item.google_event_id) {

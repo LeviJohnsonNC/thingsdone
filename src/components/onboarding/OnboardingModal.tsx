@@ -62,12 +62,22 @@ export function OnboardingModal({ open, onComplete }: OnboardingModalProps) {
     // Pre-seed GTD contexts as tags
     if (user) {
       const contexts = ["@phone", "@computer", "@errands", "@home", "@office"];
-      const inserts = contexts.map((name, i) => ({
-        name,
-        user_id: user.id,
-        sort_order: i,
-      }));
-      await supabase.from("tags").insert(inserts);
+      // Check for existing tags to avoid duplicates
+      const { data: existingTags } = await supabase
+        .from("tags")
+        .select("name")
+        .eq("user_id", user.id)
+        .in("name", contexts);
+      const existingNames = new Set((existingTags ?? []).map(t => t.name));
+      const newContexts = contexts.filter(name => !existingNames.has(name));
+      if (newContexts.length > 0) {
+        const inserts = newContexts.map((name, i) => ({
+          name,
+          user_id: user.id,
+          sort_order: i,
+        }));
+        await supabase.from("tags").insert(inserts);
+      }
     }
     await completeOnboarding.mutateAsync();
     onComplete();
