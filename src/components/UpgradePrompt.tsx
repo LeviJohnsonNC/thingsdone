@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
-export type UpgradeTrigger = "items" | "projects" | "areas" | "ai_review" | "ai_coach";
+export type UpgradeTrigger = "items" | "projects" | "areas" | "ai_review";
 
 interface UpgradePromptProps {
   open: boolean;
@@ -26,16 +26,14 @@ const triggerMessages: Record<UpgradeTrigger, (used: number, limit: number) => s
   projects: (u, l) => `You're using ${u} of ${l} active projects.`,
   areas: (u, l) => `You're using ${u} of ${l} areas of focus.`,
   ai_review: (u, l) => `You've used ${u} of ${l} free AI reviews this month.`,
-  ai_coach: (u, l) => `You've used ${u} of ${l} free AI coach messages this month.`,
 };
 
 const PRO_FEATURES = [
   "Unlimited items & projects",
   "Unlimited areas of focus",
-  "Unlimited AI weekly reviews *",
-  "AI coach *",
-  "Review history & insights *",
-  "Quick Review mode *",
+  "AI-powered weekly reviews",
+  "Recurring tasks",
+  "Priority support",
 ];
 
 export function UpgradePrompt({ open, onOpenChange, trigger, currentUsage, limit }: UpgradePromptProps) {
