@@ -5,11 +5,14 @@ interface AppState {
   setSelectedAreaId: (id: string | null) => void;
   editingItemId: string | null;
   setEditingItemId: (id: string | null) => void;
-  // Keep backward compat alias
   clarifyItemId: string | null;
   setClarifyItemId: (id: string | null) => void;
   moreMenuOpen: boolean;
   setMoreMenuOpen: (open: boolean) => void;
+  searchOpen: boolean;
+  setSearchOpen: (open: boolean) => void;
+  globalQuickAddOpen: boolean;
+  setGlobalQuickAddOpen: (open: boolean) => void;
 }
 
 export const useAppStore = create<AppState>((set) => ({
@@ -21,4 +24,8 @@ export const useAppStore = create<AppState>((set) => ({
   setClarifyItemId: (id) => set({ clarifyItemId: id, editingItemId: id }),
   moreMenuOpen: false,
   setMoreMenuOpen: (open) => set({ moreMenuOpen: open }),
+  searchOpen: false,
+  setSearchOpen: (open) => set({ searchOpen: open }),
+  globalQuickAddOpen: false,
+  setGlobalQuickAddOpen: (open) => set({ globalQuickAddOpen: open }),
 }));
