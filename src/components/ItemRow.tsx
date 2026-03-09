@@ -43,7 +43,13 @@ export function ItemRow({ item, showProject, dimmed, dragHandleProps }: ItemRowP
     setSwiping(null);
   };
 
-  const isOverdue = item.due_date && new Date(item.due_date) < new Date();
+  const todayStr = new Date().toISOString().split("T")[0];
+  const isOverdue = item.due_date && item.due_date < todayStr;
+
+  const checklist = (item as any).checklist as ChecklistItem[] | null;
+  const checklistTotal = checklist?.length ?? 0;
+  const checklistDone = checklist?.filter(c => c.checked).length ?? 0;
+  const hasRecurrence = !!(item as any).recurrence_rule;
 
   return (
     <div>
