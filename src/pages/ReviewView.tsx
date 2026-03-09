@@ -285,6 +285,7 @@ export default function ReviewView() {
               canUseAI={limits.canUseAI}
               aiReviewsUsed={limits.aiReviewsUsed}
               aiReviewLimit={limits.aiReviewLimit}
+              isPro={limits.aiReviewLimit === Infinity}
             />
           )}
         </div>
