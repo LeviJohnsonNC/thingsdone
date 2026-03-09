@@ -1,0 +1,1 @@
+ALTER TABLE public.user_settings ADD COLUMN has_completed_onboarding boolean DEFAULT false;
