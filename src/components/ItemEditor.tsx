@@ -125,7 +125,11 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
     if (item.google_event_id) {
       deleteCalendarEvent.mutate({ item_id: item.id, google_event_id: item.google_event_id });
     }
-    completeItem.mutate(item.id);
+    completeItem.mutate({
+      id: item.id, recurrence_rule: (item as any).recurrence_rule, title: item.title,
+      user_id: item.user_id, scheduled_date: item.scheduled_date, project_id: item.project_id,
+      area_id: item.area_id, energy: item.energy, time_estimate: item.time_estimate,
+    });
     setEditingItemId(null);
   };
 

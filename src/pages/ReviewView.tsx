@@ -116,7 +116,7 @@ export default function ReviewView() {
             break;
           case "complete":
             if (suggestion.item_id) {
-              await completeItem.mutateAsync(suggestion.item_id);
+              await completeItem.mutateAsync({ id: suggestion.item_id });
               review.incrementStat("itemsCompleted");
             }
             break;
