@@ -1,6 +1,8 @@
 import type { ReviewStats } from "@/hooks/useReview";
 import { Button } from "@/components/ui/button";
-import { Trophy, Sparkles } from "lucide-react";
+import { Trophy, Sparkles, Zap } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 interface ReviewSummaryStepProps {
   stats: ReviewStats;
