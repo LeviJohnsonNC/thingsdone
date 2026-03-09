@@ -22,6 +22,7 @@ export default function ProjectDetailView() {
   const updateProject = useUpdateProject();
   const { data: itemTagMap } = useAllItemTags();
   const { filters, setFilters } = useItemFilters();
+  const [outcome, setOutcome] = useState("");
 
   const area = areas?.find((a) => a.id === project?.area_id);
   const total = items?.length ?? 0;
