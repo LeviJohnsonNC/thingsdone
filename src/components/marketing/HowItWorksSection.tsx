@@ -1,5 +1,8 @@
 import { motion } from "framer-motion";
 import { ProductMockup } from "./ProductMockup";
+import heroInbox from "@/assets/blog/hero-todo-list.jpg";
+import heroReview from "@/assets/blog/hero-open-loops.jpg";
+import heroProjects from "@/assets/blog/hero-chaos-to-calm.jpg";
 
 const STEPS = [
   {
