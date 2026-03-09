@@ -16,6 +16,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { useQueryClient } from "@tanstack/react-query";
 
 export default function NextView() {
+  const navigate = useNavigate();
   const { selectedAreaId } = useAppStore();
   const { data: items, isLoading } = useNextItems(selectedAreaId);
   const { data: completedItems } = useCompletedItems(selectedAreaId);
