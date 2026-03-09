@@ -56,8 +56,10 @@ export default function InboxView() {
           {isLoading ? <ItemListSkeleton /> : stableItems.length === 0 ? (
             <EmptyState
               icon={InboxIcon}
-              title="Your mind is clear"
-              description="Nothing to process. Enjoy the calm."
+              title="All clear!"
+              description="Your inbox is empty. Capture anything on your mind."
+              actionLabel="Capture something"
+              onAction={() => useAppStore.getState().setGlobalQuickAddOpen(true)}
             />
           ) : (
             <SortableItemList items={stableItems} showSwipeHintOnFirst={showSwipeHint} />

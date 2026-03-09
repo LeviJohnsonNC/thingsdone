@@ -47,7 +47,7 @@ export default function WaitingView() {
           <EmptyState
             icon={Hourglass}
             title="Nothing waiting"
-            description="Items delegated to others will appear here."
+            description="Assign a 'waiting on' contact when clarifying items to track delegated work here."
           />
         ) : (
           <div className="divide-y divide-border">

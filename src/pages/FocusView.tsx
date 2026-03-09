@@ -41,7 +41,7 @@ export default function FocusView() {
             <EmptyState
               icon={Star}
               title="Nothing focused right now"
-              description="Star items to bring them here."
+              description="Swipe right on any item or tap the ★ to star it for focus."
             />
           ) : (
             <SortableItemList items={filteredItems} />
