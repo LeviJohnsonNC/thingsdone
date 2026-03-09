@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { useCreateItem } from "@/hooks/useItems";
-import { useAppStore } from "@/stores/appStore";
+// Zustand store no longer needed for quick-add
 import { useUsageLimits } from "@/hooks/useUsageLimits";
 import { UpgradePrompt } from "@/components/UpgradePrompt";
 import { Input } from "@/components/ui/input";
