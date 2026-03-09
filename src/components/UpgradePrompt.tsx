@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
-export type UpgradeTrigger = "items" | "projects" | "areas" | "ai_review";
+export type UpgradeTrigger = "items" | "projects" | "areas" | "ai_review" | "recurring";
 
 interface UpgradePromptProps {
   open: boolean;
