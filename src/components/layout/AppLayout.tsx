@@ -9,6 +9,9 @@ import { OverLimitBanner } from "../OverLimitBanner";
 import { useActiveTheme } from "@/hooks/useTheme";
 import { useOnboarding } from "@/hooks/useOnboarding";
 import { OnboardingModal } from "../onboarding/OnboardingModal";
+import { SearchModal } from "../SearchModal";
+import { GlobalQuickAdd } from "../GlobalQuickAdd";
+import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 
 export function AppLayout({ children }: { children: ReactNode }) {
   const isMobile = useIsMobile();
@@ -17,12 +20,12 @@ export function AppLayout({ children }: { children: ReactNode }) {
   const { needsOnboarding, isLoading: onboardingLoading } = useOnboarding();
   const [showOnboarding, setShowOnboarding] = useState(false);
   useActiveTheme();
+  useKeyboardShortcuts();
 
   useEffect(() => {
     setEditingItemId(null);
   }, [location.pathname, setEditingItemId]);
 
-  // Show onboarding after a brief delay to let the app render
   useEffect(() => {
     if (!onboardingLoading && needsOnboarding) {
       const timer = setTimeout(() => setShowOnboarding(true), 300);
@@ -38,6 +41,8 @@ export function AppLayout({ children }: { children: ReactNode }) {
         <MobileBottomNav />
         <QuickAddFAB />
         <OnboardingModal open={showOnboarding} onComplete={() => setShowOnboarding(false)} />
+        <SearchModal />
+        <GlobalQuickAdd />
       </div>
     );
   }
@@ -51,6 +56,8 @@ export function AppLayout({ children }: { children: ReactNode }) {
       </div>
       <QuickAddFAB />
       <OnboardingModal open={showOnboarding} onComplete={() => setShowOnboarding(false)} />
+      <SearchModal />
+      <GlobalQuickAdd />
     </div>
   );
 }
