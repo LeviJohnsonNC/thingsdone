@@ -22,7 +22,7 @@ export function GlobalQuickAdd() {
       toast.error("Item limit reached. Upgrade to add more.");
       return;
     }
-    createItem.mutate({ title: title.trim(), user_id: user.id, state: "inbox" });
+    createItem.mutate({ title: title.trim(), state: "inbox" });
     setTitle("");
     setGlobalQuickAddOpen(false);
     toast.success("Added to Inbox");
