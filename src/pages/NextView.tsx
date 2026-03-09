@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { SortableItemList } from "@/components/SortableItemList";
 import { EmptyState } from "@/components/EmptyState";
