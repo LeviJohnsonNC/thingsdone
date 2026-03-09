@@ -6,10 +6,12 @@ import { ItemRow } from "@/components/ItemRow";
 import { EmptyState } from "@/components/EmptyState";
 import { useItems } from "@/hooks/useItems";
 import { useAppStore } from "@/stores/appStore";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export default function WaitingView() {
   const { selectedAreaId } = useAppStore();
   const { data: items, isLoading } = useItems("waiting", selectedAreaId);
+  const isMobile = useIsMobile();
 
   const grouped = useMemo(() => {
     if (!items) return [];
@@ -38,6 +40,7 @@ export default function WaitingView() {
   return (
     <div className="flex flex-col h-full">
       <ViewHeader title="Waiting" count={items?.length} />
+      {!isMobile && <QuickAddBar placeholder="Add waiting item…" defaultState="waiting" />}
 
       <div className="flex-1 overflow-y-auto">
         {grouped.length === 0 ? (

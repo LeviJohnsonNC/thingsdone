@@ -3,10 +3,12 @@ import { ItemListSkeleton } from "@/components/ItemListSkeleton";
 import { ItemRow } from "@/components/ItemRow";
 import { EmptyState } from "@/components/EmptyState";
 import { ViewHeader } from "@/components/ViewHeader";
+import { QuickAddBar } from "@/components/QuickAddBar";
 import { ItemFilterBar, useItemFilters, applyItemFilters } from "@/components/ItemFilterBar";
 import { useItems } from "@/hooks/useItems";
 import { useAllItemTags } from "@/hooks/useTags";
 import { useAppStore } from "@/stores/appStore";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { useGoogleCalendarEvents, GoogleCalendarEvent } from "@/hooks/useGoogleCalendar";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -101,6 +103,7 @@ export default function ScheduledView() {
   const { data: gcalEvents = [] } = useGoogleCalendarEvents();
   const { data: itemTagMap } = useAllItemTags();
   const { filters, setFilters } = useItemFilters();
+  const isMobile = useIsMobile();
 
   const filteredItems = applyItemFilters(items, filters, itemTagMap);
   const merged = getMergedItems(filteredItems, gcalEvents);
@@ -110,6 +113,7 @@ export default function ScheduledView() {
   return (
     <div className="flex flex-col h-full">
       <ViewHeader title="Scheduled" count={totalCount} />
+      {!isMobile && <QuickAddBar placeholder="Add scheduled item…" defaultState="scheduled" />}
       {totalCount > 0 && <ItemFilterBar filters={filters} onChange={setFilters} />}
       <div className="flex-1">
         {isLoading ? <ItemListSkeleton /> : groups.length === 0 ? (
