@@ -13,7 +13,6 @@ import {
 
 interface PricingFeature {
   text: string;
-  comingSoon?: boolean;
 }
 
 const FREE_FEATURES: PricingFeature[] = [
@@ -23,13 +22,15 @@ const FREE_FEATURES: PricingFeature[] = [
   { text: "Google Calendar sync" },
   { text: "All GTD views" },
   { text: "Weekly Review wizard" },
+  { text: "3 AI reviews per month" },
 ];
 
 const PRO_FEATURES: PricingFeature[] = [
   { text: "Unlimited items" },
   { text: "Unlimited projects" },
   { text: "Unlimited areas" },
-  { text: "AI-powered weekly reviews" },
+  { text: "Unlimited AI-powered reviews" },
+  { text: "AI brain dump capture" },
   { text: "Recurring tasks" },
   { text: "Priority support" },
 ];
@@ -37,7 +38,11 @@ const PRO_FEATURES: PricingFeature[] = [
 const FAQ = [
   {
     q: "Can I use Things Done.. for free forever?",
-    a: "Yes! The free plan includes up to 30 active items, 3 projects, and 3 areas with no time limit.",
+    a: "Yes! The free plan includes up to 30 active items, 3 projects, 3 areas, and 3 AI reviews per month with no time limit.",
+  },
+  {
+    q: "What counts as an AI review?",
+    a: "Each time you click 'Get AI Suggestions' or 'Generate AI Summary' during a weekly review, that counts as one AI review. Free users get 3 per month.",
   },
   {
     q: "What happens if I cancel Pro?",
@@ -49,7 +54,7 @@ const FAQ = [
   },
   {
     q: "Will AI features cost extra?",
-    a: "No. AI features are included in the Pro plan at no additional cost.",
+    a: "No. Unlimited AI reviews and AI brain dump capture are included in the Pro plan at no additional cost.",
   },
 ];
 
@@ -89,16 +94,10 @@ function PricingCard({
         {features.map((f) => (
           <li key={f.text} className="flex items-start gap-2.5 text-sm">
             <Check className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
-            <span className={f.comingSoon ? "text-muted-foreground" : "text-foreground"}>
-              {f.text}
-              {f.comingSoon && " *"}
-            </span>
+            <span className="text-foreground">{f.text}</span>
           </li>
         ))}
       </ul>
-      {features.some((f) => f.comingSoon) && (
-        <p className="mt-3 text-[10px] text-muted-foreground">* coming soon</p>
-      )}
       <div className="mt-8">
         <Button variant={ctaVariant} asChild className="w-full">
           <Link to="/auth">{cta}</Link>
@@ -135,7 +134,7 @@ export default function PricingPage() {
     <>
       <SEOHead
         title="Pricing — Things Done. | Free & Pro Plans"
-        description="Start free with up to 30 tasks, 3 projects, and Google Calendar sync. Upgrade to Pro for $4/mo for unlimited items, AI reviews, and priority support."
+        description="Start free with up to 30 tasks, 3 projects, and 3 AI reviews/month. Upgrade to Pro for $4/mo for unlimited items, AI reviews, and brain dump capture."
         canonical="https://thingsdone.lovable.app/pricing"
         jsonLd={PRICING_JSONLD}
       />

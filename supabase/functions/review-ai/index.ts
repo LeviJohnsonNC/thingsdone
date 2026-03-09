@@ -278,13 +278,15 @@ ${step === 7 ? `Review stats:\n${JSON.stringify(context, null, 2)}` : ""}`;
 
     // Increment AI usage for free users on success
     if (!isUnlimited) {
-      await adminClient.rpc("increment_ai_usage", { p_user_id: userId }).catch(() => {
-        // Fallback: direct update
-        adminClient
-          .from("user_settings")
-          .update({ ai_reviews_used: (await adminClient.from("user_settings").select("ai_reviews_used").eq("user_id", userId).single()).data?.ai_reviews_used + 1 })
-          .eq("user_id", userId);
-      });
+      const { data: curSettings } = await adminClient
+        .from("user_settings")
+        .select("ai_reviews_used")
+        .eq("user_id", userId)
+        .single();
+      await adminClient
+        .from("user_settings")
+        .update({ ai_reviews_used: (curSettings?.ai_reviews_used ?? 0) + 1 })
+        .eq("user_id", userId);
     }
 
     const result = JSON.parse(toolCall.function.arguments);

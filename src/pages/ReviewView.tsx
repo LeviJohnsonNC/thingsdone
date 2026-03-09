@@ -6,15 +6,19 @@ import { useItems, useUpdateItem, useCompleteItem, useDeleteItem, useCreateItem 
 import { useProjects } from "@/hooks/useProjects";
 import { useUserSettings } from "@/hooks/useUserSettings";
 import { useAuth } from "@/hooks/useAuth";
+import { useUsageLimits } from "@/hooks/useUsageLimits";
+import { useSubscription } from "@/hooks/useSubscription";
 import { ReviewProgress } from "@/components/review/ReviewProgress";
 import { ClearAndInboxStep } from "@/components/review/ClearAndInboxStep";
 import { StateReviewStep } from "@/components/review/StateReviewStep";
 import { ProjectReviewStep } from "@/components/review/ProjectReviewStep";
 import { ReviewSummaryStep } from "@/components/review/ReviewSummaryStep";
+import { UpgradePrompt } from "@/components/UpgradePrompt";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight, History } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
 
 const STEP_CONFIG: Record<number, { state: string; title: string; description: string }> = {
   2: { state: "next", title: "Next Actions", description: "Are these still relevant? Move stale items out." },
@@ -25,6 +29,7 @@ const STEP_CONFIG: Record<number, { state: string; title: string; description: s
 
 export default function ReviewView() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { user } = useAuth();
   const review = useReview();
   const ai = useReviewAI();
@@ -33,6 +38,11 @@ export default function ReviewView() {
   const deleteItem = useDeleteItem();
   const createItem = useCreateItem();
   const { data: settings } = useUserSettings();
+  const { isPro } = useSubscription();
+  const limits = useUsageLimits();
+
+  // Upgrade prompt state
+  const [showUpgrade, setShowUpgrade] = useState(false);
 
   // Per-step AI data
   const [stepSuggestions, setStepSuggestions] = useState<Record<number, ReviewSuggestion[]>>({});
@@ -64,6 +74,17 @@ export default function ReviewView() {
     }
   }, [user, review.reviewId, review.existingReview]);
 
+  // Show upgrade prompt when limit errors occur
+  useEffect(() => {
+    if (ai.limitError === "ai_limit_reached") {
+      setShowUpgrade(true);
+      ai.clearLimitError();
+    } else if (ai.limitError === "pro_only_feature") {
+      toast.error("AI brain dump is a Pro feature. Upgrade to unlock.");
+      ai.clearLimitError();
+    }
+  }, [ai.limitError]);
+
   const daysSinceReview = settings?.last_review_at
     ? Math.floor((Date.now() - new Date(settings.last_review_at).getTime()) / (1000 * 60 * 60 * 24))
     : null;
@@ -89,9 +110,11 @@ export default function ReviewView() {
         setStepObservations((prev) => ({ ...prev, [step]: result.observations }));
         if (result.summary_text) setSummaryText(result.summary_text);
         if (result.reflection_text) setReflectionText(result.reflection_text);
+        // Refresh usage limits after successful AI call
+        queryClient.invalidateQueries({ queryKey: ["usage-limits"] });
       }
     },
-    [ai, inboxItems, nextItems, waitingItems, scheduledItems, somedayItems, projects, daysSinceReview]
+    [ai, inboxItems, nextItems, waitingItems, scheduledItems, somedayItems, projects, daysSinceReview, queryClient]
   );
 
   const handleAcceptSuggestion = useCallback(
@@ -138,7 +161,6 @@ export default function ReviewView() {
             break;
           case "update":
             if (suggestion.item_id && suggestion.suggested_fields) {
-              // Only pass known item fields to avoid DB errors
               const allowedFields = ["energy", "time_estimate", "waiting_on", "project_id", "due_date", "scheduled_date", "notes", "is_focused", "area_id"];
               const sanitized: Record<string, unknown> = { id: suggestion.item_id };
               for (const [key, value] of Object.entries(suggestion.suggested_fields)) {
@@ -213,6 +235,10 @@ export default function ReviewView() {
               onDismissSuggestion={handleDismissSuggestion}
               onRequestAI={(brainDump) => requestAI(1, brainDump)}
               aiLoading={ai.loading}
+              canUseAI={limits.canUseAI}
+              isPro={isPro}
+              aiReviewsUsed={limits.aiReviewsUsed}
+              aiReviewLimit={limits.aiReviewLimit}
             />
           )}
 
@@ -227,6 +253,9 @@ export default function ReviewView() {
               onDismissSuggestion={handleDismissSuggestion}
               onRequestAI={() => requestAI(review.currentStep)}
               aiLoading={ai.loading}
+              canUseAI={limits.canUseAI}
+              aiReviewsUsed={limits.aiReviewsUsed}
+              aiReviewLimit={limits.aiReviewLimit}
             />
           )}
 
@@ -238,6 +267,9 @@ export default function ReviewView() {
               onDismissSuggestion={handleDismissSuggestion}
               onRequestAI={() => requestAI(6)}
               aiLoading={ai.loading}
+              canUseAI={limits.canUseAI}
+              aiReviewsUsed={limits.aiReviewsUsed}
+              aiReviewLimit={limits.aiReviewLimit}
             />
           )}
 
@@ -250,6 +282,9 @@ export default function ReviewView() {
               onFinish={handleFinish}
               aiLoading={ai.loading}
               isCompleting={isCompleting}
+              canUseAI={limits.canUseAI}
+              aiReviewsUsed={limits.aiReviewsUsed}
+              aiReviewLimit={limits.aiReviewLimit}
             />
           )}
         </div>
@@ -284,6 +319,15 @@ export default function ReviewView() {
           )}
         </div>
       </div>
+
+      {/* Upgrade prompt */}
+      <UpgradePrompt
+        open={showUpgrade}
+        onOpenChange={setShowUpgrade}
+        trigger="ai_review"
+        currentUsage={limits.aiReviewsUsed}
+        limit={limits.aiReviewLimit}
+      />
     </div>
   );
 }

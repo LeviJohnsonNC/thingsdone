@@ -16,9 +16,12 @@ interface StepContext {
   completed_this_week: number;
 }
 
+export type AILimitError = "ai_limit_reached" | "pro_only_feature" | null;
+
 export function useReviewAI() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [limitError, setLimitError] = useState<AILimitError>(null);
 
   const getStepSuggestions = useCallback(
     async (
@@ -30,6 +33,7 @@ export function useReviewAI() {
     ): Promise<AIResponse | null> => {
       setLoading(true);
       setError(null);
+      setLimitError(null);
       try {
         const body: Record<string, unknown> = { step, items, projects, context };
         if (brainDump?.trim()) body.brain_dump = brainDump;
@@ -38,7 +42,19 @@ export function useReviewAI() {
           "review-ai",
           { body }
         );
-        if (fnError) throw fnError;
+        if (fnError) {
+          // Check for limit errors from the response body
+          const errorBody = data;
+          if (errorBody?.error === "ai_limit_reached") {
+            setLimitError("ai_limit_reached");
+            return null;
+          }
+          if (errorBody?.error === "pro_only_feature") {
+            setLimitError("pro_only_feature");
+            return null;
+          }
+          throw fnError;
+        }
         return data as AIResponse;
       } catch (err) {
         const msg = err instanceof Error ? err.message : "AI request failed";
@@ -52,5 +68,7 @@ export function useReviewAI() {
     []
   );
 
-  return { getStepSuggestions, loading, error };
+  const clearLimitError = useCallback(() => setLimitError(null), []);
+
+  return { getStepSuggestions, loading, error, limitError, clearLimitError };
 }
