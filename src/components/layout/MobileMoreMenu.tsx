@@ -20,6 +20,7 @@ const MORE_ITEMS = [
   { path: "/reference", icon: FileText, label: "Reference" },
   { path: "/review", icon: ClipboardList, label: "Weekly Review" },
   { path: "/logbook", icon: BookOpen, label: "Logbook" },
+  { path: "/stats", icon: BarChart3, label: "Stats" },
 ];
 
 export function MobileMoreMenu() {
