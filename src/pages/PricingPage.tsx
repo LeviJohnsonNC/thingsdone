@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { SEOHead } from "@/components/SEOHead";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Check, Loader2, Zap } from "lucide-react";
