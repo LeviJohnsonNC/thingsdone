@@ -131,8 +131,8 @@ export default function HelpView() {
       <div className="mx-auto max-w-3xl px-4 py-6 space-y-8">
         {/* GTD Section */}
         <section>
-          <h2 className="text-base font-semibold text-foreground mb-1">Getting Things Done</h2>
-          <p className="text-sm text-muted-foreground mb-4">Learn the GTD methodology and how it helps you stay organized.</p>
+          <h2 className="text-base font-semibold text-foreground mb-1">Getting Things Done®</h2>
+          <p className="text-sm text-muted-foreground mb-4">Learn the GTD® methodology and how it helps you stay organized.</p>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {gtdTopics.map((topic) => (
               <HelpCard key={topic.id} topic={topic} onClick={() => setActiveTopic(topic)} />
