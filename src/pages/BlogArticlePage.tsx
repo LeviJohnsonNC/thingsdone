@@ -48,7 +48,7 @@ function WhyYourToDoListArticle() {
       <p>
         David Allen's{" "}
         <a href="https://en.wikipedia.org/wiki/Getting_Things_Done" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">
-          Getting Things Done
+          Getting Things Done®
         </a>{" "}
         methodology addresses this head-on with a structured approach to capturing and organizing work.
       </p>
