@@ -32,6 +32,7 @@ const PricingPage = lazy(() => import("@/pages/PricingPage"));
 const BlogPage = lazy(() => import("@/pages/BlogPage"));
 const BlogArticlePage = lazy(() => import("@/pages/BlogArticlePage"));
 const LegalPage = lazy(() => import("@/pages/LegalPage"));
+const AboutPage = lazy(() => import("@/pages/AboutPage"));
 
 const queryClient = new QueryClient();
 
