@@ -25,7 +25,7 @@ export const helpTopics: HelpTopic[] = [
 
 When you try to keep track of tasks, commitments, and ideas in your head, you create **mental overhead** — a background anxiety that drains your focus and energy. GTD® solves this by giving you a **trusted system** outside your brain where everything is captured and organized.
 
-## The 5 Steps of GTD
+## The 5 Steps of GTD®
 
 1. **Capture** — Collect everything that has your attention into a single inbox. Tasks, ideas, reminders, commitments — all of it.
 
