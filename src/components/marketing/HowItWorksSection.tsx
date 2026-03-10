@@ -96,7 +96,7 @@ export function HowItWorksSection() {
         <div className="mt-20 grid gap-8 sm:grid-cols-3">
           <img
             src={heroInbox}
-            alt="Things Done inbox view showing quick task capture for GTD workflow"
+            alt="Things Done inbox view showing quick task capture for GTD® workflow"
             width={600}
             height={338}
             loading="lazy"
@@ -112,7 +112,7 @@ export function HowItWorksSection() {
           />
           <img
             src={heroProjects}
-            alt="Things Done project list organized by GTD contexts and areas"
+            alt="Things Done project list organized by GTD® contexts and areas"
             width={600}
             height={338}
             loading="lazy"

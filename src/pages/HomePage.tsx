@@ -12,7 +12,7 @@ const HOME_JSONLD = {
   applicationCategory: "ProductivityApplication",
   operatingSystem: "Web",
   description:
-    "A calm, focused GTD task manager that helps you capture everything, organize by context, and always know what to do next.",
+    "A calm, focused GTD® task manager that helps you capture everything, organize by context, and always know what to do next.",
   offers: [
     {
       "@type": "Offer",

@@ -48,14 +48,14 @@ function WhyYourToDoListArticle() {
       <p>
         David Allen's{" "}
         <a href="https://en.wikipedia.org/wiki/Getting_Things_Done" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">
-          Getting Things Done
+          Getting Things Done®
         </a>{" "}
         methodology addresses this head-on with a structured approach to capturing and organizing work.
       </p>
 
-      <h2>What GTD gets right</h2>
+      <h2>What GTD® gets right</h2>
       <p>
-        David Allen's <em>Getting Things Done</em> methodology, often called GTD,
+        David Allen's <em>Getting Things Done®</em> methodology, often called GTD®,
         solves this with one elegant insight:{" "}
         <strong>
           your brain is for having ideas, not for holding them.
@@ -94,7 +94,7 @@ function WhyYourToDoListArticle() {
       <p>
         Most task managers give you a list and call it a day. They don't distinguish
         between something you're waiting on from a colleague and something you've
-        decided to tackle next. They don't understand that a "project" in GTD terms
+        decided to tackle next. They don't understand that a "project" in GTD® terms
         is any outcome requiring more than one action step.
       </p>
       <p>
@@ -109,7 +109,7 @@ function WhyYourToDoListArticle() {
 
       <h2>What a better system looks like</h2>
       <p>
-        A task manager built for GTD should do more than store tasks — it should{" "}
+        A task manager built for GTD® should do more than store tasks — it should{" "}
         <Link to="/features" className="text-primary hover:underline font-medium">
           guide you through each stage of the workflow
         </Link>:
@@ -181,7 +181,7 @@ function WhyYourToDoListArticle() {
         </li>
       </ol>
       <p>
-        The beauty of GTD is that it scales. It works whether you have 5 tasks or
+        The beauty of GTD® is that it scales. It works whether you have 5 tasks or
         500. The system doesn't get overwhelmed — even when you do.
       </p>
 
@@ -198,7 +198,7 @@ function WhyYourToDoListArticle() {
         <Link to="/auth" className="text-primary hover:underline font-medium">
           try Things Done. for free
         </Link>
-        . It's built from the ground up for the way GTD actually works — not just
+        . It's built from the ground up for the way GTD® actually works — not just
         another list with a checkbox.
       </p>
     </div>
@@ -229,7 +229,7 @@ function OpenLoopsArticle() {
 
       <h2>What is an "open loop"?</h2>
       <p>
-        In GTD terminology, an <strong>open loop</strong> is anything that has
+        In GTD® terminology, an <strong>open loop</strong> is anything that has
         your attention but hasn't been captured, clarified, or acted upon. It
         could be a task, a promise you made, an idea you want to explore, or a
         vague worry about something you might have forgotten.
@@ -292,7 +292,7 @@ function OpenLoopsArticle() {
         was recorded somewhere reliable.
       </p>
       <p>
-        This is the core insight behind GTD's capture habit: the faster you get
+        This is the core insight behind GTD®'s capture habit: the faster you get
         something out of your head and into a trusted system, the faster your
         mind can let go of it. Things Done is{" "}
         <Link to="/features" className="text-primary hover:underline font-medium">
@@ -374,7 +374,7 @@ function ChaosToCalm() {
         not the same thing. I decided to try something different: one month of
         committing fully to{" "}
         <a href="https://gettingthingsdone.com" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">
-          GTD
+          GTD®
         </a>. Here's what happened.
       </p>
 
@@ -452,7 +452,7 @@ function ChaosToCalm() {
 
       <h2>What I wish I'd known earlier</h2>
       <p>
-        GTD isn't about doing more. It's about <em>carrying less</em>. The system
+        GTD® isn't about doing more. It's about <em>carrying less</em>. The system
         isn't meant to turn you into a productivity robot — it's meant to give
         you back the mental space that chaos steals.
       </p>
@@ -495,7 +495,7 @@ function TwoMinuteRuleArticle() {
       <p className="lead">
         Of all the tactics in David Allen's{" "}
         <a href="https://en.wikipedia.org/wiki/Getting_Things_Done" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">
-          Getting Things Done
+          Getting Things Done®
         </a>, the two-minute
         rule is the simplest — and possibly the most powerful. It goes like this:
         <strong> if an action takes less than two minutes, do it now.</strong>
@@ -535,7 +535,7 @@ function TwoMinuteRuleArticle() {
       <p>
         The two-minute rule is most powerful during <strong>processing</strong>{" "}
         — when you're clarifying items in your inbox and deciding what to do with
-        them. This is its native habitat in GTD.
+        them. This is its native habitat in GTD®.
       </p>
       <p>When you pull an item from your inbox, ask:</p>
       <ol>
@@ -602,7 +602,7 @@ function TwoMinuteRuleArticle() {
           "If the next action can be done in two minutes or less, do it when you
           first pick the item up."
           <br />
-          <span className="text-sm">— David Allen, Getting Things Done</span>
+          <span className="text-sm">— David Allen, Getting Things Done®</span>
         </p>
       </blockquote>
 
@@ -611,7 +611,7 @@ function TwoMinuteRuleArticle() {
         <Link to="/auth" className="text-primary hover:underline font-medium">
           Try Things Done.
         </Link>{" "}
-        — built for the way GTD actually works. Explore all the{" "}
+        — built for the way GTD® actually works. Explore all the{" "}
         <Link to="/features" className="text-primary hover:underline font-medium">
           features designed to support your workflow
         </Link>.

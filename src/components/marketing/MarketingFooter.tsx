@@ -15,6 +15,11 @@ export function MarketingFooter() {
           <Link to="/auth" className="hover:text-foreground transition-colors">Sign In</Link>
         </div>
       </div>
+      <div className="mx-auto max-w-5xl px-6 pb-6">
+        <p className="text-[11px] leading-relaxed text-muted-foreground/70 text-center">
+          GTD® and Getting Things Done® are registered trademarks of the David Allen Company. Things Done. is not affiliated with or endorsed by the David Allen Company.
+        </p>
+      </div>
     </footer>
   );
 }

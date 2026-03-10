@@ -19,13 +19,13 @@ export const helpTopics: HelpTopic[] = [
     id: "what-is-gtd",
     section: "gtd",
     icon: Brain,
-    title: "What is GTD?",
-    description: "The core philosophy behind Getting Things Done.",
-    content: `**Getting Things Done (GTD)** is a personal productivity methodology created by David Allen. The core insight is simple: your mind is for *having* ideas, not *holding* them.
+    title: "What is GTD®?",
+    description: "The core philosophy behind Getting Things Done®.",
+    content: `**Getting Things Done® (GTD®)** is a personal productivity methodology created by David Allen. The core insight is simple: your mind is for *having* ideas, not *holding* them.
 
-When you try to keep track of tasks, commitments, and ideas in your head, you create **mental overhead** — a background anxiety that drains your focus and energy. GTD solves this by giving you a **trusted system** outside your brain where everything is captured and organized.
+When you try to keep track of tasks, commitments, and ideas in your head, you create **mental overhead** — a background anxiety that drains your focus and energy. GTD® solves this by giving you a **trusted system** outside your brain where everything is captured and organized.
 
-## The 5 Steps of GTD
+## The 5 Steps of GTD®
 
 1. **Capture** — Collect everything that has your attention into a single inbox. Tasks, ideas, reminders, commitments — all of it.
 
@@ -39,7 +39,7 @@ When you try to keep track of tasks, commitments, and ideas in your head, you cr
 
 ## Why it works
 
-GTD doesn't ask you to prioritize harder or work faster. It asks you to **externalize** your commitments so your brain can stop worrying about what you might be forgetting. When you trust your system, you can focus fully on the task at hand.`,
+GTD® doesn't ask you to prioritize harder or work faster. It asks you to **externalize** your commitments so your brain can stop worrying about what you might be forgetting. When you trust your system, you can focus fully on the task at hand.`,
   },
   {
     id: "capture",
@@ -47,7 +47,7 @@ GTD doesn't ask you to prioritize harder or work faster. It asks you to **extern
     icon: Inbox,
     title: "Capture Everything",
     description: "Why 100% capture matters and how to build the habit.",
-    content: `The first step of GTD is **capturing** — getting everything out of your head and into a trusted collection point.
+    content: `The first step of GTD® is **capturing** — getting everything out of your head and into a trusted collection point.
 
 ## Why 100% capture matters
 
@@ -100,7 +100,7 @@ Go through your inbox from top to bottom. For each item, ask: **"Is this actiona
 
 ## The Two-Minute Rule
 
-This is one of GTD's most powerful ideas. If something takes less than two minutes to complete, **do it immediately** rather than adding it to your system. The overhead of tracking it would be greater than just doing it.
+This is one of GTD®'s most powerful ideas. If something takes less than two minutes to complete, **do it immediately** rather than adding it to your system. The overhead of tracking it would be greater than just doing it.
 
 ## What "clarify" really means
 
@@ -112,7 +112,7 @@ Clarifying is about turning vague stuff ("handle the proposal") into concrete ne
     icon: ArrowRight,
     title: "Next Actions",
     description: "Why concrete next steps eliminate procrastination.",
-    content: `A **next action** is the single, concrete, physical thing you can do to move something forward. It's the most important concept in GTD after capture.
+    content: `A **next action** is the single, concrete, physical thing you can do to move something forward. It's the most important concept in GTD® after capture.
 
 ## Why vague tasks paralyze you
 
@@ -143,8 +143,8 @@ Next actions are most useful when organized by context — where you are, what t
     section: "gtd",
     icon: FolderOpen,
     title: "Projects & Outcomes",
-    description: "How to think about multi-step outcomes in GTD.",
-    content: `In GTD, a **project** is any outcome that requires more than one action step to complete. That's it — no minimum size, no complexity threshold.
+    description: "How to think about multi-step outcomes in GTD®.",
+    content: `In GTD®, a **project** is any outcome that requires more than one action step to complete. That's it — no minimum size, no complexity threshold.
 
 ## Examples of projects
 
@@ -183,7 +183,7 @@ During your Weekly Review, scan every active project and ask:
     icon: ClipboardList,
     title: "The Weekly Review",
     description: "The keystone habit that keeps your system trustworthy.",
-    content: `The **Weekly Review** is the single most important habit in GTD. Without it, your system gradually becomes outdated, and your brain stops trusting it — which puts you right back to keeping everything in your head.
+    content: `The **Weekly Review** is the single most important habit in GTD®. Without it, your system gradually becomes outdated, and your brain stops trusting it — which puts you right back to keeping everything in your head.
 
 ## Why it matters
 
@@ -427,7 +427,7 @@ During each Weekly Review, scan your Someday list:
     icon: BookOpen,
     title: "Weekly Review in the App",
     description: "How to use the guided review wizard to stay current.",
-    content: `Things Done includes a **guided Weekly Review wizard** that walks you through each step of the GTD review process.
+    content: `Things Done includes a **guided Weekly Review wizard** that walks you through each step of the GTD® review process.
 
 ## Starting a review
 
