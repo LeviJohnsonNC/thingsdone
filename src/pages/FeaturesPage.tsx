@@ -51,7 +51,7 @@ const CAPTURE_FEATURES: Omit<FeatureBlockProps, "">[] = [
 const ORGANIZE_FEATURES: Omit<FeatureBlockProps, "">[] = [
   {
     title: "Sequential & Parallel Projects",
-    body: "In GTD, a project is any outcome requiring more than one action step. Things Done supports both sequential projects — where only the first incomplete action appears in your Next view — and parallel projects where all actions are available at once. Drag to reorder steps, set project-level due dates, and track progress with a visual completion indicator. Each project can belong to an area of responsibility so your commitments stay organized by life context. Whether you're managing a product launch or planning a vacation, project management in Things Done keeps multi-step work moving forward without clutter.",
+    body: "In GTD®, a project is any outcome requiring more than one action step. Things Done supports both sequential projects — where only the first incomplete action appears in your Next view — and parallel projects where all actions are available at once. Drag to reorder steps, set project-level due dates, and track progress with a visual completion indicator. Each project can belong to an area of responsibility so your commitments stay organized by life context. Whether you're managing a product launch or planning a vacation, project management in Things Done keeps multi-step work moving forward without clutter.",
     mockup: "projects",
   },
   {
