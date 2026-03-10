@@ -374,7 +374,7 @@ function ChaosToCalm() {
         not the same thing. I decided to try something different: one month of
         committing fully to{" "}
         <a href="https://gettingthingsdone.com" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">
-          GTD
+          GTD®
         </a>. Here's what happened.
       </p>
 
