@@ -143,8 +143,8 @@ Next actions are most useful when organized by context — where you are, what t
     section: "gtd",
     icon: FolderOpen,
     title: "Projects & Outcomes",
-    description: "How to think about multi-step outcomes in GTD.",
-    content: `In GTD, a **project** is any outcome that requires more than one action step to complete. That's it — no minimum size, no complexity threshold.
+    description: "How to think about multi-step outcomes in GTD®.",
+    content: `In GTD®, a **project** is any outcome that requires more than one action step to complete. That's it — no minimum size, no complexity threshold.
 
 ## Examples of projects
 
