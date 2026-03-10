@@ -50,7 +50,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
   },
   {
     slug: "the-two-minute-rule",
-    title: "The Two-Minute Rule: The Smallest GTD Hack With the Biggest Impact",
+    title: "The Two-Minute Rule: The Smallest GTD® Hack With the Biggest Impact",
     description:
       "If it takes less than two minutes, do it now. This simple rule clears more tasks than any app ever could.",
     date: "2026-03-06",
