@@ -70,7 +70,7 @@ const REVIEW_FEATURES: Omit<FeatureBlockProps, "">[] = [
   },
   {
     title: "AI-Powered Weekly Reviews",
-    body: "The weekly review is the heartbeat of GTD — and the habit most people skip. Things Done makes it effortless with a guided, step-by-step review wizard. Clear your inbox, review each project for a clear next action, check your Waiting For list, and scan Someday/Maybe for anything that sparks energy. On Pro, the AI assistant surfaces stale tasks, suggests next actions, and even converts a free-form brain dump into ready-to-file tasks with suggested state, energy, and time estimates. A consistent weekly review is what transforms a task manager from a graveyard of forgotten items into a trusted productivity system you rely on every day.",
+    body: "The weekly review is the heartbeat of GTD® — and the habit most people skip. Things Done makes it effortless with a guided, step-by-step review wizard. Clear your inbox, review each project for a clear next action, check your Waiting For list, and scan Someday/Maybe for anything that sparks energy. On Pro, the AI assistant surfaces stale tasks, suggests next actions, and even converts a free-form brain dump into ready-to-file tasks with suggested state, energy, and time estimates. A consistent weekly review is what transforms a task manager from a graveyard of forgotten items into a trusted productivity system you rely on every day.",
     mockup: "review",
     reverse: true,
   },
