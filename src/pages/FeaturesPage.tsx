@@ -37,7 +37,7 @@ function FeatureBlock({ title, body, mockup, reverse }: FeatureBlockProps) {
 const CAPTURE_FEATURES: Omit<FeatureBlockProps, "">[] = [
   {
     title: "Instant Inbox Capture",
-    body: "Drop any task, reminder, or half-formed idea into your inbox in under a second. Use the quick-add bar, the floating action button, or the global keyboard shortcut (Ctrl+K) — whichever is fastest in the moment. Things Done also supports natural language dates, so typing 'Call dentist next Tuesday at 2pm' automatically sets the scheduled date for you. Your inbox is a holding pen, not a to-do list — capture freely and organize later. This is the cornerstone of any effective GTD task manager: frictionless capture means nothing falls through the cracks.",
+    body: "Drop any task, reminder, or half-formed idea into your inbox in under a second. Use the quick-add bar, the floating action button, or the global keyboard shortcut (Ctrl+K) — whichever is fastest in the moment. Things Done also supports natural language dates, so typing 'Call dentist next Tuesday at 2pm' automatically sets the scheduled date for you. Your inbox is a holding pen, not a to-do list — capture freely and organize later. This is the cornerstone of any effective GTD® task manager: frictionless capture means nothing falls through the cracks.",
     mockup: "inbox",
   },
   {
