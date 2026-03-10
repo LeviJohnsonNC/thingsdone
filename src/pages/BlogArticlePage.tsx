@@ -181,7 +181,7 @@ function WhyYourToDoListArticle() {
         </li>
       </ol>
       <p>
-        The beauty of GTD is that it scales. It works whether you have 5 tasks or
+        The beauty of GTD® is that it scales. It works whether you have 5 tasks or
         500. The system doesn't get overwhelmed — even when you do.
       </p>
 
