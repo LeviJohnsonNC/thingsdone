@@ -19,7 +19,7 @@ export const helpTopics: HelpTopic[] = [
     id: "what-is-gtd",
     section: "gtd",
     icon: Brain,
-    title: "What is GTD?",
+    title: "What is GTD®?",
     description: "The core philosophy behind Getting Things Done.",
     content: `**Getting Things Done (GTD)** is a personal productivity methodology created by David Allen. The core insight is simple: your mind is for *having* ideas, not *holding* them.
 
