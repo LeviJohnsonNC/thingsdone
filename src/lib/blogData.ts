@@ -41,7 +41,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
     slug: "from-chaos-to-calm",
     title: "From Chaos to Calm: One Month of Actually Trusting My System",
     description:
-      "I was drowning in browser tabs, sticky notes, and guilt. Then I committed to GTD for 30 days. Here's what changed — and what surprised me.",
+      "I was drowning in browser tabs, sticky notes, and guilt. Then I committed to GTD® for 30 days. Here's what changed — and what surprised me.",
     date: "2026-03-07",
     readingTime: "6 min read",
     author: "Things Done.",
