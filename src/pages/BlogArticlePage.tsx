@@ -229,7 +229,7 @@ function OpenLoopsArticle() {
 
       <h2>What is an "open loop"?</h2>
       <p>
-        In GTD terminology, an <strong>open loop</strong> is anything that has
+        In GTD® terminology, an <strong>open loop</strong> is anything that has
         your attention but hasn't been captured, clarified, or acted upon. It
         could be a task, a promise you made, an idea you want to explore, or a
         vague worry about something you might have forgotten.
