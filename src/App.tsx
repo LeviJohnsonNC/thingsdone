@@ -32,6 +32,7 @@ const PricingPage = lazy(() => import("@/pages/PricingPage"));
 const BlogPage = lazy(() => import("@/pages/BlogPage"));
 const BlogArticlePage = lazy(() => import("@/pages/BlogArticlePage"));
 const LegalPage = lazy(() => import("@/pages/LegalPage"));
+const AboutPage = lazy(() => import("@/pages/AboutPage"));
 
 const queryClient = new QueryClient();
 
@@ -109,6 +110,7 @@ const App = () => (
               <Route path="/blog" element={<PublicRoute><MarketingLayout><BlogPage /></MarketingLayout></PublicRoute>} />
               <Route path="/blog/:slug" element={<PublicRoute><MarketingLayout><BlogArticlePage /></MarketingLayout></PublicRoute>} />
               <Route path="/legal" element={<MarketingLayout><LegalPage /></MarketingLayout>} />
+              <Route path="/about" element={<PublicRoute><MarketingLayout><AboutPage /></MarketingLayout></PublicRoute>} />
               <Route path="/auth" element={<AuthPage />} />
               {/* Protected app routes */}
               <Route path="/*" element={<ProtectedRoutes />} />
