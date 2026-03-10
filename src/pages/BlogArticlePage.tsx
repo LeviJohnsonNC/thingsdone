@@ -198,7 +198,7 @@ function WhyYourToDoListArticle() {
         <Link to="/auth" className="text-primary hover:underline font-medium">
           try Things Done. for free
         </Link>
-        . It's built from the ground up for the way GTD actually works — not just
+        . It's built from the ground up for the way GTD® actually works — not just
         another list with a checkbox.
       </p>
     </div>
