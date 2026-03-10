@@ -8,7 +8,7 @@ interface SEOHeadProps {
   jsonLd?: object | object[];
 }
 
-export const SITE_URL = "https://things-done.app";
+export const SITE_URL = "https://www.things-done.app";
 const SITE_NAME = "Things Done.";
 const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.png`;
 
