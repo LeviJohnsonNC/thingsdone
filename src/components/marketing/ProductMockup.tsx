@@ -8,11 +8,13 @@ import {
   Clock,
   CircleDot,
   ChevronRight,
-  MoreHorizontal,
-  Plus,
+  Tag,
+  Zap,
+  Check,
+  AlertCircle,
 } from "lucide-react";
 
-type MockupVariant = "tasks" | "inbox" | "editor" | "projects" | "review";
+type MockupVariant = "tasks" | "inbox" | "editor" | "projects" | "project-detail" | "review";
 
 interface ProductMockupProps {
   variant: MockupVariant;
@@ -95,12 +97,19 @@ function TasksContent() {
 
 function InboxContent() {
   return (
-    <div className="divide-y divide-border">
-      <MockRow icon={Inbox} text="Book flights for conference" />
-      <MockRow icon={Inbox} text="Read article on GTD workflows" />
-      <MockRow icon={Inbox} text="Call insurance company" />
-      <MockRow icon={Inbox} text="Order new monitor cable" />
-      <MockRow icon={Inbox} text="Review onboarding feedback" />
+    <div>
+      {/* Quick-add bar */}
+      <div className="flex items-center gap-2 border-b border-border px-4 py-2">
+        <span className="text-[12px] text-muted-foreground/60">Add a task…</span>
+        <span className="ml-auto rounded bg-accent px-1.5 py-0.5 text-[10px] text-muted-foreground">⌘K</span>
+      </div>
+      <div className="divide-y divide-border">
+        <MockRow icon={Inbox} text="Book flights for conference" />
+        <MockRow icon={Inbox} text="Read article on GTD® workflows" />
+        <MockRow icon={Inbox} text="Call insurance company" />
+        <MockRow icon={Inbox} text="Order new monitor cable" />
+        <MockRow icon={Inbox} text="Review onboarding feedback" />
+      </div>
     </div>
   );
 }
@@ -123,6 +132,33 @@ function EditorContent() {
         <div className="flex items-center gap-2 text-[12px] text-muted-foreground">
           <CircleDot className="h-3 w-3" />
           <span>High energy</span>
+        </div>
+        <div className="flex items-center gap-2 text-[12px] text-muted-foreground">
+          <Calendar className="h-3 w-3" />
+          <span>Due Mar 14</span>
+        </div>
+        <div className="flex items-center gap-2 text-[12px] text-muted-foreground">
+          <Tag className="h-3 w-3" />
+          <span className="flex gap-1">
+            <span className="rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] text-primary">@office</span>
+            <span className="rounded-full bg-accent px-1.5 py-0.5 text-[10px] text-muted-foreground">presentation</span>
+          </span>
+        </div>
+      </div>
+      {/* Checklist */}
+      <div className="space-y-1 pt-1">
+        <div className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Checklist</div>
+        <div className="flex items-center gap-2 text-[12px]">
+          <Check className="h-3 w-3 text-[hsl(var(--success-green))]" />
+          <span className="text-muted-foreground line-through">Gather sprint metrics</span>
+        </div>
+        <div className="flex items-center gap-2 text-[12px]">
+          <div className="h-3 w-3 rounded-sm border border-border" />
+          <span className="text-foreground">Draft slide outline</span>
+        </div>
+        <div className="flex items-center gap-2 text-[12px]">
+          <div className="h-3 w-3 rounded-sm border border-border" />
+          <span className="text-foreground">Add roadmap updates</span>
         </div>
       </div>
       <div className="rounded-md bg-accent/50 p-2.5 text-[12px] text-muted-foreground leading-relaxed">
@@ -161,6 +197,73 @@ function ProjectsContent() {
           <ChevronRight className="h-3 w-3 text-muted-foreground" />
         </div>
       ))}
+    </div>
+  );
+}
+
+function ProjectDetailContent() {
+  const actions = [
+    { text: "Define project scope", done: true },
+    { text: "Create wireframes", done: true },
+    { text: "Set up staging environment", done: false, isNext: true },
+    { text: "Build landing page", done: false },
+    { text: "Write launch copy", done: false },
+    { text: "QA and deploy", done: false },
+  ];
+  const completed = actions.filter((a) => a.done).length;
+  const pct = Math.round((completed / actions.length) * 100);
+
+  return (
+    <div className="p-4 space-y-3">
+      <div className="flex items-center justify-between">
+        <div className="text-sm font-medium text-foreground">Website Redesign</div>
+        <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary">Sequential</span>
+      </div>
+      {/* Progress bar */}
+      <div className="space-y-1">
+        <div className="flex items-center justify-between text-[11px] text-muted-foreground">
+          <span>{completed}/{actions.length} actions</span>
+          <span>{pct}%</span>
+        </div>
+        <div className="h-1.5 rounded-full bg-accent overflow-hidden">
+          <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${pct}%` }} />
+        </div>
+      </div>
+      {/* Area */}
+      <div className="flex items-center gap-2 text-[12px] text-muted-foreground">
+        <Zap className="h-3 w-3" />
+        <span>Area: Work</span>
+      </div>
+      {/* Actions list */}
+      <div className="space-y-0.5">
+        {actions.map((a) => (
+          <div
+            key={a.text}
+            className={cn(
+              "flex items-center gap-2.5 rounded-md px-2.5 py-1.5 text-[12px]",
+              a.isNext && "bg-primary/8 ring-1 ring-primary/20"
+            )}
+          >
+            {a.done ? (
+              <Check className="h-3 w-3 shrink-0 text-[hsl(var(--success-green))]" />
+            ) : (
+              <div className={cn(
+                "h-3 w-3 shrink-0 rounded-sm border",
+                a.isNext ? "border-primary" : "border-border"
+              )} />
+            )}
+            <span className={cn(
+              a.done ? "text-muted-foreground line-through" : "text-foreground",
+              a.isNext && "font-medium text-primary"
+            )}>
+              {a.text}
+            </span>
+            {a.isNext && (
+              <span className="ml-auto text-[10px] text-primary">Next →</span>
+            )}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -213,6 +316,7 @@ const VARIANT_MAP: Record<MockupVariant, { title: string; content: React.FC }> =
   inbox: { title: "Things Done. — Inbox", content: InboxContent },
   editor: { title: "Things Done. — Detail", content: EditorContent },
   projects: { title: "Things Done. — Projects", content: ProjectsContent },
+  "project-detail": { title: "Things Done. — Project", content: ProjectDetailContent },
   review: { title: "Things Done. — Review", content: ReviewContent },
 };
 
