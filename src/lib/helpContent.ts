@@ -39,7 +39,7 @@ When you try to keep track of tasks, commitments, and ideas in your head, you cr
 
 ## Why it works
 
-GTD doesn't ask you to prioritize harder or work faster. It asks you to **externalize** your commitments so your brain can stop worrying about what you might be forgetting. When you trust your system, you can focus fully on the task at hand.`,
+GTD® doesn't ask you to prioritize harder or work faster. It asks you to **externalize** your commitments so your brain can stop worrying about what you might be forgetting. When you trust your system, you can focus fully on the task at hand.`,
   },
   {
     id: "capture",
