@@ -8,6 +8,7 @@ const NAV_LINKS = [
   { path: "/features", label: "Features" },
   { path: "/pricing", label: "Pricing" },
   { path: "/blog", label: "Blog" },
+  { path: "/about", label: "About" },
 ];
 
 export function MarketingNav() {
