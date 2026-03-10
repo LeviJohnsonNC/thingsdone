@@ -535,7 +535,7 @@ function TwoMinuteRuleArticle() {
       <p>
         The two-minute rule is most powerful during <strong>processing</strong>{" "}
         — when you're clarifying items in your inbox and deciding what to do with
-        them. This is its native habitat in GTD.
+        them. This is its native habitat in GTD®.
       </p>
       <p>When you pull an item from your inbox, ask:</p>
       <ol>
