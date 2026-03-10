@@ -112,7 +112,7 @@ export function HowItWorksSection() {
           />
           <img
             src={heroProjects}
-            alt="Things Done project list organized by GTD contexts and areas"
+            alt="Things Done project list organized by GTD® contexts and areas"
             width={600}
             height={338}
             loading="lazy"

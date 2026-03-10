@@ -9,8 +9,8 @@ export default function BlogPage() {
   return (
     <>
       <SEOHead
-        title="Blog — Things Done. | Productivity Tips & GTD Guides"
-        description="Practical guides on Getting Things Done, task management, and building a productivity system you actually trust."
+        title="Blog — Things Done. | Productivity Tips & GTD® Guides"
+        description="Practical guides on Getting Things Done®, task management, and building a productivity system you actually trust."
         canonical={`${SITE_URL}/blog`}
       />
 

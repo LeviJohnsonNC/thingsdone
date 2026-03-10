@@ -56,7 +56,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
     date: "2026-03-06",
     readingTime: "5 min read",
     author: "Things Done.",
-    tags: ["GTD", "Quick Tips", "Tactics"],
+    tags: ["GTD®", "Quick Tips", "Tactics"],
     heroImage: heroTwoMinuteRule,
   },
 ];

@@ -207,7 +207,7 @@ export function OnboardingModal({ open, onComplete }: OnboardingModalProps) {
           <Sparkles className="h-10 w-10 text-white" />
         </motion.div>
         <h2 className="text-2xl font-semibold text-foreground mb-2">
-          🎉 You just did GTD!
+          🎉 You just did GTD®!
         </h2>
         <p className="text-muted-foreground mb-2 max-w-sm">
           That's the whole system:

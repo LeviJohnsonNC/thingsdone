@@ -57,8 +57,8 @@ const FAQ = [
     a: "Yes, all data is encrypted in transit and at rest, stored in a secure cloud database, and never sold or shared with third parties. AI suggestions are generated per-request and not stored for training.",
   },
   {
-    q: "What is GTD, and do I need to know it?",
-    a: "GTD (Getting Things Done) is a productivity method by David Allen. You don't need to study it — Things Done. is built on its principles so you get the benefits just by using the app. Capture, clarify, organize, review, do.",
+    q: "What is GTD®, and do I need to know it?",
+    a: "GTD® (Getting Things Done®) is a productivity method by David Allen. You don't need to study it — Things Done. is built on its principles so you get the benefits just by using the app. Capture, clarify, organize, review, do.",
   },
   {
     q: "What counts as an AI review?",
