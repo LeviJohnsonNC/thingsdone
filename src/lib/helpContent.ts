@@ -21,7 +21,7 @@ export const helpTopics: HelpTopic[] = [
     icon: Brain,
     title: "What is GTD®?",
     description: "The core philosophy behind Getting Things Done®.",
-    content: `**Getting Things Done (GTD)** is a personal productivity methodology created by David Allen. The core insight is simple: your mind is for *having* ideas, not *holding* them.
+    content: `**Getting Things Done® (GTD®)** is a personal productivity methodology created by David Allen. The core insight is simple: your mind is for *having* ideas, not *holding* them.
 
 When you try to keep track of tasks, commitments, and ideas in your head, you create **mental overhead** — a background anxiety that drains your focus and energy. GTD solves this by giving you a **trusted system** outside your brain where everything is captured and organized.
 
