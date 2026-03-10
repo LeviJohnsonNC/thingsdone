@@ -56,7 +56,7 @@ const ORGANIZE_FEATURES: Omit<FeatureBlockProps, "">[] = [
   },
   {
     title: "Focus Mode",
-    body: "Star the tasks that matter most today to surface them in Focus view. When you have 20 minutes between meetings, Focus mode shows only what you've committed to right now — not your entire backlog. Swipe right on any item to star it, swipe left to un-star. It's a deliberate, distraction-free workspace designed to keep you moving on your highest-priority work without decision fatigue. Focus mode turns your GTD next actions list into a curated, intention-driven daily plan so you always know exactly what to work on.",
+    body: "Star the tasks that matter most today to surface them in Focus view. When you have 20 minutes between meetings, Focus mode shows only what you've committed to right now — not your entire backlog. Swipe right on any item to star it, swipe left to un-star. It's a deliberate, distraction-free workspace designed to keep you moving on your highest-priority work without decision fatigue. Focus mode turns your GTD® next actions list into a curated, intention-driven daily plan so you always know exactly what to work on.",
     mockup: "tasks",
     reverse: true,
   },
