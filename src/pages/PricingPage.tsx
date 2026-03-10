@@ -20,7 +20,7 @@ const FREE_FEATURES: PricingFeature[] = [
   { text: "Up to 3 projects" },
   { text: "Up to 3 areas" },
   { text: "Google Calendar sync" },
-  { text: "All GTD views" },
+  { text: "All GTD® views" },
   { text: "Weekly Review wizard" },
   { text: "3 AI reviews per month" },
 ];
