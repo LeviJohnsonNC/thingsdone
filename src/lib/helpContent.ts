@@ -100,7 +100,7 @@ Go through your inbox from top to bottom. For each item, ask: **"Is this actiona
 
 ## The Two-Minute Rule
 
-This is one of GTD's most powerful ideas. If something takes less than two minutes to complete, **do it immediately** rather than adding it to your system. The overhead of tracking it would be greater than just doing it.
+This is one of GTD®'s most powerful ideas. If something takes less than two minutes to complete, **do it immediately** rather than adding it to your system. The overhead of tracking it would be greater than just doing it.
 
 ## What "clarify" really means
 
