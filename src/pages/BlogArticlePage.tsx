@@ -292,7 +292,7 @@ function OpenLoopsArticle() {
         was recorded somewhere reliable.
       </p>
       <p>
-        This is the core insight behind GTD's capture habit: the faster you get
+        This is the core insight behind GTD®'s capture habit: the faster you get
         something out of your head and into a trusted system, the faster your
         mind can let go of it. Things Done is{" "}
         <Link to="/features" className="text-primary hover:underline font-medium">
