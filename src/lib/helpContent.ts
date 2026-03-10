@@ -427,7 +427,7 @@ During each Weekly Review, scan your Someday list:
     icon: BookOpen,
     title: "Weekly Review in the App",
     description: "How to use the guided review wizard to stay current.",
-    content: `Things Done includes a **guided Weekly Review wizard** that walks you through each step of the GTD review process.
+    content: `Things Done includes a **guided Weekly Review wizard** that walks you through each step of the GTD® review process.
 
 ## Starting a review
 
