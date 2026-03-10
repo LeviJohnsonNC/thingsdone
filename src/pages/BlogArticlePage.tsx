@@ -53,9 +53,9 @@ function WhyYourToDoListArticle() {
         methodology addresses this head-on with a structured approach to capturing and organizing work.
       </p>
 
-      <h2>What GTD gets right</h2>
+      <h2>What GTD® gets right</h2>
       <p>
-        David Allen's <em>Getting Things Done</em> methodology, often called GTD,
+        David Allen's <em>Getting Things Done®</em> methodology, often called GTD®,
         solves this with one elegant insight:{" "}
         <strong>
           your brain is for having ideas, not for holding them.
