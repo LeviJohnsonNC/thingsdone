@@ -602,7 +602,7 @@ function TwoMinuteRuleArticle() {
           "If the next action can be done in two minutes or less, do it when you
           first pick the item up."
           <br />
-          <span className="text-sm">— David Allen, Getting Things Done</span>
+          <span className="text-sm">— David Allen, Getting Things Done®</span>
         </p>
       </blockquote>
 
