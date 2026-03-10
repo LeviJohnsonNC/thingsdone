@@ -183,7 +183,7 @@ During your Weekly Review, scan every active project and ask:
     icon: ClipboardList,
     title: "The Weekly Review",
     description: "The keystone habit that keeps your system trustworthy.",
-    content: `The **Weekly Review** is the single most important habit in GTD. Without it, your system gradually becomes outdated, and your brain stops trusting it — which puts you right back to keeping everything in your head.
+    content: `The **Weekly Review** is the single most important habit in GTD®. Without it, your system gradually becomes outdated, and your brain stops trusting it — which puts you right back to keeping everything in your head.
 
 ## Why it matters
 
