@@ -94,7 +94,7 @@ function WhyYourToDoListArticle() {
       <p>
         Most task managers give you a list and call it a day. They don't distinguish
         between something you're waiting on from a colleague and something you've
-        decided to tackle next. They don't understand that a "project" in GTD terms
+        decided to tackle next. They don't understand that a "project" in GTD® terms
         is any outcome requiring more than one action step.
       </p>
       <p>
