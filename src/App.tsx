@@ -31,6 +31,7 @@ const FeaturesPage = lazy(() => import("@/pages/FeaturesPage"));
 const PricingPage = lazy(() => import("@/pages/PricingPage"));
 const BlogPage = lazy(() => import("@/pages/BlogPage"));
 const BlogArticlePage = lazy(() => import("@/pages/BlogArticlePage"));
+const LegalPage = lazy(() => import("@/pages/LegalPage"));
 
 const queryClient = new QueryClient();
 
