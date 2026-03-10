@@ -47,7 +47,7 @@ GTD® doesn't ask you to prioritize harder or work faster. It asks you to **exte
     icon: Inbox,
     title: "Capture Everything",
     description: "Why 100% capture matters and how to build the habit.",
-    content: `The first step of GTD is **capturing** — getting everything out of your head and into a trusted collection point.
+    content: `The first step of GTD® is **capturing** — getting everything out of your head and into a trusted collection point.
 
 ## Why 100% capture matters
 
