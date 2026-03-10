@@ -80,7 +80,7 @@ export default function FeaturesPage() {
   return (
     <>
       <SEOHead
-        title="Features — Things Done. | GTD Task Manager"
+        title="Features — Things Done. | GTD® Task Manager"
         description="Inbox capture, Next actions, Focus mode, Google Calendar sync, sequential projects, and AI-powered weekly reviews. Everything you need to stay on top of everything."
         canonical={`${SITE_URL}/features`}
       />
