@@ -23,7 +23,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
     date: "2026-03-09",
     readingTime: "8 min read",
     author: "Things Done.",
-    tags: ["Productivity", "GTD", "Getting Started"],
+    tags: ["Productivity", "GTD®", "Getting Started"],
     heroImage: heroTodoList,
   },
   {
