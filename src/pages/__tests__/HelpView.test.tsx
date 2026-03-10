@@ -19,7 +19,7 @@ describe("HelpView", () => {
 
   it("renders both section headings", () => {
     renderWithProviders(<HelpView />);
-    expect(screen.getByText("Getting Things Done")).toBeInTheDocument();
+    expect(screen.getByText("Getting Things Done®")).toBeInTheDocument();
     expect(screen.getByText("Using Things Done.")).toBeInTheDocument();
   });
 
@@ -32,9 +32,9 @@ describe("HelpView", () => {
 
   it("opens dialog when clicking a topic card", () => {
     renderWithProviders(<HelpView />);
-    fireEvent.click(screen.getByText("What is GTD?"));
+    fireEvent.click(screen.getByText("What is GTD®?"));
     // Dialog should now show the topic content - check for a known phrase
-    expect(screen.getByText(/Getting Things Done \(GTD\)/)).toBeInTheDocument();
+    expect(screen.getByText(/Getting Things Done® \(GTD®\)/)).toBeInTheDocument();
   });
 
   it("back button calls navigate(-1)", () => {
