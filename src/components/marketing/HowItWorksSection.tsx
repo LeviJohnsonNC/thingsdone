@@ -1,8 +1,5 @@
 import { motion } from "framer-motion";
 import { ProductMockup } from "./ProductMockup";
-import heroInbox from "@/assets/blog/hero-todo-list.jpg";
-import heroReview from "@/assets/blog/hero-open-loops.jpg";
-import heroProjects from "@/assets/blog/hero-chaos-to-calm.jpg";
 
 const STEPS = [
   {
@@ -21,7 +18,7 @@ const STEPS = [
     num: "03",
     title: "Organize by context",
     body: "Sort work by project, area, schedule, waiting status, and someday items so your list stays useful.",
-    mockup: "projects" as const,
+    mockup: "project-detail" as const,
   },
   {
     num: "04",
@@ -90,34 +87,6 @@ export function HowItWorksSection() {
               </motion.div>
             );
           })}
-        </div>
-
-        {/* Product screenshot images for SEO */}
-        <div className="mt-20 grid gap-8 sm:grid-cols-3">
-          <img
-            src={heroInbox}
-            alt="Things Done inbox view showing quick task capture for GTD® workflow"
-            width={600}
-            height={338}
-            loading="lazy"
-            className="rounded-xl w-full object-cover aspect-video"
-          />
-          <img
-            src={heroReview}
-            alt="Things Done weekly review checklist with progress tracking"
-            width={600}
-            height={338}
-            loading="lazy"
-            className="rounded-xl w-full object-cover aspect-video"
-          />
-          <img
-            src={heroProjects}
-            alt="Things Done project list organized by GTD® contexts and areas"
-            width={600}
-            height={338}
-            loading="lazy"
-            className="rounded-xl w-full object-cover aspect-video"
-          />
         </div>
       </div>
     </section>
