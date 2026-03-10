@@ -112,7 +112,7 @@ Clarifying is about turning vague stuff ("handle the proposal") into concrete ne
     icon: ArrowRight,
     title: "Next Actions",
     description: "Why concrete next steps eliminate procrastination.",
-    content: `A **next action** is the single, concrete, physical thing you can do to move something forward. It's the most important concept in GTD after capture.
+    content: `A **next action** is the single, concrete, physical thing you can do to move something forward. It's the most important concept in GTD® after capture.
 
 ## Why vague tasks paralyze you
 
