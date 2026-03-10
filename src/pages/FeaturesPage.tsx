@@ -42,7 +42,7 @@ const CAPTURE_FEATURES: Omit<FeatureBlockProps, "">[] = [
   },
   {
     title: "Clarify with Context",
-    body: "When you process your inbox, the clarify sheet guides you through the GTD decision tree: Is this actionable? What's the very next step? Does it belong to a project? Add energy level (low, medium, high), time estimates, areas of responsibility, and tags so you can filter by context later. Attach notes and checklists to keep supporting information right where you need it — no switching apps. Clarifying transforms vague reminders into concrete next actions, which is what separates a real productivity system from a simple to-do list.",
+    body: "When you process your inbox, the clarify sheet guides you through the GTD® decision tree: Is this actionable? What's the very next step? Does it belong to a project? Add energy level (low, medium, high), time estimates, areas of responsibility, and tags so you can filter by context later. Attach notes and checklists to keep supporting information right where you need it — no switching apps. Clarifying transforms vague reminders into concrete next actions, which is what separates a real productivity system from a simple to-do list.",
     mockup: "editor",
     reverse: true,
   },
