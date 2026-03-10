@@ -611,7 +611,7 @@ function TwoMinuteRuleArticle() {
         <Link to="/auth" className="text-primary hover:underline font-medium">
           Try Things Done.
         </Link>{" "}
-        — built for the way GTD actually works. Explore all the{" "}
+        — built for the way GTD® actually works. Explore all the{" "}
         <Link to="/features" className="text-primary hover:underline font-medium">
           features designed to support your workflow
         </Link>.
