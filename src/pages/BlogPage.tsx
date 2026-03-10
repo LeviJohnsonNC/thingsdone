@@ -24,7 +24,7 @@ export default function BlogPage() {
           <h1 className="font-display text-4xl text-foreground sm:text-[2.5rem]">
             The Things Done. Blog
           </h1>
-          <p className="mx-auto mt-4 max-w-md text-lg text-muted-foreground">
+          <p className="mx-auto mt-4 max-w-md text-lg text-foreground/70">
             Practical ideas for getting — and staying — on top of your work and life.
           </p>
         </motion.div>

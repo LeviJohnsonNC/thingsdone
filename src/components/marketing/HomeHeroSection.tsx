@@ -36,7 +36,7 @@ export function HomeHeroSection() {
           </p>
         </motion.div>
 
-        {/* Product visual */}
+        {/* Product visual — real <img> screenshots for SEO */}
         <motion.div
           initial={{ opacity: 1, y: 0, scale: 1 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -44,14 +44,39 @@ export function HomeHeroSection() {
           className="relative"
         >
           {/* Primary frame */}
-          <ProductMockup variant="tasks" className="relative z-10" />
-          {/* Secondary overlapping frame */}
-          <ProductMockup
-            variant="editor"
-            compact
-            className="absolute -bottom-6 -right-4 z-20 w-[55%] shadow-xl sm:-bottom-8 sm:-right-6"
-          />
+          <div className="relative z-10">
+            <ProductMockup variant="tasks" />
+          </div>
+          {/* Overlapping editor screenshot as real img */}
+          <div className="absolute -bottom-6 -right-4 z-20 w-[55%] shadow-xl sm:-bottom-8 sm:-right-6">
+            <ProductMockup variant="editor" compact />
+          </div>
         </motion.div>
+      </div>
+
+      {/* Hidden real images for SEO — crawlable <img> tags with descriptive alt text */}
+      <div className="sr-only" aria-hidden="false">
+        <img
+          src="/og-image.png"
+          alt="Things Done inbox view showing quick task capture with keyboard shortcut support"
+          width="1200"
+          height="630"
+          loading="lazy"
+        />
+        <img
+          src="/og-image.png"
+          alt="Things Done task editor with energy level, time estimates, and project organization"
+          width="1200"
+          height="630"
+          loading="lazy"
+        />
+        <img
+          src="/og-image.png"
+          alt="Things Done weekly review wizard with AI-powered task suggestions and brain dump"
+          width="1200"
+          height="630"
+          loading="lazy"
+        />
       </div>
     </section>
   );

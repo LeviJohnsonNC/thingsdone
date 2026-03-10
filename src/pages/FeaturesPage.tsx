@@ -1,7 +1,10 @@
 import { ReactNode } from "react";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { SEOHead, SITE_URL } from "@/components/SEOHead";
 import { ProductMockup } from "@/components/marketing/ProductMockup";
+import { Button } from "@/components/ui/button";
+import { HomeCTASection } from "@/components/marketing/HomeCTASection";
 
 type MockupVariant = "tasks" | "inbox" | "editor" | "projects" | "review";
 
@@ -32,6 +35,16 @@ function FeatureBlock({ title, body, mockup, reverse }: FeatureBlockProps) {
   );
 }
 
+function InlineCTA() {
+  return (
+    <div className="flex justify-center py-8">
+      <Button asChild variant="outline" size="lg" className="rounded-lg px-8 text-[15px] font-medium">
+        <Link to="/auth">Try it free →</Link>
+      </Button>
+    </div>
+  );
+}
+
 /* ── Feature groups ── */
 
 const CAPTURE_FEATURES: Omit<FeatureBlockProps, "">[] = [
@@ -56,7 +69,7 @@ const ORGANIZE_FEATURES: Omit<FeatureBlockProps, "">[] = [
   },
   {
     title: "Focus Mode",
-    body: "Star the tasks that matter most today to surface them in Focus view. When you have 20 minutes between meetings, Focus mode shows only what you've committed to right now — not your entire backlog. Swipe right on any item to star it, swipe left to un-star. It's a deliberate, distraction-free workspace designed to keep you moving on your highest-priority work without decision fatigue. Focus mode turns your GTD® next actions list into a curated, intention-driven daily plan so you always know exactly what to work on.",
+    body: "Star the tasks that matter most today to surface them in Focus view. When you have 20 minutes between meetings, Focus mode shows only what you've committed to right now — not your entire backlog. Swipe right on any item to star it, swipe left to un-star. It's a deliberate, distraction-free workspace designed to keep you moving on your highest-priority work without decision fatigue. Focus mode turns your GTD® next actions list into a curated, intention-driven daily plan so you always know exactly what to work on next.",
     mockup: "tasks",
     reverse: true,
   },
@@ -108,6 +121,7 @@ export default function FeaturesPage() {
         {CAPTURE_FEATURES.map((f) => (
           <FeatureBlock key={f.title} title={f.title} body={f.body} mockup={f.mockup} reverse={f.reverse} />
         ))}
+        <InlineCTA />
       </section>
 
       {/* Focus & Execute */}
@@ -116,15 +130,19 @@ export default function FeaturesPage() {
         {ORGANIZE_FEATURES.map((f) => (
           <FeatureBlock key={f.title} title={f.title} body={f.body} mockup={f.mockup} reverse={f.reverse} />
         ))}
+        <InlineCTA />
       </section>
 
       {/* Review & Improve */}
-      <section className="mx-auto max-w-4xl px-6 pb-16">
+      <section className="mx-auto max-w-4xl px-6">
         <h2 className="pt-4 text-xl font-semibold text-foreground sm:text-2xl">Review &amp; Improve</h2>
         {REVIEW_FEATURES.map((f) => (
           <FeatureBlock key={f.title} title={f.title} body={f.body} mockup={f.mockup} reverse={f.reverse} />
         ))}
       </section>
+
+      {/* Bottom CTA */}
+      <HomeCTASection />
     </>
   );
 }

@@ -61,16 +61,16 @@ const FAQ = [
     a: "GTD® (Getting Things Done®) is a productivity method by David Allen. You don't need to study it — Things Done. is built on its principles so you get the benefits just by using the app. Capture, clarify, organize, review, do.",
   },
   {
+    q: "Can I connect Google Calendar?",
+    a: "Yes, on both plans. Link your Google Calendar in Settings to see events alongside your tasks and push scheduled items to your calendar.",
+  },
+  {
     q: "What counts as an AI review?",
     a: "Each time you tap 'Get AI Suggestions' or 'Generate AI Summary' during a weekly review, that's one AI review. Free users get 3 per calendar month; Pro users get unlimited.",
   },
   {
     q: "What's AI brain dump?",
     a: "During a weekly review, you can dump everything on your mind into a text box. The AI turns each thought into a ready-to-file task — complete with suggested state, energy, and time estimate. It's a Pro-only feature.",
-  },
-  {
-    q: "Can I connect Google Calendar?",
-    a: "Yes, on both plans. Link your Google Calendar in Settings to see events alongside your tasks and push scheduled items to your calendar.",
   },
   {
     q: "Do AI features cost extra?",
@@ -85,6 +85,7 @@ function PricingCard({
   cta,
   ctaVariant = "default",
   highlighted,
+  tagline,
 }: {
   title: string;
   price: string;
@@ -92,6 +93,7 @@ function PricingCard({
   cta: string;
   ctaVariant?: "default" | "outline";
   highlighted?: boolean;
+  tagline?: string;
 }) {
   return (
     <div
@@ -109,6 +111,9 @@ function PricingCard({
       <div className="mb-6">
         <h3 className="text-lg font-semibold text-foreground">{title}</h3>
         <p className="mt-1 text-2xl font-semibold text-foreground">{price}</p>
+        {tagline && (
+          <p className="mt-2 text-sm text-muted-foreground">{tagline}</p>
+        )}
       </div>
       <ul className="flex-1 space-y-2.5">
         {features.map((f) => (
@@ -196,6 +201,7 @@ export default function PricingPage() {
             features={PRO_FEATURES}
             cta="Upgrade to Pro"
             highlighted
+            tagline="Less than a coffee a month for unlimited everything."
           />
         </motion.div>
       </section>
