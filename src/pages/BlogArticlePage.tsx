@@ -109,7 +109,7 @@ function WhyYourToDoListArticle() {
 
       <h2>What a better system looks like</h2>
       <p>
-        A task manager built for GTD should do more than store tasks — it should{" "}
+        A task manager built for GTD® should do more than store tasks — it should{" "}
         <Link to="/features" className="text-primary hover:underline font-medium">
           guide you through each stage of the workflow
         </Link>:
