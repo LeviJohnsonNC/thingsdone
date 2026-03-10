@@ -452,7 +452,7 @@ function ChaosToCalm() {
 
       <h2>What I wish I'd known earlier</h2>
       <p>
-        GTD isn't about doing more. It's about <em>carrying less</em>. The system
+        GTD® isn't about doing more. It's about <em>carrying less</em>. The system
         isn't meant to turn you into a productivity robot — it's meant to give
         you back the mental space that chaos steals.
       </p>
