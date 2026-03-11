@@ -37,7 +37,7 @@ export default function ProjectsView() {
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newTitle.trim()) return;
-    const project = await createProject.mutateAsync({ title: newTitle.trim() });
+    const project = await createProject.mutateAsync({ title: newTitle.trim(), ...(selectedAreaId && { area_id: selectedAreaId }) });
     setNewTitle("");
     setShowCreate(false);
     navigate(`/projects/${project.id}`);

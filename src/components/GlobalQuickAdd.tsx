@@ -27,9 +27,11 @@ export function GlobalQuickAdd() {
       toast.error("Item limit reached. Upgrade to add more.");
       return;
     }
+    const { selectedAreaId } = useAppStore.getState();
     createItem.mutate({
       title: parsed.cleanTitle,
       state: "inbox",
+      ...(selectedAreaId && { area_id: selectedAreaId }),
       ...(parsed.scheduledDate && { scheduled_date: parsed.scheduledDate }),
     });
     setTitle("");
