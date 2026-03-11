@@ -84,6 +84,9 @@
     --input: 217 33% 18%;
     --ring: 213 58% 57%;
 
+    --overdue-red: 4 72% 56%;
+    --due-today: 36 90% 55%;
+
     --sidebar-background: 222 47% 8%;
     --sidebar-foreground: 215 20% 60%;
     --sidebar-primary: 213 58% 57%;
