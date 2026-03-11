@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, useMotionValue, useTransform, PanInfo, AnimatePresence } from "framer-motion";
 import { Star, Check, GripVertical, Repeat, ListChecks } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, parseLocalDate } from "@/lib/utils";
 import type { Item } from "@/lib/types";
 import { useCompleteItem, useUpdateItem } from "@/hooks/useItems";
 import { useAppStore } from "@/stores/appStore";
@@ -206,7 +206,7 @@ export function ItemRow({ item, showProject, dimmed, dragHandleProps, showSwipeH
                 <div className="flex items-center gap-2 mt-0.5">
                   {item.due_date && (
                     <span className={cn("text-xs", isOverdue ? "text-overdue-red" : "text-muted-foreground")}>
-                      {new Date(item.due_date).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
+                      {parseLocalDate(item.due_date).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
                     </span>
                   )}
                   {item.time_estimate && (

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { parseLocalDate } from "@/lib/utils";
 import { format } from "date-fns";
 import { CalendarIcon, Trash2, RotateCcw } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
@@ -252,13 +253,13 @@ export function ClarifySheet() {
                 <PopoverTrigger asChild>
                   <Button variant="outline" size="sm" className={cn("w-full justify-start text-left font-normal", !item.scheduled_date && "text-muted-foreground")}>
                     <CalendarIcon className="mr-2 h-3.5 w-3.5" />
-                    {item.scheduled_date ? format(new Date(item.scheduled_date), "MMM d") : "Set date"}
+                    {item.scheduled_date ? format(parseLocalDate(item.scheduled_date), "MMM d") : "Set date"}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
                   <Calendar
                     mode="single"
-                    selected={item.scheduled_date ? new Date(item.scheduled_date) : undefined}
+                    selected={item.scheduled_date ? parseLocalDate(item.scheduled_date) : undefined}
                     onSelect={(d) => handleDateChange("scheduled_date", d)}
                     className="p-3 pointer-events-auto"
                   />
@@ -271,13 +272,13 @@ export function ClarifySheet() {
                 <PopoverTrigger asChild>
                   <Button variant="outline" size="sm" className={cn("w-full justify-start text-left font-normal", !item.due_date && "text-muted-foreground")}>
                     <CalendarIcon className="mr-2 h-3.5 w-3.5" />
-                    {item.due_date ? format(new Date(item.due_date), "MMM d") : "Set date"}
+                    {item.due_date ? format(parseLocalDate(item.due_date), "MMM d") : "Set date"}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
                   <Calendar
                     mode="single"
-                    selected={item.due_date ? new Date(item.due_date) : undefined}
+                    selected={item.due_date ? parseLocalDate(item.due_date) : undefined}
                     onSelect={(d) => handleDateChange("due_date", d)}
                     className="p-3 pointer-events-auto"
                   />
