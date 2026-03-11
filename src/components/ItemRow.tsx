@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, useMotionValue, useTransform, PanInfo, AnimatePresence } from "framer-motion";
-import { Star, Check, GripVertical, Repeat, ListChecks } from "lucide-react";
+import { Star, Check, GripVertical, Repeat, ListChecks, AlertTriangle, Clock } from "lucide-react";
 import { cn, parseLocalDate } from "@/lib/utils";
 import type { Item } from "@/lib/types";
 import { useCompleteItem, useUpdateItem } from "@/hooks/useItems";
