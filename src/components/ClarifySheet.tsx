@@ -272,7 +272,7 @@ export function ClarifySheet() {
                 <PopoverTrigger asChild>
                   <Button variant="outline" size="sm" className={cn("w-full justify-start text-left font-normal", !item.due_date && "text-muted-foreground")}>
                     <CalendarIcon className="mr-2 h-3.5 w-3.5" />
-                    {item.due_date ? format(new Date(item.due_date), "MMM d") : "Set date"}
+                    {item.due_date ? format(parseLocalDate(item.due_date), "MMM d") : "Set date"}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
