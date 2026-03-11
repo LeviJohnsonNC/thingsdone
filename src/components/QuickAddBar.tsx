@@ -2,6 +2,7 @@ import { useState, useMemo } from "react";
 import { Plus, Calendar } from "lucide-react";
 import { useCreateItem } from "@/hooks/useItems";
 import { useUsageLimits } from "@/hooks/useUsageLimits";
+import { useAppStore } from "@/stores/appStore";
 import { UpgradePrompt } from "@/components/UpgradePrompt";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -20,6 +21,7 @@ export function QuickAddBar({ placeholder = "Add to inbox…", defaultState, pro
   const createItem = useCreateItem();
   const { canCreateItem, activeItemCount, activeItemLimit } = useUsageLimits();
   const [showUpgrade, setShowUpgrade] = useState(false);
+  const { selectedAreaId } = useAppStore();
 
   const parsed = useMemo(() => parseNaturalDate(title), [title]);
 
@@ -36,6 +38,7 @@ export function QuickAddBar({ placeholder = "Add to inbox…", defaultState, pro
       title: parsed.cleanTitle,
       ...(defaultState && { state: defaultState }),
       ...(projectId && { project_id: projectId }),
+      ...(selectedAreaId && { area_id: selectedAreaId }),
       ...(parsed.scheduledDate && { scheduled_date: parsed.scheduledDate }),
     });
     setTitle("");

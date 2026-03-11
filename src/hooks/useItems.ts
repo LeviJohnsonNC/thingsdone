@@ -193,7 +193,7 @@ export function useCreateItem() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (data: { title: string; state?: ItemState; project_id?: string }) => {
+    mutationFn: async (data: { title: string; state?: ItemState; project_id?: string; area_id?: string | null; scheduled_date?: string }) => {
       const { data: item, error } = await supabase
         .from("items")
         .insert({ ...data, user_id: user!.id })
