@@ -37,6 +37,7 @@
     --focus-gold: 36 90% 55%;
     --success-green: 96 60% 48%;
     --overdue-red: 4 72% 56%;
+    --due-today: 36 92% 50%;
 
     --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 210 15% 55%;
@@ -82,6 +83,9 @@
     --border: 217 33% 18%;
     --input: 217 33% 18%;
     --ring: 213 58% 57%;
+
+    --overdue-red: 4 72% 56%;
+    --due-today: 36 90% 55%;
 
     --sidebar-background: 222 47% 8%;
     --sidebar-foreground: 215 20% 60%;
