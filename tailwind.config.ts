@@ -60,6 +60,7 @@ export default {
         "focus-gold": "hsl(var(--focus-gold))",
         "success-green": "hsl(var(--success-green))",
         "overdue-red": "hsl(var(--overdue-red))",
+        "due-today": "hsl(var(--due-today))",
         "hero-bg": "hsl(var(--hero-bg))",
         "pricing-highlight": "hsl(var(--pricing-highlight))",
         "feature-card-bg": "hsl(var(--feature-card-bg))",

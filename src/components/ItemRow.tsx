@@ -201,12 +201,24 @@ export function ItemRow({ item, showProject, dimmed, dragHandleProps, showSwipeH
               )}
 
               <div className="flex-1 min-w-0">
-                <p className={cn("text-sm truncate", isOverdue && "text-overdue-red")}>
+                <p className="text-sm truncate">
                   {item.title}
                 </p>
                 <div className="flex items-center gap-2 mt-0.5">
-                  {item.due_date && (
-                    <span className={cn("text-xs", isOverdue ? "text-overdue-red" : "text-muted-foreground")}>
+                  {item.due_date && isOverdue && (
+                    <span className="inline-flex items-center gap-1 text-xs bg-overdue-red/10 text-overdue-red rounded-full px-1.5 py-0.5">
+                      <AlertTriangle className="h-3 w-3" />
+                      {parseLocalDate(item.due_date).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
+                    </span>
+                  )}
+                  {item.due_date && isDueToday && (
+                    <span className="inline-flex items-center gap-1 text-xs bg-due-today/10 text-due-today rounded-full px-1.5 py-0.5">
+                      <Clock className="h-3 w-3" />
+                      Today
+                    </span>
+                  )}
+                  {item.due_date && !isOverdue && !isDueToday && (
+                    <span className="text-xs text-muted-foreground">
                       {parseLocalDate(item.due_date).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
                     </span>
                   )}
