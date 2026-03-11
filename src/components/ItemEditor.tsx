@@ -448,7 +448,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
                   <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
                       mode="single"
-                      selected={item.scheduled_date ? new Date(item.scheduled_date) : undefined}
+                      selected={item.scheduled_date ? parseLocalDate(item.scheduled_date) : undefined}
                       onSelect={(d) => handleDateChange("scheduled_date", d)}
                       className="p-3 pointer-events-auto"
                     />

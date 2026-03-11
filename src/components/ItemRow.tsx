@@ -206,7 +206,7 @@ export function ItemRow({ item, showProject, dimmed, dragHandleProps, showSwipeH
                 <div className="flex items-center gap-2 mt-0.5">
                   {item.due_date && (
                     <span className={cn("text-xs", isOverdue ? "text-overdue-red" : "text-muted-foreground")}>
-                      {new Date(item.due_date).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
+                      {parseLocalDate(item.due_date).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
                     </span>
                   )}
                   {item.time_estimate && (

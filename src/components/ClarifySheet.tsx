@@ -278,7 +278,7 @@ export function ClarifySheet() {
                 <PopoverContent className="w-auto p-0" align="start">
                   <Calendar
                     mode="single"
-                    selected={item.due_date ? new Date(item.due_date) : undefined}
+                    selected={item.due_date ? parseLocalDate(item.due_date) : undefined}
                     onSelect={(d) => handleDateChange("due_date", d)}
                     className="p-3 pointer-events-auto"
                   />
