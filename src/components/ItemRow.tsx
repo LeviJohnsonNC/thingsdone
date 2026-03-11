@@ -104,6 +104,7 @@ export function ItemRow({ item, showProject, dimmed, dragHandleProps, showSwipeH
 
   const todayStr = new Date().toISOString().split("T")[0];
   const isOverdue = item.due_date && item.due_date < todayStr;
+  const isDueToday = item.due_date === todayStr;
 
   const checklist = (item as any).checklist as ChecklistItem[] | null;
   const checklistTotal = checklist?.length ?? 0;
