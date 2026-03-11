@@ -409,7 +409,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
                       )}
                     >
                       <CalendarIcon className="mr-1.5 h-3.5 w-3.5" />
-                      {item.due_date ? format(new Date(item.due_date), "MMM d, yyyy") : "No due date"}
+                      {item.due_date ? format(parseLocalDate(item.due_date), "MMM d, yyyy") : "No due date"}
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
