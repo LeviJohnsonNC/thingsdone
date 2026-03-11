@@ -442,7 +442,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
                       )}
                     >
                       <CalendarIcon className="mr-1.5 h-3.5 w-3.5" />
-                      {item.scheduled_date ? format(new Date(item.scheduled_date), "MMM d, yyyy") : "Not scheduled"}
+                      {item.scheduled_date ? format(parseLocalDate(item.scheduled_date), "MMM d, yyyy") : "Not scheduled"}
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
