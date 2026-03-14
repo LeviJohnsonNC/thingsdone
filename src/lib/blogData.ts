@@ -2,6 +2,8 @@ import heroTodoList from "@/assets/blog/hero-todo-list.jpg";
 import heroOpenLoops from "@/assets/blog/hero-open-loops.jpg";
 import heroChaosToCalm from "@/assets/blog/hero-chaos-to-calm.jpg";
 import heroTwoMinuteRule from "@/assets/blog/hero-two-minute-rule.jpg";
+import heroGtdGuide from "@/assets/blog/hero-gtd-beginners-guide.png";
+import heroProductivitySystem from "@/assets/blog/hero-productivity-system.png";
 
 export interface BlogArticle {
   slug: string;
