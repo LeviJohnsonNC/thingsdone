@@ -61,6 +61,28 @@ export const BLOG_ARTICLES: BlogArticle[] = [
     tags: ["GTD®", "Quick Tips", "Tactics"],
     heroImage: heroTwoMinuteRule,
   },
+  {
+    slug: "getting-things-done-method-beginners-guide",
+    title: "The Getting Things Done (GTD) Method: A Beginner's Guide That Actually Makes Sense",
+    description:
+      "Learn the Getting Things Done (GTD) method step by step. This beginner's guide breaks down David Allen's 5-step productivity system so you can stop forgetting tasks and start getting things done.",
+    date: "2026-03-14",
+    readingTime: "10 min read",
+    author: "Things Done.",
+    tags: ["GTD®", "Getting Started", "Productivity"],
+    heroImage: heroGtdGuide,
+  },
+  {
+    slug: "how-to-build-a-productivity-system",
+    title: "How to Build a Productivity System That Actually Sticks",
+    description:
+      "Overwhelmed by tasks and to-do lists? Learn how to build a simple productivity system that actually sticks — with practical steps you can start using today.",
+    date: "2026-03-14",
+    readingTime: "9 min read",
+    author: "Things Done.",
+    tags: ["Productivity", "Deep Dive", "Getting Started"],
+    heroImage: heroProductivitySystem,
+  },
 ];
 
 export function getArticleBySlug(slug: string): BlogArticle | undefined {

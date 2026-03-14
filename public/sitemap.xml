@@ -49,6 +49,18 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.things-done.app/blog/getting-things-done-method-beginners-guide</loc>
+    <lastmod>2026-03-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.things-done.app/blog/how-to-build-a-productivity-system</loc>
+    <lastmod>2026-03-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.things-done.app/about</loc>
     <lastmod>2026-03-10</lastmod>
     <changefreq>monthly</changefreq>

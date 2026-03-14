@@ -620,6 +620,364 @@ function TwoMinuteRuleArticle() {
   );
 }
 
+/* ──────────────────────────────────────────────
+   Article 5: GTD Method Beginner's Guide
+   ────────────────────────────────────────────── */
+
+function GtdBeginnersGuideArticle() {
+  return (
+    <div className="prose-custom">
+      <p className="lead">
+        You've got 47 tabs open, a sticky note graveyard on your desk, and a nagging
+        feeling you're forgetting something important. Sound familiar?
+      </p>
+      <p>
+        The Getting Things Done method — GTD for short — was designed for exactly this
+        kind of overwhelm. Created by productivity consultant David Allen, GTD is a
+        five-step system for capturing everything on your mind, organizing it, and
+        deciding what to do next. It's been around for over two decades, and it endures
+        because it works. Not because it's complicated, but because it's surprisingly
+        simple once you understand the core idea:{" "}
+        <strong>your brain is for having ideas, not holding them.</strong>
+      </p>
+      <p>
+        Here's how to get started with GTD, step by step — no prior productivity system
+        required.
+      </p>
+
+      <h2>Step 1: Capture Everything</h2>
+      <p>
+        The first rule of GTD is deceptively straightforward: get it out of your head.
+        Every task, idea, errand, reminder, half-formed thought — all of it goes into a
+        single trusted place. David Allen calls this your "inbox."
+      </p>
+      <p>
+        Your inbox can be a notebook, a notes app, or a dedicated task manager. The
+        format matters less than the habit. The goal is to build the reflex of capturing
+        instead of remembering. When your brain trusts that nothing will slip through
+        the cracks, it stops running background anxiety loops — and that frees up mental
+        energy for actual work. This is closely related to the psychology behind{" "}
+        <Link to="/blog/the-hidden-cost-of-open-loops" className="text-primary hover:underline font-medium">
+          open loops and why unfinished tasks drain you
+        </Link>.
+      </p>
+      <p>
+        <strong>Practical tip:</strong> Start with a single capture tool. Don't split
+        your inbox across five apps. One place, always accessible, always used.
+      </p>
+
+      <h2>Step 2: Clarify What Each Item Means</h2>
+      <p>
+        Once you've captured a batch of items, the next step is to process them one by
+        one. For each item, ask yourself: <em>What is this? Is it actionable?</em>
+      </p>
+      <p>
+        If it's not actionable, you have three choices: trash it, file it as reference
+        material, or add it to a "someday/maybe" list for things you might want to
+        revisit later.
+      </p>
+      <p>
+        If it is actionable, identify the very next physical action. Not "plan the
+        project" — that's vague. More like "draft the project brief in Google Docs" or
+        "email Sarah to confirm the timeline." GTD works because it forces you to think
+        in concrete next steps instead of fuzzy intentions.
+      </p>
+      <p>
+        <strong>Practical tip:</strong> If a task takes less than two minutes, do it
+        immediately. This is Allen's famous{" "}
+        <Link to="/blog/the-two-minute-rule" className="text-primary hover:underline font-medium">
+          two-minute rule
+        </Link>, and it's one of the most effective habits you can build.
+      </p>
+
+      <h2>Step 3: Organize by Context</h2>
+      <p>
+        Now that you've clarified your tasks, organize them so you can find the right
+        thing to do at the right time. GTD uses a few key lists:
+      </p>
+      <ul>
+        <li>
+          <strong>Next Actions</strong> — the single next step for every active project
+          or commitment. This is your go-to list when you're ready to work.
+        </li>
+        <li>
+          <strong>Projects</strong> — anything that requires more than one action step
+          to complete. "Launch the newsletter" is a project. "Write the first draft" is
+          a next action within that project.
+        </li>
+        <li>
+          <strong>Waiting For</strong> — tasks you've delegated or are blocked on.
+          Tracking these prevents things from falling through the cracks.
+        </li>
+        <li>
+          <strong>Someday/Maybe</strong> — ideas and aspirations that aren't active
+          commitments yet. Reviewing this list regularly keeps good ideas alive without
+          cluttering your day-to-day.
+        </li>
+      </ul>
+      <p>
+        <strong>Practical tip:</strong> Don't over-engineer your lists on day one.
+        Start with Next Actions and Projects. Add the others as you get comfortable.
+      </p>
+
+      <h2>Step 4: Review Regularly</h2>
+      <p>
+        A system is only as good as your trust in it, and trust comes from regular
+        review. GTD's "Weekly Review" is the keystone habit of the entire method. Once a
+        week, sit down and go through your lists. Update what's changed. Clear out
+        what's done. Identify what's stalled.
+      </p>
+      <p>
+        The weekly review is where most people either fall in love with GTD or fall off
+        the wagon. It takes 30 to 60 minutes, and it pays for itself many times over in
+        reduced stress and clearer priorities for the week ahead.
+      </p>
+      <p>
+        <strong>Practical tip:</strong> Put your weekly review on the calendar as a
+        recurring event. Friday afternoon or Sunday evening both work well — pick the
+        time that fits your rhythm.
+      </p>
+
+      <h2>Step 5: Engage With Confidence</h2>
+      <p>
+        With everything captured, clarified, organized, and reviewed, the final step is
+        simply to do the work. The beauty of a well-maintained GTD system is that when
+        you sit down to work, you're not wondering what you should be doing — you
+        already know. You pick a task from your Next Actions list based on your current
+        context, energy level, and available time, and you get to work.
+      </p>
+      <p>
+        This is the payoff. GTD isn't about doing more. It's about doing the right
+        things with a clear mind.
+      </p>
+
+      <h2>Getting Started Today</h2>
+      <p>
+        You don't need to overhaul your entire life to try GTD. Start small:
+      </p>
+      <ol>
+        <li>Pick one capture tool.</li>
+        <li>Spend 15 minutes doing a brain dump of everything on your mind.</li>
+        <li>Process that list using the clarify step.</li>
+        <li>Organize what's left into Next Actions and Projects.</li>
+        <li>Do your first weekly review at the end of the week.</li>
+      </ol>
+      <p>That's it. Five steps. One week. You'll feel the difference.</p>
+
+      <blockquote>
+        <p>
+          "Your mind is for having ideas, not holding them."
+          <br />
+          <span className="text-sm">— David Allen</span>
+        </p>
+      </blockquote>
+
+      <p>
+        If you're looking for a task manager built around GTD principles — one that
+        makes capturing fast and always shows you what to do next —{" "}
+        <Link to="/auth" className="text-primary hover:underline font-medium">
+          Things Done was designed for exactly this workflow
+        </Link>. It's free to start, and it's calm by design. Learn more about{" "}
+        <Link to="/features" className="text-primary hover:underline font-medium">
+          how it works
+        </Link>.
+      </p>
+    </div>
+  );
+}
+
+/* ──────────────────────────────────────────────
+   Article 6: How to Build a Productivity System
+   ────────────────────────────────────────────── */
+
+function ProductivitySystemArticle() {
+  return (
+    <div className="prose-custom">
+      <p className="lead">
+        Most productivity systems fail for the same reason most diets fail: they ask
+        too much, too fast, with too little payoff in the early days. You read about a
+        method, download an app, spend an evening setting things up, feel great for
+        about 72 hours — and then quietly abandon the whole thing when real life gets
+        in the way.
+      </p>
+      <p>
+        The problem usually isn't motivation. It's architecture. A good productivity
+        system should be so easy to use that you default to it even on your worst days.
+        Here's how to build one that lasts.
+      </p>
+
+      <h2>Start With the Problem, Not the Tool</h2>
+      <p>
+        Before you download anything, ask yourself what's actually going wrong. Where
+        does work slip through the cracks? When do you feel most overwhelmed?
+      </p>
+      <p>For most people, the answer falls into one of three categories:</p>
+      <ul>
+        <li>
+          <strong>Capture failure</strong> — tasks and ideas live in your head, in
+          scattered notes, in email threads, on sticky notes, and you forget things
+          regularly.
+        </li>
+        <li>
+          <strong>Prioritization confusion</strong> — you have a long list but no clear
+          sense of what matters most right now.
+        </li>
+        <li>
+          <strong>Follow-through breakdown</strong> — you know what to do but can't
+          seem to make consistent progress on it.
+        </li>
+      </ul>
+      <p>
+        Your system needs to solve your specific problem. If you're great at capturing
+        but terrible at prioritizing, a new notes app won't help. If you never forget
+        tasks but struggle to make progress, you might need better project structure or
+        time-blocking, not a better to-do list.
+      </p>
+      <p>Name the bottleneck first. Then design around it.</p>
+
+      <h2>The Three Things Every System Needs</h2>
+      <p>
+        Regardless of the specific method you choose —{" "}
+        <Link to="/blog/getting-things-done-method-beginners-guide" className="text-primary hover:underline font-medium">
+          GTD
+        </Link>, time-blocking, Eisenhower matrix, or something you invented yourself —
+        every reliable productivity system needs three components.
+      </p>
+      <p>
+        <strong>A single capture point.</strong> Everything you need to remember goes
+        into one trusted place. Not two apps and a notebook. One place. The simpler and
+        faster this is, the more likely you are to use it consistently. Your capture
+        tool should be accessible from wherever you are — your phone, your computer,
+        your desk — in under five seconds.
+      </p>
+      <p>
+        <strong>A regular processing habit.</strong> Capturing is worthless if you never
+        look at what you've captured. Build a daily or weekly habit of reviewing your
+        inbox and deciding what each item means: Is it a task? A project? Something to
+        delegate? Something to delete? This processing step is where raw input becomes
+        organized action, and it's the habit most people skip. Understanding{" "}
+        <Link to="/blog/the-hidden-cost-of-open-loops" className="text-primary hover:underline font-medium">
+          why open loops drain you
+        </Link>{" "}
+        makes it easier to commit to this habit.
+      </p>
+      <p>
+        <strong>A clear "what's next" view.</strong> When you sit down to work, your
+        system should answer one question immediately: what should I do right now? If
+        you have to scan a 200-item list and make a decision every time, you'll burn
+        through willpower before you start actual work. The best systems surface a
+        short, context-appropriate list of next actions so you can just pick and go.
+      </p>
+      <p>That's it. Capture, process, execute. Everything else is optional.</p>
+
+      <h2>Keep It Embarrassingly Simple</h2>
+      <p>
+        The biggest threat to any productivity system is complexity. The temptation is
+        to add features: color-coded priorities, nested sub-projects, automated
+        workflows, integrations with six other tools. Every addition feels productive
+        in the moment. But each one adds friction, and friction is the enemy of
+        consistency.
+      </p>
+      <p>
+        Here's a good test: could you explain your system to a friend in under two
+        minutes? If not, simplify. The people who maintain their systems for years —
+        not weeks — tend to use the simplest version that works.
+      </p>
+      <p>
+        Start with the minimum viable system. Use it for two weeks. Only add complexity
+        when you hit a specific, named problem that the current system can't handle.
+        This approach sounds slow, but it's actually faster because you don't waste
+        time rebuilding a system that collapsed under its own weight.
+      </p>
+
+      <h2>Choose Your Rhythm</h2>
+      <p>
+        Every system needs a rhythm — a recurring pattern of review and planning that
+        keeps it alive. Without rhythm, even a great system becomes a graveyard of
+        outdated tasks.
+      </p>
+      <p>Two rhythms matter most:</p>
+      <ul>
+        <li>
+          <strong>A daily check-in</strong> where you spend two to five minutes at the
+          start of your day reviewing your task list and choosing your priorities. This
+          doesn't need to be elaborate. Just look at your list, pick the most important
+          things, and start.
+        </li>
+        <li>
+          <strong>A weekly review</strong> where you spend 20 to 45 minutes going
+          through everything: clearing your inbox, updating your projects, checking on
+          things you're waiting for, and asking yourself what needs attention next week.
+          This is the habit that separates people who stick with a system from people
+          who abandon one every quarter.
+        </li>
+      </ul>
+      <p>
+        Put both on your calendar. Treat them like meetings with yourself that you
+        don't cancel.
+      </p>
+
+      <h2>Pick a Tool That Matches Your Style</h2>
+      <p>
+        Your tool should serve your system, not the other way around. If you've
+        identified that your main problem is capture speed and clear next actions,
+        choose a tool that's fast to open and shows you what to do next without
+        clicking through five screens.
+      </p>
+      <p>A few principles for choosing well:</p>
+      <ul>
+        <li>
+          Favor tools that start simple and let you add complexity later, over tools
+          that front-load configuration.
+        </li>
+        <li>Avoid tools that require more than one session to set up.</li>
+        <li>
+          Pick something that works on the devices you actually use — if you're never
+          at a desktop, a desktop-only app is the wrong choice.
+        </li>
+      </ul>
+      <p>
+        And give your tool a real chance. Use it for at least three weeks before
+        evaluating. The first few days are always awkward, no matter how good the app
+        is.
+      </p>
+
+      <h2>Start Today, Not Monday</h2>
+      <p>
+        The single best thing you can do right now is spend 10 minutes on a brain dump.
+        Open a blank document or a fresh task manager, and write down everything that's
+        on your mind: tasks, projects, errands, ideas, worries, commitments. Don't
+        organize yet. Just get it all out.
+      </p>
+      <p>
+        That list is your starting point. Tomorrow, process it. By the end of the week,
+        you'll have the foundation of a system that actually works — not because it's
+        perfect, but because it's yours and it's simple enough to keep using.
+      </p>
+
+      <blockquote>
+        <p>
+          Building a productivity system that works for you is a process, not an event.
+          Start simple, review often, and adjust as you go.
+        </p>
+      </blockquote>
+
+      <p>
+        If you want a tool that was designed for exactly this kind of workflow — fast
+        capture, clear next actions, and a built-in weekly review —{" "}
+        <Link to="/auth" className="text-primary hover:underline font-medium">
+          Things Done is worth a look
+        </Link>. It's free to start, and it's built to stay out of your way. See all
+        the{" "}
+        <Link to="/features" className="text-primary hover:underline font-medium">
+          features
+        </Link>{" "}
+        designed to support your workflow.
+      </p>
+    </div>
+  );
+}
+
 /* ──────── Article page shell ──────── */
 
 const ARTICLE_CONTENT: Record<string, React.FC> = {
@@ -627,6 +985,8 @@ const ARTICLE_CONTENT: Record<string, React.FC> = {
   "the-hidden-cost-of-open-loops": OpenLoopsArticle,
   "from-chaos-to-calm": ChaosToCalm,
   "the-two-minute-rule": TwoMinuteRuleArticle,
+  "getting-things-done-method-beginners-guide": GtdBeginnersGuideArticle,
+  "how-to-build-a-productivity-system": ProductivitySystemArticle,
 };
 
 export default function BlogArticlePage() {
