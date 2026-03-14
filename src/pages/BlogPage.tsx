@@ -33,7 +33,7 @@ export default function BlogPage() {
       {/* Article grid */}
       <section className="mx-auto max-w-3xl px-6 py-16">
         <div className="grid gap-8">
-          {BLOG_ARTICLES.map((article, i) => (
+          {[...BLOG_ARTICLES].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).map((article, i) => (
             <motion.article
               key={article.slug}
               initial={{ opacity: 1, y: 0 }}
