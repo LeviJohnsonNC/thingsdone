@@ -108,7 +108,6 @@ export default function SettingsView() {
     navigator.clipboard.writeText(text);
     toast.success("Copied to clipboard");
   };
-  const saveAreaTheme = useSaveAreaTheme();
 
   // Handle callback from Google OAuth
   useEffect(() => {
