@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, Plus, Trash2, RefreshCw, Calendar, Check, Loader2, AlertTriangle } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, RefreshCw, Calendar, Check, Loader2, AlertTriangle, Key, Copy, Eye, EyeOff } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ViewHeader } from "@/components/ViewHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { supabase } from "@/integrations/supabase/client";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { useAreas, useCreateArea, useDeleteArea } from "@/hooks/useAreas";
 import { useTags, useCreateTag, useDeleteTag, usePurgeAllData } from "@/hooks/useTags";
@@ -46,6 +47,67 @@ export default function SettingsView() {
   const { data: settings } = useUserSettings();
   const saveGlobalTheme = useSaveGlobalTheme();
   const saveAreaTheme = useSaveAreaTheme();
+
+  // API key state
+  const [apiKeys, setApiKeys] = useState<any[]>([]);
+  const [newApiKey, setNewApiKey] = useState<string | null>(null);
+  const [generatingKey, setGeneratingKey] = useState(false);
+  const [loadingKeys, setLoadingKeys] = useState(true);
+
+  // Fetch existing API keys
+  useEffect(() => {
+    if (!user) return;
+    const fetchKeys = async () => {
+      setLoadingKeys(true);
+      const { data } = await supabase
+        .from("api_keys" as any)
+        .select("id, key_prefix, label, created_at, last_used_at, is_active")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false });
+      setApiKeys((data as any[]) || []);
+      setLoadingKeys(false);
+    };
+    fetchKeys();
+  }, [user]);
+
+  const handleGenerateKey = async () => {
+    setGeneratingKey(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const res = await supabase.functions.invoke("generate-api-key", {
+        headers: { Authorization: `Bearer ${session?.access_token}` },
+        body: { label: "API Key" },
+      });
+      if (res.error) throw res.error;
+      const result = res.data;
+      setNewApiKey(result.api_key);
+      setApiKeys((prev) => [result.key, ...prev]);
+      toast.success("API key generated! Copy it now — you won't see it again.");
+    } catch (err) {
+      toast.error("Failed to generate API key");
+    }
+    setGeneratingKey(false);
+  };
+
+  const handleDeleteKey = async (keyId: string) => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      await supabase.functions.invoke("generate-api-key", {
+        headers: { Authorization: `Bearer ${session?.access_token}` },
+        method: "DELETE",
+        body: { key_id: keyId },
+      });
+      setApiKeys((prev) => prev.filter((k) => k.id !== keyId));
+      toast.success("API key revoked");
+    } catch {
+      toast.error("Failed to revoke key");
+    }
+  };
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    toast.success("Copied to clipboard");
+  };
 
   // Handle callback from Google OAuth
   useEffect(() => {
@@ -162,7 +224,62 @@ export default function SettingsView() {
           <p className="text-sm text-muted-foreground">{user?.email}</p>
         </section>
 
-        {/* Subscription */}
+        {/* API Keys */}
+        <section>
+          <h2 className="text-sm font-medium text-foreground mb-1">API Keys</h2>
+          <p className="text-xs text-muted-foreground mb-3">
+            Use API keys to add items to your inbox from external tools (e.g. Claude, scripts, automations).
+          </p>
+
+          {newApiKey && (
+            <div className="bg-primary/5 border border-primary/20 rounded-md p-3 mb-3 space-y-2">
+              <p className="text-xs font-medium text-primary">🔑 New API key — copy it now, you won't see it again!</p>
+              <div className="flex items-center gap-2">
+                <code className="text-xs bg-muted px-2 py-1 rounded flex-1 break-all font-mono">{newApiKey}</code>
+                <Button size="sm" variant="ghost" onClick={() => copyToClipboard(newApiKey)}>
+                  <Copy className="h-3.5 w-3.5" />
+                </Button>
+              </div>
+              <p className="text-[11px] text-muted-foreground">
+                Endpoint: <code className="bg-muted px-1 rounded">POST {`https://${import.meta.env.VITE_SUPABASE_PROJECT_ID}.supabase.co/functions/v1/add-inbox-item`}</code>
+              </p>
+              <Button size="sm" variant="outline" className="w-full text-xs" onClick={() => setNewApiKey(null)}>
+                Done
+              </Button>
+            </div>
+          )}
+
+          {apiKeys.map((key) => (
+            <div key={key.id} className="flex items-center justify-between bg-card border border-border rounded-md px-3 py-2 mb-2">
+              <div className="flex items-center gap-2 min-w-0">
+                <Key className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
+                <div className="min-w-0">
+                  <p className="text-sm font-mono truncate">{key.key_prefix}</p>
+                  <p className="text-[11px] text-muted-foreground">
+                    Created {new Date(key.created_at).toLocaleDateString()}
+                    {key.last_used_at && ` · Last used ${new Date(key.last_used_at).toLocaleDateString()}`}
+                  </p>
+                </div>
+              </div>
+              <button onClick={() => handleDeleteKey(key.id)} className="p-1 text-muted-foreground hover:text-destructive flex-shrink-0">
+                <Trash2 className="h-4 w-4" />
+              </button>
+            </div>
+          ))}
+
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full gap-2"
+            onClick={handleGenerateKey}
+            disabled={generatingKey}
+          >
+            {generatingKey ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Key className="h-3.5 w-3.5" />}
+            Generate API Key
+          </Button>
+        </section>
+
+
         <SubscriptionSection />
 
         {/* Global Theme */}
