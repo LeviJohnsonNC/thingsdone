@@ -224,7 +224,62 @@ export default function SettingsView() {
           <p className="text-sm text-muted-foreground">{user?.email}</p>
         </section>
 
-        {/* Subscription */}
+        {/* API Keys */}
+        <section>
+          <h2 className="text-sm font-medium text-foreground mb-1">API Keys</h2>
+          <p className="text-xs text-muted-foreground mb-3">
+            Use API keys to add items to your inbox from external tools (e.g. Claude, scripts, automations).
+          </p>
+
+          {newApiKey && (
+            <div className="bg-primary/5 border border-primary/20 rounded-md p-3 mb-3 space-y-2">
+              <p className="text-xs font-medium text-primary">🔑 New API key — copy it now, you won't see it again!</p>
+              <div className="flex items-center gap-2">
+                <code className="text-xs bg-muted px-2 py-1 rounded flex-1 break-all font-mono">{newApiKey}</code>
+                <Button size="sm" variant="ghost" onClick={() => copyToClipboard(newApiKey)}>
+                  <Copy className="h-3.5 w-3.5" />
+                </Button>
+              </div>
+              <p className="text-[11px] text-muted-foreground">
+                Endpoint: <code className="bg-muted px-1 rounded">POST {`https://${import.meta.env.VITE_SUPABASE_PROJECT_ID}.supabase.co/functions/v1/add-inbox-item`}</code>
+              </p>
+              <Button size="sm" variant="outline" className="w-full text-xs" onClick={() => setNewApiKey(null)}>
+                Done
+              </Button>
+            </div>
+          )}
+
+          {apiKeys.map((key) => (
+            <div key={key.id} className="flex items-center justify-between bg-card border border-border rounded-md px-3 py-2 mb-2">
+              <div className="flex items-center gap-2 min-w-0">
+                <Key className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
+                <div className="min-w-0">
+                  <p className="text-sm font-mono truncate">{key.key_prefix}</p>
+                  <p className="text-[11px] text-muted-foreground">
+                    Created {new Date(key.created_at).toLocaleDateString()}
+                    {key.last_used_at && ` · Last used ${new Date(key.last_used_at).toLocaleDateString()}`}
+                  </p>
+                </div>
+              </div>
+              <button onClick={() => handleDeleteKey(key.id)} className="p-1 text-muted-foreground hover:text-destructive flex-shrink-0">
+                <Trash2 className="h-4 w-4" />
+              </button>
+            </div>
+          ))}
+
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full gap-2"
+            onClick={handleGenerateKey}
+            disabled={generatingKey}
+          >
+            {generatingKey ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Key className="h-3.5 w-3.5" />}
+            Generate API Key
+          </Button>
+        </section>
+
+
         <SubscriptionSection />
 
         {/* Global Theme */}
