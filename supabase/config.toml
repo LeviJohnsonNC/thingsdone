@@ -29,3 +29,9 @@ verify_jwt = false
 
 [functions.review-ai]
 verify_jwt = false
+
+[functions.add-inbox-item]
+verify_jwt = false
+
+[functions.generate-api-key]
+verify_jwt = false
