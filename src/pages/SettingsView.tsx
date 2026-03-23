@@ -48,6 +48,68 @@ export default function SettingsView() {
   const saveGlobalTheme = useSaveGlobalTheme();
   const saveAreaTheme = useSaveAreaTheme();
 
+  // API key state
+  const [apiKeys, setApiKeys] = useState<any[]>([]);
+  const [newApiKey, setNewApiKey] = useState<string | null>(null);
+  const [generatingKey, setGeneratingKey] = useState(false);
+  const [loadingKeys, setLoadingKeys] = useState(true);
+
+  // Fetch existing API keys
+  useEffect(() => {
+    if (!user) return;
+    const fetchKeys = async () => {
+      setLoadingKeys(true);
+      const { data } = await supabase
+        .from("api_keys" as any)
+        .select("id, key_prefix, label, created_at, last_used_at, is_active")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false });
+      setApiKeys((data as any[]) || []);
+      setLoadingKeys(false);
+    };
+    fetchKeys();
+  }, [user]);
+
+  const handleGenerateKey = async () => {
+    setGeneratingKey(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const res = await supabase.functions.invoke("generate-api-key", {
+        headers: { Authorization: `Bearer ${session?.access_token}` },
+        body: { label: "API Key" },
+      });
+      if (res.error) throw res.error;
+      const result = res.data;
+      setNewApiKey(result.api_key);
+      setApiKeys((prev) => [result.key, ...prev]);
+      toast.success("API key generated! Copy it now — you won't see it again.");
+    } catch (err) {
+      toast.error("Failed to generate API key");
+    }
+    setGeneratingKey(false);
+  };
+
+  const handleDeleteKey = async (keyId: string) => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      await supabase.functions.invoke("generate-api-key", {
+        headers: { Authorization: `Bearer ${session?.access_token}` },
+        method: "DELETE",
+        body: { key_id: keyId },
+      });
+      setApiKeys((prev) => prev.filter((k) => k.id !== keyId));
+      toast.success("API key revoked");
+    } catch {
+      toast.error("Failed to revoke key");
+    }
+  };
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    toast.success("Copied to clipboard");
+  };
+  const saveAreaTheme = useSaveAreaTheme();
+
   // Handle callback from Google OAuth
   useEffect(() => {
     const subParam = searchParams.get("subscription");
