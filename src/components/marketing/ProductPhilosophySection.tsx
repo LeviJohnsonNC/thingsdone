@@ -30,11 +30,32 @@ const TABS = [
   },
 ];
 
+const slideVariants = {
+  enter: (direction: number) => ({
+    x: direction > 0 ? 60 : -60,
+    opacity: 0,
+  }),
+  center: {
+    x: 0,
+    opacity: 1,
+  },
+  exit: (direction: number) => ({
+    x: direction > 0 ? -60 : 60,
+    opacity: 0,
+  }),
+};
+
 export function ProductPhilosophySection() {
   const [activeTab, setActiveTab] = useState(0);
+  const [direction, setDirection] = useState(0);
+
+  const handleTabChange = (i: number) => {
+    setDirection(i > activeTab ? 1 : -1);
+    setActiveTab(i);
+  };
 
   return (
-    <section className="bg-hero-bg px-6 py-20 md:py-28">
+    <section className="bg-[hsl(222,47%,8%)] px-6 py-20 md:py-28">
       <div className="mx-auto max-w-5xl">
         {/* Heading */}
         <motion.h2
@@ -42,7 +63,7 @@ export function ProductPhilosophySection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.5 }}
-          className="mx-auto mb-12 max-w-xl text-center font-display text-3xl text-foreground sm:text-[2.5rem]"
+          className="mx-auto mb-12 max-w-xl text-center font-display text-3xl text-[hsl(210,40%,96%)] sm:text-[2.5rem]"
         >
           Built for people who think in systems, not just lists.
         </motion.h2>
@@ -58,11 +79,11 @@ export function ProductPhilosophySection() {
           {TABS.map((tab, i) => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(i)}
+              onClick={() => handleTabChange(i)}
               className={`flex items-center gap-2 rounded-full px-5 py-2.5 text-[14px] font-medium transition-all duration-200 ${
                 activeTab === i
                   ? "bg-primary text-primary-foreground shadow-md shadow-primary/20"
-                  : "bg-card border border-border text-muted-foreground hover:text-foreground hover:border-primary/30"
+                  : "bg-[hsl(217,33%,15%)] border border-[hsl(217,33%,22%)] text-[hsl(215,20%,60%)] hover:text-[hsl(210,40%,96%)] hover:border-primary/30"
               }`}
             >
               <tab.icon className="h-4 w-4" />
@@ -72,30 +93,37 @@ export function ProductPhilosophySection() {
         </motion.div>
 
         {/* Tab content */}
-        <div className="rounded-2xl border border-border bg-card p-6 md:p-10">
-          <AnimatePresence mode="wait">
+        <div className="rounded-2xl border border-[hsl(217,33%,18%)] bg-[hsl(222,47%,10%)] p-6 md:p-10">
+          <AnimatePresence mode="wait" custom={direction}>
             <motion.div
               key={activeTab}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.3 }}
+              custom={direction}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
               className="grid items-center gap-8 md:grid-cols-2 md:gap-12"
             >
               {/* Text */}
               <div>
-                <h3 className="text-xl font-semibold text-foreground sm:text-2xl">
+                <h3 className="text-xl font-semibold text-[hsl(210,40%,96%)] sm:text-2xl">
                   {TABS[activeTab].heading}
                 </h3>
-                <p className="mt-4 text-[15px] leading-relaxed text-muted-foreground">
+                <p className="mt-4 text-[15px] leading-relaxed text-[hsl(215,20%,60%)]">
                   {TABS[activeTab].body}
                 </p>
               </div>
 
-              {/* Mockup */}
-              <div className="overflow-hidden rounded-xl border border-border/50">
+              {/* Mockup — scale in */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.4, delay: 0.1 }}
+                className="overflow-hidden rounded-xl border border-[hsl(217,33%,22%)]"
+              >
                 <ProductMockup variant={TABS[activeTab].mockup} compact />
-              </div>
+              </motion.div>
             </motion.div>
           </AnimatePresence>
         </div>

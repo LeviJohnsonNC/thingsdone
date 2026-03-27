@@ -6,10 +6,10 @@ export function HomeCTASection() {
   return (
     <section className="bg-background px-6 py-24 md:py-32">
       <motion.div
-        initial={{ opacity: 0, y: 25 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, scale: 0.96 }}
+        whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true, margin: "-60px" }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         className="mx-auto max-w-lg text-center"
       >
         <h2 className="font-display text-3xl text-foreground sm:text-[2.5rem]">
@@ -22,7 +22,7 @@ export function HomeCTASection() {
           <Button
             asChild
             size="lg"
-            className="rounded-full px-8 text-[15px] font-medium transition-transform hover:scale-[1.02]"
+            className="btn-shimmer rounded-full px-8 text-[15px] font-medium transition-transform hover:scale-[1.02]"
           >
             <Link to="/auth">Get Started Free</Link>
           </Button>
