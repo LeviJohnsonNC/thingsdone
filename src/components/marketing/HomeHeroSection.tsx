@@ -82,27 +82,12 @@ export function HomeHeroSection() {
       </div>
 
       <div className="relative mx-auto max-w-3xl text-center">
-        {/* Pill CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <Link
-            to="/auth"
-            className="group inline-flex items-center gap-2 rounded-full border border-border bg-card/60 backdrop-blur-sm px-4 py-1.5 text-[13px] font-medium text-muted-foreground transition-colors hover:border-primary/30 hover:text-foreground"
-          >
-            Get started free
-            <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
-          </Link>
-        </motion.div>
-
         {/* Headline */}
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="mt-8 font-display text-5xl leading-[1.05] text-foreground sm:text-[4rem] md:text-[4.5rem]"
+          transition={{ duration: 0.6 }}
+          className="font-display text-5xl leading-[1.05] text-foreground sm:text-[4rem] md:text-[4.5rem]"
         >
           Capture everything.
           <br />
