@@ -132,7 +132,7 @@ export function HomeHeroSection() {
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.45 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
           className="mt-3 text-[13px] text-muted-foreground"
         >
           Free forever · No credit card required
