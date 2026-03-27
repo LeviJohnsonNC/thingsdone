@@ -1,14 +1,23 @@
+import { useRef } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { ProductMockup } from "./ProductMockup";
 
 export function WeeklyReviewSection() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+  const mockupY = useTransform(scrollYProgress, [0, 1], [30, -30]);
+
   return (
-    <section className="bg-background px-6 py-24 md:py-32">
+    <section ref={sectionRef} className="dot-grid-bg relative bg-background px-6 py-24 md:py-32">
       <div className="mx-auto grid max-w-5xl items-center gap-12 md:grid-cols-2 md:gap-16">
-        {/* Visual */}
+        {/* Visual — parallax-lite */}
         <motion.div
+          style={{ y: mockupY }}
           initial={{ opacity: 0, x: -30 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true, margin: "-60px" }}
