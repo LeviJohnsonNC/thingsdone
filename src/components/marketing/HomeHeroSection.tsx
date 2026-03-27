@@ -98,7 +98,7 @@ export function HomeHeroSection() {
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
           className="mx-auto mt-6 max-w-lg text-[16px] leading-relaxed text-muted-foreground sm:text-lg"
         >
           Things Done helps you get tasks out of your head, organize them into a
