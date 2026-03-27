@@ -109,7 +109,7 @@ export function HomeHeroSection() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
           className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center sm:gap-4"
         >
           <Button
