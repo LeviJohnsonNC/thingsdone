@@ -4,9 +4,9 @@ import { Button } from "@/components/ui/button";
 
 export function HomeCTASection() {
   return (
-    <section className="bg-hero-bg px-6 py-20 md:py-28">
+    <section className="bg-background px-6 py-24 md:py-32">
       <motion.div
-        initial={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, y: 25 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-60px" }}
         transition={{ duration: 0.5 }}
@@ -18,13 +18,21 @@ export function HomeCTASection() {
         <p className="mt-4 text-[15px] leading-relaxed text-muted-foreground">
           Capture tasks, organize projects, and stay clear on what matters next.
         </p>
-        <div className="mt-8">
+        <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center sm:gap-4">
           <Button
             asChild
             size="lg"
-            className="rounded-lg px-8 text-[15px] font-medium transition-transform hover:scale-[1.02]"
+            className="rounded-full px-8 text-[15px] font-medium transition-transform hover:scale-[1.02]"
           >
             <Link to="/auth">Get Started Free</Link>
+          </Button>
+          <Button
+            asChild
+            variant="outline"
+            size="lg"
+            className="rounded-full px-8 text-[15px] font-medium"
+          >
+            <Link to="/features">Learn More</Link>
           </Button>
         </div>
       </motion.div>
