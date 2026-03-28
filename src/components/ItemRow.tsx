@@ -3,7 +3,7 @@ import { motion, useMotionValue, useTransform, PanInfo, AnimatePresence } from "
 import { Star, Check, GripVertical, Repeat, ListChecks, AlertTriangle, Clock } from "lucide-react";
 import { cn, parseLocalDate } from "@/lib/utils";
 import type { Item } from "@/lib/types";
-import { useCompleteItem, useUpdateItem } from "@/hooks/useItems";
+import { useCompleteItem, useUpdateItem, useToggleFocus } from "@/hooks/useItems";
 import { useAppStore } from "@/stores/appStore";
 import { ItemEditorDrawer } from "./ItemEditorDrawer";
 import { toast } from "sonner";
@@ -22,6 +22,7 @@ export function ItemRow({ item, showProject, dimmed, dragHandleProps, showSwipeH
   const { editingItemId, setEditingItemId, selectedItemIds, toggleSelectedItem } = useAppStore();
   const completeItem = useCompleteItem();
   const updateItem = useUpdateItem();
+  const toggleFocus = useToggleFocus();
   const x = useMotionValue(0);
   const [swiping, setSwiping] = useState<"left" | "right" | null>(null);
   const [completing, setCompleting] = useState(false);
@@ -70,7 +71,7 @@ export function ItemRow({ item, showProject, dimmed, dragHandleProps, showSwipeH
     if (info.offset.x > 80) {
       handleComplete();
     } else if (info.offset.x < -80) {
-      updateItem.mutate({ id: item.id, is_focused: !item.is_focused });
+      toggleFocus.mutate({ id: item.id, is_focused: !item.is_focused });
       toast(item.is_focused ? "Removed from Focus" : "Added to Focus", { duration: 1500 });
     }
     setSwiping(null);
@@ -235,7 +236,7 @@ export function ItemRow({ item, showProject, dimmed, dragHandleProps, showSwipeH
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    updateItem.mutate({ id: item.id, is_focused: !item.is_focused });
+                    toggleFocus.mutate({ id: item.id, is_focused: !item.is_focused });
                   }}
                   className="shrink-0 p-1.5"
                 >

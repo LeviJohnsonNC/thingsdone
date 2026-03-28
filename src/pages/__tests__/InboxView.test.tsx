@@ -19,6 +19,7 @@ vi.mock("@/hooks/useItems", () => ({
   useUpdateItem: () => ({ mutate: mockMutate }),
   useCompleteItem: () => ({ mutate: mockMutate }),
   useDeleteItem: () => ({ mutate: mockMutate }),
+  useToggleFocus: () => ({ mutate: mockMutate }),
 }));
 
 vi.mock("@/hooks/useAuth", () => ({

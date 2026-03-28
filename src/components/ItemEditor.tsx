@@ -1,45 +1,27 @@
-import { useEffect, useState, useRef, useCallback, type MutableRefObject } from "react";
-import { parseLocalDate } from "@/lib/utils";
-import { format } from "date-fns";
-import { Star, CalendarIcon, Trash2, X, Plus, Check, Repeat, Zap } from "lucide-react";
+import { useEffect, useState, useRef, useCallback } from "react";
+import { Star, CalendarIcon, Trash2, Check, Zap } from "lucide-react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Calendar } from "@/components/ui/calendar";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { format } from "date-fns";
 import { useItem, useUpdateItem, useCompleteItem, useDeleteItem } from "@/hooks/useItems";
-import { useProjects } from "@/hooks/useProjects";
-import { useAreas } from "@/hooks/useAreas";
-import { useTags, useItemTags, useSetItemTags } from "@/hooks/useTags";
-import { useContacts, useCreateContact } from "@/hooks/useContacts";
 import { useGoogleCalendarStatus, usePushItemToCalendar, useDeleteCalendarEvent } from "@/hooks/useGoogleCalendar";
 import { useAppStore } from "@/stores/appStore";
 import { cn } from "@/lib/utils";
-import { TIME_ESTIMATE_OPTIONS, ENERGY_OPTIONS } from "@/lib/types";
-import type { ItemState, EnergyLevel } from "@/lib/types";
+import type { Item } from "@/lib/types";
 import { ChecklistEditor, type ChecklistItem } from "@/components/ChecklistEditor";
-import { RecurrenceSelector } from "@/components/RecurrenceSelector";
-import { UpgradePrompt } from "@/components/UpgradePrompt";
-import { useSubscription } from "@/hooks/useSubscription";
+import { ItemTagEditor } from "@/components/editor/ItemTagEditor";
+import { ItemDates } from "@/components/editor/ItemDates";
+import { ItemProperties } from "@/components/editor/ItemProperties";
+import { ItemCalendarToggle } from "@/components/editor/ItemCalendarToggle";
 import { toast } from "sonner";
 import inboxIcon from "@/assets/icons/inbox.svg";
 import nextIcon from "@/assets/icons/next.svg";
 import waitingIcon from "@/assets/icons/waiting.svg";
 import scheduledIcon from "@/assets/icons/scheduled.svg";
 import somedayIcon from "@/assets/icons/someday.svg";
-import timeEstIcon from "@/assets/icons/time-est.svg";
-import energyIcon from "@/assets/icons/energy.svg";
-import dueIcon from "@/assets/icons/due.svg";
-import projectIcon from "@/assets/icons/project.svg";
-import areaIcon from "@/assets/icons/area.svg";
-import waitingOnIcon from "@/assets/icons/waiting-on.svg";
 
-// State config with accent colors (HSL values matching design system)
 const STATE_CONFIG: Record<string, { label: string; icon: string; activeClass: string; borderClass: string; bgClass: string }> = {
   inbox: { label: "Inbox", icon: inboxIcon, activeClass: "bg-muted text-foreground border-border", borderClass: "border-border", bgClass: "hover:bg-muted/60" },
   next: { label: "Next", icon: nextIcon, activeClass: "bg-primary/10 text-primary border-primary", borderClass: "border-primary", bgClass: "hover:bg-primary/5" },
@@ -57,25 +39,16 @@ interface ItemEditorProps {
 
 export function ItemEditor({ itemId }: ItemEditorProps) {
   const { setEditingItemId } = useAppStore();
-  const { isPro } = useSubscription();
-  const [showRecurrenceUpgrade, setShowRecurrenceUpgrade] = useState(false);
   const { data: item } = useItem(itemId);
   const updateItem = useUpdateItem();
   const completeItem = useCompleteItem();
   const deleteItem = useDeleteItem();
-  const { data: projects } = useProjects("active");
-  const { data: areas } = useAreas();
-  const { data: tags } = useTags();
-  const { data: itemTagIds } = useItemTags(itemId);
-  const setItemTags = useSetItemTags();
   const { data: calendarToken } = useGoogleCalendarStatus();
-  const { data: contacts } = useContacts();
   const pushToCalendar = usePushItemToCalendar();
   const deleteCalendarEvent = useDeleteCalendarEvent();
 
   const [title, setTitle] = useState("");
   const [notes, setNotes] = useState("");
-  const [waitingOn, setWaitingOn] = useState("");
   const [addToCalendar, setAddToCalendar] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const notesRef = useRef<HTMLTextAreaElement>(null);
@@ -87,12 +60,10 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
     if (item) {
       setTitle(item.title);
       setNotes(item.notes ?? "");
-      setWaitingOn(item.waiting_on ?? "");
       setAddToCalendar(!!item.google_event_id);
     }
   }, [item]);
 
-  // Auto-resize notes textarea
   const autoResize = useCallback(() => {
     const el = notesRef.current;
     if (el) {
@@ -103,7 +74,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
 
   useEffect(() => { autoResize(); }, [notes, autoResize]);
 
-  // Debounced field save: batches multiple rapid changes into one mutation
+  // Debounced field save: batches rapid changes into one mutation
   const pendingRef = useRef<Partial<Item>>({});
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -115,7 +86,6 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
     updateItem.mutate({ id: itemId, ...pending });
   }, [itemId, updateItem]);
 
-  // Flush on unmount so edits aren't lost when the editor closes
   useEffect(() => () => { flushSave(); }, [flushSave]);
 
   if (!item) return null;
@@ -129,6 +99,11 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
     timerRef.current = setTimeout(flushSave, 300);
   };
 
+  const handleStateChange = (state: string) => {
+    saveField("state", state);
+    flushSave();
+  };
+
   const handleDateChange = (field: "scheduled_date" | "due_date", d: Date | undefined) => {
     const value = d ? format(d, "yyyy-MM-dd") : null;
     saveField(field, value);
@@ -138,11 +113,6 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
         { onError: () => toast.error("Failed to sync with Google Calendar") }
       );
     }
-  };
-
-  const handleStateChange = (state: string) => {
-    saveField("state", state);
-    flushSave();
   };
 
   const handleComplete = () => {
@@ -165,12 +135,6 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
     setEditingItemId(null);
   };
 
-  const toggleTag = (tagId: string) => {
-    const current = itemTagIds ?? [];
-    const next = current.includes(tagId) ? current.filter((id) => id !== tagId) : [...current, tagId];
-    setItemTags.mutate({ itemId: item.id, tagIds: next });
-  };
-
   const handleCalendarToggle = (checked: boolean) => {
     setAddToCalendar(checked);
     const date = item.scheduled_date || item.due_date;
@@ -188,30 +152,12 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
   };
 
   const handleBlurTitle = () => {
-    if (title !== item.title) {
-      saveField("title", title);
-      flushSave();
-    }
+    if (title !== item.title) { saveField("title", title); flushSave(); }
   };
 
   const handleBlurNotes = () => {
-    if (notes !== (item.notes ?? "")) {
-      saveField("notes", notes);
-      flushSave();
-    }
+    if (notes !== (item.notes ?? "")) { saveField("notes", notes); flushSave(); }
   };
-
-  const handleBlurWaitingOn = () => {
-    if (waitingOn !== (item.waiting_on ?? "")) {
-      saveField("waiting_on", waitingOn || null);
-      flushSave();
-    }
-  };
-
-  const activeTagIds = itemTagIds ?? [];
-  const activeTags = tags?.filter((t) => activeTagIds.includes(t.id)) ?? [];
-  const availableTags = tags?.filter((t) => !activeTagIds.includes(t.id)) ?? [];
-  const energy = item.energy as EnergyLevel | null;
 
   return (
     <motion.div
@@ -233,9 +179,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
                 onClick={() => handleStateChange(s)}
                 className={cn(
                   "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border-2 transition-all duration-150",
-                  isActive
-                    ? cfg.activeClass
-                    : "border-transparent text-muted-foreground " + cfg.bgClass
+                  isActive ? cfg.activeClass : "border-transparent text-muted-foreground " + cfg.bgClass
                 )}
               >
                 <img src={cfg.icon} alt={cfg.label} className="h-4 w-4" />
@@ -249,20 +193,16 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
         <div className="border border-border rounded-xl bg-card shadow-sm">
           {/* Title Row */}
           <div className="flex items-center gap-3 px-4 pt-4 pb-2">
-            {/* Completion circle */}
             <button
               onClick={handleComplete}
               className={cn(
                 "flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 transition-all duration-150",
-                stateConfig.borderClass,
-                "hover:bg-primary/10"
+                stateConfig.borderClass, "hover:bg-primary/10"
               )}
               title="Mark complete"
             >
               <Check className="h-3 w-3 opacity-0 hover:opacity-40 transition-opacity" />
             </button>
-
-            {/* Title input */}
             <Input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
@@ -271,24 +211,12 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
               placeholder="What needs to be done?"
               autoFocus
             />
-
-            {/* Star toggle */}
-            <button
-              onClick={() => saveField("is_focused", !item.is_focused)}
-              className="shrink-0 p-1"
-            >
-              <Star
-                className={cn(
-                  "h-5 w-5 transition-colors duration-150",
-                  item.is_focused
-                    ? "fill-focus-gold text-focus-gold"
-                    : "text-muted-foreground/30 hover:text-muted-foreground"
-                )}
-              />
+            <button onClick={() => saveField("is_focused", !item.is_focused)} className="shrink-0 p-1">
+              <Star className={cn("h-5 w-5 transition-colors duration-150", item.is_focused ? "fill-focus-gold text-focus-gold" : "text-muted-foreground/30 hover:text-muted-foreground")} />
             </button>
           </div>
 
-          {/* Notes - auto-expanding, indented past the circle */}
+          {/* Notes */}
           <div className="px-4 pl-[52px]">
             <textarea
               ref={notesRef}
@@ -319,274 +247,38 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
             </div>
           )}
 
-          {/* Context Tags */}
-          <div className="px-4 pl-[52px] pb-3">
-            <div className="flex flex-wrap items-center gap-1.5">
-              {activeTags.map((tag) => (
-                <span
-                  key={tag.id}
-                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium"
-                >
-                  {tag.name}
-                  <button
-                    onClick={() => toggleTag(tag.id)}
-                    className="hover:text-destructive transition-colors"
-                  >
-                    <X className="h-3 w-3" />
-                  </button>
-                </span>
-              ))}
-              {availableTags.length > 0 && (
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <button className="flex h-6 w-6 items-center justify-center rounded-full border-2 border-dashed border-muted-foreground/30 hover:border-primary text-muted-foreground/40 hover:text-primary transition-colors duration-150">
-                      <Plus className="h-3 w-3" />
-                    </button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-2" align="start">
-                    <div className="flex flex-col gap-1">
-                      {availableTags.map((tag) => (
-                        <button
-                          key={tag.id}
-                          onClick={() => toggleTag(tag.id)}
-                          className="text-left text-sm px-3 py-1.5 rounded-md hover:bg-muted transition-colors"
-                        >
-                          {tag.name}
-                        </button>
-                      ))}
-                    </div>
-                  </PopoverContent>
-                </Popover>
-              )}
-            </div>
-          </div>
+          <ItemTagEditor itemId={itemId} />
 
-          {/* Divider */}
           <div className="border-t border-border/60 mx-4" />
 
-          {/* Properties Grid */}
-          <div className="p-4 space-y-3">
-            {/* Time Estimate + Energy - side by side */}
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-              <PropertyRow icon={timeEstIcon} label="TIME EST." className="flex-1">
-                <div className="inline-flex bg-muted rounded-lg p-0.5 gap-0.5">
-                  <SegmentButton
-                    active={!item.time_estimate}
-                    onClick={() => saveField("time_estimate", null)}
-                  >
-                    —
-                  </SegmentButton>
-                  {TIME_ESTIMATE_OPTIONS.map((opt) => (
-                    <SegmentButton
-                      key={opt.value}
-                      active={item.time_estimate === opt.value}
-                      onClick={() => saveField("time_estimate", opt.value)}
-                    >
-                      {opt.label}
-                    </SegmentButton>
-                  ))}
-                </div>
-              </PropertyRow>
+          {/* Properties */}
+          <ItemProperties
+            item={item}
+            currentState={currentState}
+            saveField={saveField}
+            onStateChange={handleStateChange}
+          />
 
-              <PropertyRow icon={energyIcon} label="ENERGY" className="flex-1">
-                <div className="inline-flex bg-muted rounded-lg p-0.5 gap-0.5">
-                  <SegmentButton
-                    active={!energy}
-                    onClick={() => saveField("energy", null)}
-                  >
-                    —
-                  </SegmentButton>
-                  {ENERGY_OPTIONS.map((opt) => (
-                    <SegmentButton
-                      key={opt.value}
-                      active={energy === opt.value}
-                      onClick={() => saveField("energy", opt.value)}
-                    >
-                      <span className="flex items-center gap-1">
-                        {energy === opt.value && (
-                          <span className={cn("h-1.5 w-1.5 rounded-full", opt.dot)} />
-                        )}
-                        {opt.label}
-                      </span>
-                    </SegmentButton>
-                  ))}
-                </div>
-              </PropertyRow>
-            </div>
-
-            {/* Due + Scheduled - side by side */}
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-              <PropertyRow icon={dueIcon} label="DUE" className="flex-1">
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className={cn(
-                        "justify-start text-left font-normal text-sm h-8 px-2 w-full",
-                        !item.due_date && "text-muted-foreground"
-                      )}
-                    >
-                      <CalendarIcon className="mr-1.5 h-3.5 w-3.5" />
-                      {item.due_date ? format(parseLocalDate(item.due_date), "MMM d, yyyy") : "No due date"}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={item.due_date ? parseLocalDate(item.due_date) : undefined}
-                      onSelect={(d) => handleDateChange("due_date", d)}
-                      className="p-3 pointer-events-auto"
-                    />
-                    {item.due_date && (
-                      <div className="border-t p-2">
-                        <Button variant="ghost" size="sm" className="w-full text-xs" onClick={() => handleDateChange("due_date", undefined)}>
-                          Clear date
-                        </Button>
-                      </div>
-                    )}
-                  </PopoverContent>
-                </Popover>
-              </PropertyRow>
-
-              <PropertyRow icon={scheduledIcon} label="SCHEDULED" className="flex-1">
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className={cn(
-                        "justify-start text-left font-normal text-sm h-8 px-2 w-full",
-                        !item.scheduled_date && "text-muted-foreground"
-                      )}
-                    >
-                      <CalendarIcon className="mr-1.5 h-3.5 w-3.5" />
-                      {item.scheduled_date ? format(parseLocalDate(item.scheduled_date), "MMM d, yyyy") : "Not scheduled"}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={item.scheduled_date ? parseLocalDate(item.scheduled_date) : undefined}
-                      onSelect={(d) => handleDateChange("scheduled_date", d)}
-                      className="p-3 pointer-events-auto"
-                    />
-                    {item.scheduled_date && (
-                      <div className="border-t p-2">
-                        <Button variant="ghost" size="sm" className="w-full text-xs" onClick={() => handleDateChange("scheduled_date", undefined)}>
-                          Clear date
-                        </Button>
-                      </div>
-                    )}
-                  </PopoverContent>
-                </Popover>
-              </PropertyRow>
-            </div>
-
-            {/* Project + Area + Waiting On */}
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-              <PropertyRow icon={projectIcon} label="PROJECT" className="flex-1">
-                <Select
-                  value={item.project_id ?? "none"}
-                  onValueChange={(v) => saveField("project_id", v === "none" ? null : v)}
-                >
-                  <SelectTrigger className="h-8 text-sm border-0 shadow-none px-2 bg-transparent">
-                    <SelectValue placeholder="No project" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="none">No project</SelectItem>
-                    {projects?.map((p) => (
-                      <SelectItem key={p.id} value={p.id}>{p.title}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </PropertyRow>
-
-              <PropertyRow icon={areaIcon} label="AREA" className="flex-1">
-                <Select
-                  value={item.area_id ?? "none"}
-                  onValueChange={(v) => saveField("area_id", v === "none" ? null : v)}
-                >
-                  <SelectTrigger className="h-8 text-sm border-0 shadow-none px-2 bg-transparent">
-                    <SelectValue placeholder="No area" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="none">No area</SelectItem>
-                    {areas?.map((a) => (
-                      <SelectItem key={a.id} value={a.id}>{a.name}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </PropertyRow>
-
-              <WaitingOnField
-                value={waitingOn}
-                contacts={contacts ?? []}
-                onChange={(val) => {
-                  setWaitingOn(val);
-                  saveField("waiting_on", val || null);
-                  // Auto-switch to waiting state when a contact is selected
-                  if (val && currentState !== "waiting") {
-                    handleStateChange("waiting");
-                  }
-                  // Auto-switch back to inbox if clearing the contact while in waiting state
-                  if (!val && currentState === "waiting") {
-                    handleStateChange("inbox");
-                  }
-                }}
-              />
-            </div>
-
-            {/* Recurrence */}
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-              <PropertyRow icon={scheduledIcon} label="REPEAT" className="flex-1">
-                {isPro ? (
-                  <RecurrenceSelector
-                    value={item.recurrence_rule ?? null}
-                    onChange={(v) => saveField("recurrence_rule", v)}
-                    compact
-                  />
-                ) : (
-                  <button
-                    onClick={() => setShowRecurrenceUpgrade(true)}
-                    className="flex items-center gap-2 px-2 h-8 text-sm text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    <span>No repeat</span>
-                    <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 border-focus text-focus font-semibold">
-                      PRO
-                    </Badge>
-                  </button>
-                )}
-              </PropertyRow>
-            </div>
-            {showRecurrenceUpgrade && (
-              <UpgradePrompt
-                open={showRecurrenceUpgrade}
-                onOpenChange={setShowRecurrenceUpgrade}
-                trigger="recurring"
-                currentUsage={0}
-                limit={0}
-              />
-            )}
-
-            {/* Google Calendar toggle */}
-            {isCalendarConnected && hasDate && (
-              <PropertyRow icon={scheduledIcon} label="CALENDAR">
-                <div className="flex items-center gap-2 px-2">
-                  <Switch
-                    id={`gcal-${item.id}`}
-                    checked={addToCalendar}
-                    onCheckedChange={handleCalendarToggle}
-                    disabled={pushToCalendar.isPending}
-                    className="scale-90"
-                  />
-                  <Label htmlFor={`gcal-${item.id}`} className="text-sm text-muted-foreground cursor-pointer">
-                    Google Calendar
-                  </Label>
-                </div>
-              </PropertyRow>
-            )}
+          {/* Dates */}
+          <div className="px-4 pb-3">
+            <ItemDates
+              dueDate={item.due_date}
+              scheduledDate={item.scheduled_date}
+              onDateChange={handleDateChange}
+            />
           </div>
+
+          {/* Google Calendar toggle */}
+          {isCalendarConnected && hasDate && (
+            <div className="px-4 pb-3">
+              <ItemCalendarToggle
+                itemId={item.id}
+                checked={addToCalendar}
+                disabled={pushToCalendar.isPending}
+                onCheckedChange={handleCalendarToggle}
+              />
+            </div>
+          )}
 
           {/* Footer */}
           <div className="flex items-center justify-end px-4 py-3 bg-muted/40 border-t border-border/60 rounded-b-xl">
@@ -620,98 +312,5 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
         </div>
       </div>
     </motion.div>
-  );
-}
-
-// Helper: Waiting On field with inline contact creation
-function WaitingOnField({ value, contacts, onChange }: { value: string; contacts: { id: string; name: string }[]; onChange: (val: string) => void }) {
-  const [newName, setNewName] = useState("");
-  const [showNew, setShowNew] = useState(false);
-  const createContact = useCreateContact();
-
-  const handleCreate = async () => {
-    const trimmed = newName.trim();
-    if (!trimmed) return;
-    await createContact.mutateAsync(trimmed);
-    onChange(trimmed);
-    setNewName("");
-    setShowNew(false);
-  };
-
-  return (
-    <PropertyRow icon={waitingOnIcon} label="WAITING ON" className="flex-1">
-      <Select
-        value={value || "none"}
-        onValueChange={(v) => {
-          if (v === "__new__") {
-            setShowNew(true);
-            return;
-          }
-          onChange(v === "none" ? "" : v);
-        }}
-      >
-        <SelectTrigger className="h-8 text-sm border-0 shadow-none px-2 bg-transparent">
-          <SelectValue placeholder="No one" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="none">No one</SelectItem>
-          {contacts.map((c) => (
-            <SelectItem key={c.id} value={c.name}>{c.name}</SelectItem>
-          ))}
-          <SelectItem value="__new__" className="text-primary">
-            <span className="flex items-center gap-1"><Plus className="h-3 w-3" /> Add contact…</span>
-          </SelectItem>
-        </SelectContent>
-      </Select>
-      {showNew && (
-        <div className="flex items-center gap-1 mt-1">
-          <Input
-            value={newName}
-            onChange={(e) => setNewName(e.target.value)}
-            placeholder="Name…"
-            className="h-7 text-xs flex-1"
-            autoFocus
-            onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); handleCreate(); } if (e.key === "Escape") setShowNew(false); }}
-          />
-          <Button size="sm" variant="ghost" className="h-7 px-2" onClick={handleCreate} disabled={!newName.trim() || createContact.isPending}>
-            <Check className="h-3 w-3" />
-          </Button>
-        </div>
-      )}
-    </PropertyRow>
-  );
-}
-
-// Helper: Property row with label
-function PropertyRow({ icon, label, children, className }: { icon: string; label: string; children: React.ReactNode; className?: string }) {
-  return (
-    <div className={cn("flex items-center gap-3", className)}>
-      <div className="w-[80px] sm:w-[100px] shrink-0 flex items-center gap-1.5">
-        {typeof icon === "string" && icon.length <= 2 ? (
-          <span className="text-sm">{icon}</span>
-        ) : (
-          <img src={icon} alt={label} className="h-3.5 w-3.5 opacity-60" />
-        )}
-        <span className="text-[10px] font-medium tracking-wider text-muted-foreground uppercase">{label}</span>
-      </div>
-      <div className="flex-1 min-w-0">{children}</div>
-    </div>
-  );
-}
-
-// Helper: Segmented control button
-function SegmentButton({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
-  return (
-    <button
-      onClick={onClick}
-      className={cn(
-        "px-2.5 py-1.5 rounded-md text-xs font-medium transition-all duration-150 min-h-[36px]",
-        active
-          ? "bg-card text-foreground shadow-sm"
-          : "text-muted-foreground hover:text-foreground"
-      )}
-    >
-      {children}
-    </button>
   );
 }
