@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef, useCallback, type MutableRefObject } from "react";
 import { parseLocalDate } from "@/lib/utils";
 import { format } from "date-fns";
 import { Star, CalendarIcon, Trash2, X, Plus, Check, Repeat, Zap } from "lucide-react";
@@ -103,13 +103,30 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
 
   useEffect(() => { autoResize(); }, [notes, autoResize]);
 
+  // Debounced field save: batches multiple rapid changes into one mutation
+  const pendingRef = useRef<Partial<Item>>({});
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const flushSave = useCallback(() => {
+    if (timerRef.current) clearTimeout(timerRef.current);
+    const pending = pendingRef.current;
+    if (Object.keys(pending).length === 0) return;
+    pendingRef.current = {};
+    updateItem.mutate({ id: itemId, ...pending });
+  }, [itemId, updateItem]);
+
+  // Flush on unmount so edits aren't lost when the editor closes
+  useEffect(() => () => { flushSave(); }, [flushSave]);
+
   if (!item) return null;
 
   const currentState = item.state as string;
   const stateConfig = STATE_CONFIG[currentState] ?? STATE_CONFIG.inbox;
 
   const saveField = (field: keyof Item, value: Item[keyof Item]) => {
-    updateItem.mutate({ id: item.id, [field]: value });
+    pendingRef.current = { ...pendingRef.current, [field]: value };
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(flushSave, 300);
   };
 
   const handleDateChange = (field: "scheduled_date" | "due_date", d: Date | undefined) => {
@@ -124,7 +141,8 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
   };
 
   const handleStateChange = (state: string) => {
-    updateItem.mutate({ id: item.id, state });
+    saveField("state", state);
+    flushSave();
   };
 
   const handleComplete = () => {
@@ -171,19 +189,22 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
 
   const handleBlurTitle = () => {
     if (title !== item.title) {
-      updateItem.mutate({ id: item.id, title });
+      saveField("title", title);
+      flushSave();
     }
   };
 
   const handleBlurNotes = () => {
     if (notes !== (item.notes ?? "")) {
-      updateItem.mutate({ id: item.id, notes });
+      saveField("notes", notes);
+      flushSave();
     }
   };
 
   const handleBlurWaitingOn = () => {
     if (waitingOn !== (item.waiting_on ?? "")) {
-      updateItem.mutate({ id: item.id, waiting_on: waitingOn || null });
+      saveField("waiting_on", waitingOn || null);
+      flushSave();
     }
   };
 
