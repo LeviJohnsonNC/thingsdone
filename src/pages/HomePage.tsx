@@ -1,7 +1,9 @@
 import { HomeHeroSection } from "@/components/marketing/HomeHeroSection";
+import { ProblemSection } from "@/components/marketing/ProblemSection";
 import { HowItWorksSection } from "@/components/marketing/HowItWorksSection";
 import { ProductPhilosophySection } from "@/components/marketing/ProductPhilosophySection";
 import { WeeklyReviewSection } from "@/components/marketing/WeeklyReviewSection";
+import { ActiveDevelopmentSection } from "@/components/marketing/ActiveDevelopmentSection";
 import { HomeCTASection } from "@/components/marketing/HomeCTASection";
 import { SEOHead, SITE_URL } from "@/components/SEOHead";
 
@@ -12,7 +14,7 @@ const HOME_JSONLD = {
   applicationCategory: "ProductivityApplication",
   operatingSystem: "Web",
   description:
-    "A calm, focused GTD® task manager that helps you capture everything, organize by context, and always know what to do next.",
+    "The GTD task manager built for practitioners. Native inbox, next actions, waiting for, sequential projects, guided weekly review, and an AI review coach. Free to start.",
   offers: [
     {
       "@type": "Offer",
@@ -35,15 +37,17 @@ export default function HomePage() {
   return (
     <>
       <SEOHead
-        title="Things Done. — Capture everything. Know what to do next."
-        description="A calm, focused GTD task manager that helps you capture tasks, organize projects, and always know what to do next. Free to start — no credit card required."
+        title="Things Done — The GTD Task Manager Built for Practitioners"
+        description="The GTD task manager with native inbox, next actions, waiting for, sequential projects, a guided weekly review, and an AI review coach. Free to start — no credit card required."
         canonical={`${SITE_URL}/`}
         jsonLd={HOME_JSONLD}
       />
       <HomeHeroSection />
+      <ProblemSection />
       <HowItWorksSection />
       <ProductPhilosophySection />
       <WeeklyReviewSection />
+      <ActiveDevelopmentSection />
       <HomeCTASection />
     </>
   );

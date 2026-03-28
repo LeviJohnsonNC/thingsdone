@@ -16,7 +16,8 @@ export function HomeCTASection() {
           Build a system you can trust.
         </h2>
         <p className="mt-4 text-[15px] leading-relaxed text-muted-foreground">
-          Capture tasks, organize projects, and stay clear on what matters next.
+          Start with the full GTD system — inbox, next actions, waiting for,
+          projects, weekly review — all built in. Free to start.
         </p>
         <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center sm:gap-4">
           <Button
