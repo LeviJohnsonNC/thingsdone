@@ -1,31 +1,31 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Inbox, FolderKanban, RefreshCw } from "lucide-react";
+import { GitBranch, Layers, Sparkles } from "lucide-react";
 import { ProductMockup } from "./ProductMockup";
 
 const TABS = [
   {
-    id: "capture",
-    icon: Inbox,
-    label: "Capture",
-    heading: "Get it out of your head — fast",
-    body: "Capture tasks, ideas, and reminders the moment they hit you. Things Done's inbox-first approach means nothing gets lost, and you can organize later when you're ready.",
-    mockup: "inbox" as const,
-  },
-  {
-    id: "organize",
-    icon: FolderKanban,
-    label: "Organize",
-    heading: "Structure that actually works",
-    body: "Break work into projects, tag by area, set energy levels, and schedule for later. Every task gets the right context so your lists stay useful — not overwhelming.",
+    id: "sequential",
+    icon: GitBranch,
+    label: "Sequential Projects",
+    heading: "Only see work you can actually do",
+    body: "When a project is marked sequential, only the first incomplete action surfaces in your Next Actions list. Blocked tasks stay hidden until it's their turn. Your Next Actions list stays clean and trustworthy — showing only work you can move on right now. That's a core GTD principle most apps ignore.",
     mockup: "project-detail" as const,
   },
   {
-    id: "review",
-    icon: RefreshCw,
-    label: "Review",
-    heading: "Stay current without relying on memory",
-    body: "A built-in weekly review walks you through inbox items, stale tasks, project progress, and someday items. Keep your system trustworthy with zero extra effort.",
+    id: "gtd-lists",
+    icon: Layers,
+    label: "Every GTD List",
+    heading: "The complete GTD vocabulary, built in",
+    body: "Things Done includes every GTD state natively — Inbox, Next Actions, Waiting For, Scheduled, Someday/Maybe, Reference, and Logbook. No plugins. No workarounds. No setting up tags to simulate states that should just exist.",
+    mockup: "inbox" as const,
+  },
+  {
+    id: "ai-coach",
+    icon: Sparkles,
+    label: "AI Review Coach",
+    heading: "A GTD coach for your weekly review",
+    body: "The built-in AI doesn't give you generic productivity advice. It reads your actual lists the way a GTD coach would — flagging stalled projects, surfacing overdue waiting-fors, suggesting whether inbox items should be next actions or someday. Available on Pro.",
     mockup: "review" as const,
   },
 ];
@@ -65,7 +65,7 @@ export function ProductPhilosophySection() {
           transition={{ duration: 0.5 }}
           className="mx-auto mb-12 max-w-xl text-center font-display text-3xl text-[hsl(210,40%,96%)] sm:text-[2.5rem]"
         >
-          Built for people who think in systems, not just lists.
+          The features other apps don't have.
         </motion.h2>
 
         {/* Tab buttons */}
@@ -74,7 +74,7 @@ export function ProductPhilosophySection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-40px" }}
           transition={{ duration: 0.4, delay: 0.1 }}
-          className="mb-10 flex justify-center gap-2"
+          className="mb-10 flex flex-wrap justify-center gap-2"
         >
           {TABS.map((tab, i) => (
             <button
@@ -115,7 +115,7 @@ export function ProductPhilosophySection() {
                 </p>
               </div>
 
-              {/* Mockup — scale in */}
+              {/* Mockup */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}

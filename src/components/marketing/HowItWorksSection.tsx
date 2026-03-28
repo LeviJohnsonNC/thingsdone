@@ -13,25 +13,25 @@ const CARDS = [
   {
     icon: Inbox,
     title: "Capture fast",
-    body: "Drop tasks, reminders, and loose thoughts into your inbox before they disappear.",
+    body: "Everything lands in the inbox — the GTD capture bucket. Quick-add from anywhere, and nothing leaks into an unorganized pile. Process later, on your schedule.",
     mockup: "inbox" as const,
   },
   {
     icon: SlidersHorizontal,
     title: "Clarify the next step",
-    body: "Turn vague reminders into real tasks with notes, time estimates, energy, and context.",
+    body: "Turn vague stuff into real next actions. Set an energy level, time estimate, project, area, due date, or waiting-on contact — the full GTD clarify step, built into every item.",
     mockup: "editor" as const,
   },
   {
     icon: FolderKanban,
     title: "Organize by context",
-    body: "Sort work by project, area, schedule, waiting status, and someday items.",
+    body: "In sequential projects, only the first unblocked action appears in your Next Actions — so your lists only show work you can actually do. Waiting For, Someday/Maybe, and Scheduled are first-class states, not tags.",
     mockup: "project-detail" as const,
   },
   {
     icon: RefreshCw,
     title: "Review with confidence",
-    body: "Run a weekly review that keeps your system current and your mind clear.",
+    body: "A guided 7-step weekly review walks you through every GTD list — inbox, next actions, waiting for, scheduled, someday, and projects. Nothing gets skipped.",
     mockup: "review" as const,
   },
 ];
@@ -49,10 +49,10 @@ export function HowItWorksSection() {
           className="mb-14 text-center"
         >
           <h2 className="text-2xl font-semibold text-foreground sm:text-3xl">
-            How Things Done works
+            The full GTD system. Out of the box.
           </h2>
-          <p className="mx-auto mt-3 max-w-md text-[15px] leading-relaxed text-muted-foreground">
-            A simple system for turning mental clutter into clear action.
+          <p className="mx-auto mt-3 max-w-lg text-[15px] leading-relaxed text-muted-foreground">
+            Every GTD workflow is built in natively — not something you configure with tags, filters, or workarounds.
           </p>
         </motion.div>
 
@@ -60,7 +60,6 @@ export function HowItWorksSection() {
         <div className="grid gap-6 sm:grid-cols-2">
           {CARDS.map((card, i) => {
             const accent = ACCENT_COLORS[i];
-            // Alternate slide direction: odd from left, even from right
             const xOffset = i % 2 === 0 ? -30 : 30;
 
             return (
