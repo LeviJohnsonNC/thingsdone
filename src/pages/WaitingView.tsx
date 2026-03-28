@@ -17,7 +17,7 @@ export default function WaitingView() {
     if (!items) return [];
     const map = new Map<string, typeof items>();
     for (const item of items) {
-      const key = (item as any).waiting_on || "Unassigned";
+      const key = item.waiting_on || "Unassigned";
       if (!map.has(key)) map.set(key, []);
       map.get(key)!.push(item);
     }

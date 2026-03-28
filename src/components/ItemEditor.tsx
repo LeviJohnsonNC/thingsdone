@@ -12,7 +12,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useItems, useUpdateItem, useCompleteItem, useDeleteItem } from "@/hooks/useItems";
+import { useItem, useUpdateItem, useCompleteItem, useDeleteItem } from "@/hooks/useItems";
 import { useProjects } from "@/hooks/useProjects";
 import { useAreas } from "@/hooks/useAreas";
 import { useTags, useItemTags, useSetItemTags } from "@/hooks/useTags";
@@ -59,8 +59,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
   const { setEditingItemId } = useAppStore();
   const { isPro } = useSubscription();
   const [showRecurrenceUpgrade, setShowRecurrenceUpgrade] = useState(false);
-  const { data: allItems } = useItems();
-  const item = allItems?.find((i) => i.id === itemId);
+  const { data: item } = useItem(itemId);
   const updateItem = useUpdateItem();
   const completeItem = useCompleteItem();
   const deleteItem = useDeleteItem();
@@ -88,7 +87,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
     if (item) {
       setTitle(item.title);
       setNotes(item.notes ?? "");
-      setWaitingOn((item as any).waiting_on ?? "");
+      setWaitingOn(item.waiting_on ?? "");
       setAddToCalendar(!!item.google_event_id);
     }
   }, [item]);
@@ -109,8 +108,8 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
   const currentState = item.state as string;
   const stateConfig = STATE_CONFIG[currentState] ?? STATE_CONFIG.inbox;
 
-  const saveField = (field: string, value: any) => {
-    updateItem.mutate({ id: item.id, [field]: value } as any);
+  const saveField = (field: keyof Item, value: Item[keyof Item]) => {
+    updateItem.mutate({ id: item.id, [field]: value });
   };
 
   const handleDateChange = (field: "scheduled_date" | "due_date", d: Date | undefined) => {
@@ -125,7 +124,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
   };
 
   const handleStateChange = (state: string) => {
-    updateItem.mutate({ id: item.id, state } as any);
+    updateItem.mutate({ id: item.id, state });
   };
 
   const handleComplete = () => {
@@ -133,13 +132,12 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
       deleteCalendarEvent.mutate({ item_id: item.id, google_event_id: item.google_event_id });
     }
     completeItem.mutate({
-      id: item.id, recurrence_rule: (item as any).recurrence_rule, title: item.title,
+      id: item.id, recurrence_rule: item.recurrence_rule, title: item.title,
       user_id: item.user_id, scheduled_date: item.scheduled_date, project_id: item.project_id,
       area_id: item.area_id, energy: item.energy, time_estimate: item.time_estimate,
     });
     setEditingItemId(null);
   };
-
 
   const handleDelete = () => {
     if (item.google_event_id) {
@@ -173,26 +171,26 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
 
   const handleBlurTitle = () => {
     if (title !== item.title) {
-      updateItem.mutate({ id: item.id, title } as any);
+      updateItem.mutate({ id: item.id, title });
     }
   };
 
   const handleBlurNotes = () => {
     if (notes !== (item.notes ?? "")) {
-      updateItem.mutate({ id: item.id, notes } as any);
+      updateItem.mutate({ id: item.id, notes });
     }
   };
 
   const handleBlurWaitingOn = () => {
-    if (waitingOn !== ((item as any).waiting_on ?? "")) {
-      updateItem.mutate({ id: item.id, waiting_on: waitingOn || null } as any);
+    if (waitingOn !== (item.waiting_on ?? "")) {
+      updateItem.mutate({ id: item.id, waiting_on: waitingOn || null });
     }
   };
 
   const activeTagIds = itemTagIds ?? [];
   const activeTags = tags?.filter((t) => activeTagIds.includes(t.id)) ?? [];
   const availableTags = tags?.filter((t) => !activeTagIds.includes(t.id)) ?? [];
-  const energy = (item as any).energy as EnergyLevel | null;
+  const energy = item.energy as EnergyLevel | null;
 
   return (
     <motion.div
@@ -285,7 +283,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
           {/* Checklist */}
           <div className="px-4 pl-[52px] pb-2">
             <ChecklistEditor
-              checklist={((item as any).checklist as ChecklistItem[]) ?? []}
+              checklist={(item.checklist as ChecklistItem[]) ?? []}
               onChange={(cl) => saveField("checklist", cl)}
             />
           </div>
@@ -523,7 +521,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
               <PropertyRow icon={scheduledIcon} label="REPEAT" className="flex-1">
                 {isPro ? (
                   <RecurrenceSelector
-                    value={(item as any).recurrence_rule ?? null}
+                    value={item.recurrence_rule ?? null}
                     onChange={(v) => saveField("recurrence_rule", v)}
                     compact
                   />

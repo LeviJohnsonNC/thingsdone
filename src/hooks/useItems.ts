@@ -4,6 +4,24 @@ import { useAuth } from "./useAuth";
 import type { Item, ItemState } from "@/lib/types";
 import { getNextOccurrence } from "@/components/RecurrenceSelector";
 
+export function useItem(id: string | null) {
+  const { user } = useAuth();
+
+  return useQuery({
+    queryKey: ["items", "detail", id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("items")
+        .select("*")
+        .eq("id", id!)
+        .single();
+      if (error) throw error;
+      return data as Item;
+    },
+    enabled: !!user && !!id,
+  });
+}
+
 export function useItems(state?: ItemState | ItemState[], areaId?: string | null) {
   const { user } = useAuth();
 
