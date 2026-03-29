@@ -12,6 +12,7 @@ const mockUpdateItem = { mutate: vi.fn() };
 vi.mock("@/hooks/useItems", () => ({
   useCompleteItem: () => mockCompleteItem,
   useUpdateItem: () => mockUpdateItem,
+  useToggleFocus: () => ({ mutate: vi.fn() }),
 }));
 
 vi.mock("@/hooks/useAuth", () => ({

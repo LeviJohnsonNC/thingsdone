@@ -20,7 +20,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const NAV_GROUPS = [
+interface NavItem {
+  path: string;
+  icon: typeof Inbox;
+  label: string;
+  badge?: boolean;
+  reviewBadge?: boolean;
+}
+
+const NAV_GROUPS: { label: string; items: NavItem[] }[] = [
   {
     label: "Collect",
     items: [
@@ -134,7 +142,7 @@ export function DesktopSidebar() {
                       {inboxCount}
                     </span>
                   )}
-                  {(item as any).reviewBadge && daysSinceReview !== null && (
+                  {item.reviewBadge && daysSinceReview !== null && (
                     <span className={cn(
                       "text-[10px] font-medium",
                       daysSinceReview >= 7 ? "text-focus-gold" : "text-muted-foreground"

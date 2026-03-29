@@ -30,7 +30,7 @@ export function applyItemFilters(
       if (item.time_estimate !== target) return false;
     }
     if (filters.energy !== "all") {
-      if ((item as any).energy !== filters.energy) return false;
+      if (item.energy !== filters.energy) return false;
     }
     if (filters.tagIds.length > 0 && itemTagMap) {
       const tags = itemTagMap.get(item.id) ?? [];

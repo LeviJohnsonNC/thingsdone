@@ -1,8 +1,51 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient, type QueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./useAuth";
 import type { Item, ItemState } from "@/lib/types";
 import { getNextOccurrence } from "@/components/RecurrenceSelector";
+
+// Fields that affect which list an item appears in
+const LIST_AFFECTING_FIELDS = new Set(["state", "is_focused", "project_id", "area_id", "scheduled_date"]);
+
+/** Update an item in all cached list queries (in-place, no refetch) */
+function updateItemInListCaches(queryClient: QueryClient, updatedItem: Item) {
+  queryClient.setQueriesData<Item[]>(
+    { queryKey: ["items"], type: "active" },
+    (old) => {
+      if (!old || !Array.isArray(old)) return old;
+      return old.map((item) => (item.id === updatedItem.id ? updatedItem : item));
+    }
+  );
+}
+
+/** Remove an item from all cached list queries */
+function removeItemFromListCaches(queryClient: QueryClient, itemId: string) {
+  queryClient.setQueriesData<Item[]>(
+    { queryKey: ["items"], type: "active" },
+    (old) => {
+      if (!old || !Array.isArray(old)) return old;
+      return old.filter((item) => item.id !== itemId);
+    }
+  );
+}
+
+export function useItem(id: string | null) {
+  const { user } = useAuth();
+
+  return useQuery({
+    queryKey: ["items", "detail", id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("items")
+        .select("*")
+        .eq("id", id!)
+        .single();
+      if (error) throw error;
+      return data as Item;
+    },
+    enabled: !!user && !!id,
+  });
+}
 
 export function useItems(state?: ItemState | ItemState[], areaId?: string | null) {
   const { user } = useAuth();
@@ -41,7 +84,6 @@ export function useNextItems(areaId?: string | null) {
     queryFn: async () => {
       const today = new Date().toISOString().split("T")[0];
 
-      // 1) "next" state items
       let nextQuery = supabase
         .from("items")
         .select("*")
@@ -49,7 +91,6 @@ export function useNextItems(areaId?: string | null) {
         .order("sort_order", { ascending: true });
       if (areaId) nextQuery = nextQuery.eq("area_id", areaId);
 
-      // 2) Inbox items
       let inboxQuery = supabase
         .from("items")
         .select("*")
@@ -57,7 +98,6 @@ export function useNextItems(areaId?: string | null) {
         .order("created_at", { ascending: true });
       if (areaId) inboxQuery = inboxQuery.eq("area_id", areaId);
 
-      // 3) Scheduled items due today or earlier
       let scheduledQuery = supabase
         .from("items")
         .select("*")
@@ -77,7 +117,6 @@ export function useNextItems(areaId?: string | null) {
       const inboxItems = inboxRes.data as Item[];
       const scheduledItems = scheduledRes.data as Item[];
 
-      // Sequential project filtering for "next" items only
       const projectIds = [...new Set(
         nextItems.filter(i => i.project_id).map(i => i.project_id!)
       )];
@@ -105,7 +144,6 @@ export function useNextItems(areaId?: string | null) {
         });
       }
 
-      // Merge and deduplicate
       const seen = new Set<string>();
       const merged: Item[] = [];
       for (const item of [...filteredNextItems, ...inboxItems, ...scheduledItems]) {
@@ -220,10 +258,20 @@ export function useUpdateItem() {
         .select()
         .single();
       if (error) throw error;
-      return item;
+      return { item: item as Item, changedFields: Object.keys(data) };
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["items"] });
+    onSuccess: ({ item: updatedItem, changedFields }) => {
+      // Always update the detail cache
+      queryClient.setQueryData(["items", "detail", updatedItem.id], updatedItem);
+
+      // If the change affects list membership, refetch all lists
+      const affectsList = changedFields.some((f) => LIST_AFFECTING_FIELDS.has(f));
+      if (affectsList) {
+        queryClient.invalidateQueries({ queryKey: ["items"], predicate: (q) => q.queryKey[1] !== "detail" });
+      } else {
+        // Just update the item in-place in all list caches (no refetch)
+        updateItemInListCaches(queryClient, updatedItem);
+      }
     },
   });
 }
@@ -233,14 +281,12 @@ export function useCompleteItem() {
 
   return useMutation({
     mutationFn: async (item: { id: string; recurrence_rule?: string | null; title?: string; user_id?: string; scheduled_date?: string | null; project_id?: string | null; area_id?: string | null; energy?: string | null; time_estimate?: number | null }) => {
-      // Complete the current item
       const { error } = await supabase
         .from("items")
         .update({ state: "completed", completed_at: new Date().toISOString() })
         .eq("id", item.id);
       if (error) throw error;
 
-      // If recurring, create the next occurrence
       if (item.recurrence_rule) {
         const nextDate = getNextOccurrence(item.recurrence_rule, item.scheduled_date ?? undefined);
         const { error: createError } = await supabase
@@ -258,9 +304,77 @@ export function useCompleteItem() {
           });
         if (createError) throw createError;
       }
+
+      return item.id;
     },
-    onSuccess: () => {
+    // Optimistic: remove item from lists immediately
+    onMutate: async (item) => {
+      await queryClient.cancelQueries({ queryKey: ["items"] });
+
+      // Snapshot all item list caches for rollback
+      const previousQueries = queryClient.getQueriesData<Item[]>({ queryKey: ["items"] });
+
+      removeItemFromListCaches(queryClient, item.id);
+
+      return { previousQueries };
+    },
+    onError: (_err, _item, context) => {
+      // Roll back all caches
+      if (context?.previousQueries) {
+        for (const [key, data] of context.previousQueries) {
+          queryClient.setQueryData(key, data);
+        }
+      }
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["items"] });
+    },
+  });
+}
+
+export function useToggleFocus() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ id, is_focused }: { id: string; is_focused: boolean }) => {
+      const { data: item, error } = await supabase
+        .from("items")
+        .update({ is_focused })
+        .eq("id", id)
+        .select()
+        .single();
+      if (error) throw error;
+      return item as Item;
+    },
+    onMutate: async ({ id, is_focused }) => {
+      await queryClient.cancelQueries({ queryKey: ["items"] });
+      const previousQueries = queryClient.getQueriesData<Item[]>({ queryKey: ["items"] });
+
+      // Optimistically toggle focus in all caches
+      queryClient.setQueriesData<Item[] | Item>(
+        { queryKey: ["items"], type: "active" },
+        (old) => {
+          if (!old) return old;
+          if (Array.isArray(old)) {
+            return old.map((item) => (item.id === id ? { ...item, is_focused } : item));
+          }
+          // Detail query
+          if ((old as Item).id === id) return { ...old, is_focused };
+          return old;
+        }
+      );
+
+      return { previousQueries };
+    },
+    onError: (_err, _vars, context) => {
+      if (context?.previousQueries) {
+        for (const [key, data] of context.previousQueries) {
+          queryClient.setQueryData(key, data);
+        }
+      }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["items"], predicate: (q) => q.queryKey[1] !== "detail" });
     },
   });
 }
@@ -272,8 +386,23 @@ export function useDeleteItem() {
     mutationFn: async (id: string) => {
       const { error } = await supabase.from("items").delete().eq("id", id);
       if (error) throw error;
+      return id;
     },
-    onSuccess: () => {
+    // Optimistic: remove item from lists immediately
+    onMutate: async (id) => {
+      await queryClient.cancelQueries({ queryKey: ["items"] });
+      const previousQueries = queryClient.getQueriesData<Item[]>({ queryKey: ["items"] });
+      removeItemFromListCaches(queryClient, id);
+      return { previousQueries };
+    },
+    onError: (_err, _id, context) => {
+      if (context?.previousQueries) {
+        for (const [key, data] of context.previousQueries) {
+          queryClient.setQueryData(key, data);
+        }
+      }
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["items"] });
     },
   });

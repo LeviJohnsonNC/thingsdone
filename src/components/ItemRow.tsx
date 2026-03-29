@@ -3,7 +3,7 @@ import { motion, useMotionValue, useTransform, PanInfo, AnimatePresence } from "
 import { Star, Check, GripVertical, Repeat, ListChecks, AlertTriangle, Clock } from "lucide-react";
 import { cn, parseLocalDate } from "@/lib/utils";
 import type { Item } from "@/lib/types";
-import { useCompleteItem, useUpdateItem } from "@/hooks/useItems";
+import { useCompleteItem, useUpdateItem, useToggleFocus } from "@/hooks/useItems";
 import { useAppStore } from "@/stores/appStore";
 import { ItemEditorDrawer } from "./ItemEditorDrawer";
 import { toast } from "sonner";
@@ -22,6 +22,7 @@ export function ItemRow({ item, showProject, dimmed, dragHandleProps, showSwipeH
   const { editingItemId, setEditingItemId, selectedItemIds, toggleSelectedItem } = useAppStore();
   const completeItem = useCompleteItem();
   const updateItem = useUpdateItem();
+  const toggleFocus = useToggleFocus();
   const x = useMotionValue(0);
   const [swiping, setSwiping] = useState<"left" | "right" | null>(null);
   const [completing, setCompleting] = useState(false);
@@ -31,6 +32,23 @@ export function ItemRow({ item, showProject, dimmed, dragHandleProps, showSwipeH
   const isEditing = editingItemId === item.id;
   const isSelectionMode = selectedItemIds.length > 0;
   const isSelected = selectedItemIds.includes(item.id);
+
+  const handleComplete = useCallback(() => {
+    setCompleting(true);
+    setTimeout(() => {
+      completeItem.mutate({ id: item.id, recurrence_rule: item.recurrence_rule, title: item.title, user_id: item.user_id, scheduled_date: item.scheduled_date, project_id: item.project_id, area_id: item.area_id, energy: item.energy, time_estimate: item.time_estimate });
+      toast.success("Completed!", {
+        duration: 4000,
+        action: {
+          label: "Undo",
+          onClick: () => {
+            updateItem.mutate({ id: item.id, state: item.state, completed_at: null });
+            setCompleting(false);
+          },
+        },
+      });
+    }, 200);
+  }, [item, completeItem, updateItem]);
 
   const bgRight = useTransform(x, [0, 80], ["hsl(96 60% 48% / 0)", "hsl(96 60% 48% / 1)"]);
   const bgLeft = useTransform(x, [-80, 0], ["hsl(36 90% 55% / 1)", "hsl(36 90% 55% / 0)"]);
@@ -51,22 +69,9 @@ export function ItemRow({ item, showProject, dimmed, dragHandleProps, showSwipeH
   const handleDragEnd = (_: any, info: PanInfo) => {
     if (isSelectionMode) return;
     if (info.offset.x > 80) {
-      setCompleting(true);
-      setTimeout(() => {
-        completeItem.mutate({ id: item.id, recurrence_rule: (item as any).recurrence_rule, title: item.title, user_id: item.user_id, scheduled_date: item.scheduled_date, project_id: item.project_id, area_id: item.area_id, energy: item.energy, time_estimate: item.time_estimate });
-        toast.success("Completed!", {
-          duration: 4000,
-          action: {
-            label: "Undo",
-            onClick: () => {
-              updateItem.mutate({ id: item.id, state: item.state, completed_at: null } as any);
-              setCompleting(false);
-            },
-          },
-        });
-      }, 200);
+      handleComplete();
     } else if (info.offset.x < -80) {
-      updateItem.mutate({ id: item.id, is_focused: !item.is_focused });
+      toggleFocus.mutate({ id: item.id, is_focused: !item.is_focused });
       toast(item.is_focused ? "Removed from Focus" : "Added to Focus", { duration: 1500 });
     }
     setSwiping(null);
@@ -106,10 +111,10 @@ export function ItemRow({ item, showProject, dimmed, dragHandleProps, showSwipeH
   const isOverdue = item.due_date && item.due_date < todayStr;
   const isDueToday = item.due_date === todayStr;
 
-  const checklist = (item as any).checklist as ChecklistItem[] | null;
+  const checklist = item.checklist as ChecklistItem[] | null;
   const checklistTotal = checklist?.length ?? 0;
   const checklistDone = checklist?.filter(c => c.checked).length ?? 0;
-  const hasRecurrence = !!(item as any).recurrence_rule;
+  const hasRecurrence = !!item.recurrence_rule;
 
   return (
     <div>
@@ -181,20 +186,7 @@ export function ItemRow({ item, showProject, dimmed, dragHandleProps, showSwipeH
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    setCompleting(true);
-                    setTimeout(() => {
-                      completeItem.mutate({ id: item.id, recurrence_rule: (item as any).recurrence_rule, title: item.title, user_id: item.user_id, scheduled_date: item.scheduled_date, project_id: item.project_id, area_id: item.area_id, energy: item.energy, time_estimate: item.time_estimate });
-                      toast.success("Completed!", {
-                        duration: 4000,
-                        action: {
-                          label: "Undo",
-                          onClick: () => {
-                            updateItem.mutate({ id: item.id, state: item.state, completed_at: null } as any);
-                            setCompleting(false);
-                          },
-                        },
-                      });
-                    }, 200);
+                    handleComplete();
                   }}
                   className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 border-border hover:border-success-green hover:bg-success-green/10 transition-colors"
                 />
@@ -244,7 +236,7 @@ export function ItemRow({ item, showProject, dimmed, dragHandleProps, showSwipeH
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    updateItem.mutate({ id: item.id, is_focused: !item.is_focused });
+                    toggleFocus.mutate({ id: item.id, is_focused: !item.is_focused });
                   }}
                   className="shrink-0 p-1.5"
                 >

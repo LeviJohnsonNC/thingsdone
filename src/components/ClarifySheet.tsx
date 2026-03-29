@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAppStore } from "@/stores/appStore";
-import { useItems, useUpdateItem, useCompleteItem, useDeleteItem } from "@/hooks/useItems";
+import { useItem, useUpdateItem, useCompleteItem, useDeleteItem } from "@/hooks/useItems";
 import { useProjects } from "@/hooks/useProjects";
 import { useAreas } from "@/hooks/useAreas";
 import { useTags, useItemTags, useSetItemTags } from "@/hooks/useTags";
@@ -27,8 +27,7 @@ import { toast } from "sonner";
 
 export function ClarifySheet() {
   const { clarifyItemId, setClarifyItemId } = useAppStore();
-  const { data: allItems } = useItems();
-  const item = allItems?.find((i) => i.id === clarifyItemId);
+  const { data: item } = useItem(clarifyItemId);
   const updateItem = useUpdateItem();
   const completeItem = useCompleteItem();
   const deleteItem = useDeleteItem();
@@ -95,7 +94,7 @@ export function ClarifySheet() {
       deleteCalendarEvent.mutate({ item_id: item.id, google_event_id: item.google_event_id });
     }
     completeItem.mutate({
-      id: item.id, recurrence_rule: (item as any).recurrence_rule, title: item.title,
+      id: item.id, recurrence_rule: item.recurrence_rule, title: item.title,
       user_id: item.user_id, scheduled_date: item.scheduled_date, project_id: item.project_id,
       area_id: item.area_id, energy: item.energy, time_estimate: item.time_estimate,
     });
@@ -326,7 +325,7 @@ export function ClarifySheet() {
           <div>
             <p className="text-xs text-muted-foreground mb-1.5">Repeat</p>
             <RecurrenceSelector
-              value={(item as any).recurrence_rule ?? null}
+              value={item.recurrence_rule ?? null}
               onChange={(v) => saveField("recurrence_rule", v)}
             />
           </div>
@@ -335,7 +334,7 @@ export function ClarifySheet() {
           <div>
             <p className="text-xs text-muted-foreground mb-2">Checklist</p>
             <ChecklistEditor
-              checklist={((item as any).checklist as ChecklistItem[]) ?? []}
+              checklist={(item.checklist as ChecklistItem[]) ?? []}
               onChange={(cl) => saveField("checklist", cl)}
             />
           </div>

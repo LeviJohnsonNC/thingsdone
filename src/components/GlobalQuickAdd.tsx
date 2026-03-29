@@ -62,7 +62,7 @@ export function GlobalQuickAdd() {
             )}
           </div>
           <div className="flex justify-end">
-            <Button type="submit" disabled={!title.trim()}>Add</Button>
+            <Button type="submit" disabled={!title.trim() || createItem.isPending}>Add</Button>
           </div>
         </form>
       </DialogContent>

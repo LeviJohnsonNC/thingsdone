@@ -8,6 +8,7 @@ import { useScheduledActivation } from "@/hooks/useScheduledActivation";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { MarketingLayout } from "@/components/marketing/MarketingLayout";
 import { lazy, Suspense } from "react";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 import ReviewView from "@/pages/ReviewView";
 import ReviewHistoryView from "@/pages/ReviewHistoryView";
 import Auth from "@/pages/Auth";
@@ -51,27 +52,29 @@ function ProtectedRoutes() {
   if (!user) return <Navigate to="/auth" replace />;
 
   return (
-    <AppLayout>
-      <Routes>
-        <Route path="/" element={<Navigate to="/inbox" replace />} />
-        <Route path="/inbox" element={<InboxView />} />
-        <Route path="/focus" element={<FocusView />} />
-        <Route path="/next" element={<NextView />} />
-        <Route path="/scheduled" element={<ScheduledView />} />
-        <Route path="/waiting" element={<WaitingView />} />
-        <Route path="/someday" element={<SomedayView />} />
-        <Route path="/projects" element={<ProjectsView />} />
-        <Route path="/projects/:id" element={<ProjectDetailView />} />
-        <Route path="/logbook" element={<LogbookView />} />
-        <Route path="/reference" element={<ReferenceView />} />
-        <Route path="/help" element={<HelpView />} />
-        <Route path="/stats" element={<StatsView />} />
-        <Route path="/settings" element={<SettingsView />} />
-        <Route path="/review" element={<ReviewView />} />
-        <Route path="/review/history" element={<ReviewHistoryView />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </AppLayout>
+    <ErrorBoundary>
+      <AppLayout>
+        <Routes>
+          <Route path="/" element={<Navigate to="/inbox" replace />} />
+          <Route path="/inbox" element={<InboxView />} />
+          <Route path="/focus" element={<FocusView />} />
+          <Route path="/next" element={<NextView />} />
+          <Route path="/scheduled" element={<ScheduledView />} />
+          <Route path="/waiting" element={<WaitingView />} />
+          <Route path="/someday" element={<SomedayView />} />
+          <Route path="/projects" element={<ProjectsView />} />
+          <Route path="/projects/:id" element={<ProjectDetailView />} />
+          <Route path="/logbook" element={<LogbookView />} />
+          <Route path="/reference" element={<ReferenceView />} />
+          <Route path="/help" element={<HelpView />} />
+          <Route path="/stats" element={<StatsView />} />
+          <Route path="/settings" element={<SettingsView />} />
+          <Route path="/review" element={<ReviewView />} />
+          <Route path="/review/history" element={<ReviewHistoryView />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </AppLayout>
+    </ErrorBoundary>
   );
 }
 
