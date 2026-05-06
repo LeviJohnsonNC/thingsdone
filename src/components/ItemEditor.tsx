@@ -233,7 +233,7 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
           <div className="px-4 pl-[52px] pb-2">
             <ChecklistEditor
               checklist={(item.checklist as unknown as ChecklistItem[]) ?? []}
-              onChange={(cl) => saveField("checklist", cl as unknown as Json)}
+              onChange={(cl) => saveField("checklist", cl as never)}
             />
           </div>
 
