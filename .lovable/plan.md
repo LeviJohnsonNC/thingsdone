@@ -1,53 +1,118 @@
+# Diagnosis: "Loads forever until I clear browser data"
 
+## Root cause
 
-# Landing Page Level-Up: Richer Background, Better Motion, Visual Variety
+Two bugs combine to create exactly the symptom you described:
 
-## The Problem
+### Bug 1 — Marketing pages are blocked by auth loading state
 
-Comparing our site to instruct.ai, three gaps stand out:
+In `src/App.tsx`, every public marketing route (including `/`, the home page) is wrapped in `PublicRoute`:
 
-1. **Background is too flat** -- instruct.ai has a watercolor/marble texture that feels organic and alive. Ours is barely-visible radial gradients on a near-white background. It looks empty.
-2. **Motion is uniform** -- every element fades up the same way (opacity 0 to 1, y 20 to 0). No stagger, no scale, no variety. Instruct uses different animation types for different elements.
-3. **Everything looks the same** -- all sections use the same card style, same rounded borders, same spacing. Instruct varies its sections visually (full-bleed background, dark sections, asymmetric layouts, gradient cards).
+```ts
+function PublicRoute({ children }) {
+  const { user, loading } = useAuth();
+  if (loading) return null;        // <-- renders NOTHING while auth resolves
+  if (user) return <Navigate to="/inbox" replace />;
+  return <>{children}</>;
+}
+```
 
-## What We'll Change
+While `loading === true`, the page renders **a blank white screen** — no spinner, no fallback, nothing. There is no good reason for the marketing/landing page to wait on auth at all (the redirect-if-signed-in is a nice-to-have, not a hard gate).
 
-### 1. Hero Background -- SVG Noise Texture + Animated Gradient Orbs
-- Add a subtle SVG noise/grain texture overlay to the hero (inline SVG filter, no external asset)
-- Make the gradient orbs **slowly animate** using CSS keyframes (drift/pulse) so the background feels alive, not static
-- Increase gradient opacity (from 0.08 to ~0.15) so the color is actually visible
-- Add a soft top-edge gradient fade from the nav into the hero
+### Bug 2 — Auth init can hang on a stale/invalid refresh token
 
-### 2. Motion Variety Across Sections
-- **Hero**: Staggered fade-up with slight scale (0.97 to 1) on the headline for a zoom-in feel
-- **HowItWorksSection cards**: Staggered entrance with alternating directions -- odd cards slide from left, even from right
-- **ProductPhilosophySection**: Tab content transitions use horizontal slide (not vertical), and the mockup scales in from 0.95
-- **WeeklyReviewSection**: Parallax-lite effect -- the mockup moves slightly slower than the text on scroll (using Framer Motion `useScroll` + `useTransform`)
-- **CTA**: Scale-in animation instead of the same fade-up
+Your console logs show:
+```
+POST /auth/v1/token?grant_type=refresh_token → 400
+"Invalid Refresh Token: Refresh Token Not Found"
+```
 
-### 3. Visual Variety Between Sections
-- **HowItWorksSection**: Give each card a **unique accent color gradient** on its icon background (blue, green, amber, purple) instead of all using `bg-primary/10`. Add a faint matching gradient stripe at the top of each card.
-- **ProductPhilosophySection**: Switch to a **dark/inverted background** (dark card bg with light text) to break the monotony of all-white sections. This creates the visual rhythm instruct.ai achieves.
-- **WeeklyReviewSection**: Add a subtle background pattern (CSS dot grid or diagonal lines) behind the section to distinguish it.
-- **CTA Section**: Add a gradient border glow effect on the primary button (animated shimmer on hover).
+`AuthProvider` does:
+```ts
+supabase.auth.getSession().then(({ data: { session } }) => {
+  setLoading(false);
+});
+```
 
-## Files Modified
+When the refresh token in `localStorage` is invalid/expired, the Supabase client retries the refresh internally. In some cases (slow network, retry backoff, browser throttling background tabs), `getSession()` and the `INITIAL_SESSION` event both stall for a long time before resolving. There is **no timeout** and **no fallback** — `loading` stays `true` indefinitely.
+
+Combine the two: blank page that "loads forever" until you clear site data (which deletes the bad refresh token from localStorage, so the next load skips the refresh attempt and resolves instantly).
+
+This is also why the bug is intermittent: it only triggers when the cached session is stale. After a successful sign-in or right after clearing data, it works fine — until the refresh token expires or gets invalidated server-side again.
+
+## The fix
+
+Three small, surgical changes — all in frontend code:
+
+### 1. Don't block marketing pages on auth loading (`src/App.tsx`)
+
+Change `PublicRoute` so it renders children immediately and only redirects once auth has resolved AND a user is present:
+
+```ts
+function PublicRoute({ children }) {
+  const { user, loading } = useAuth();
+  if (!loading && user) return <Navigate to="/inbox" replace />;
+  return <>{children}</>;
+}
+```
+
+The home page now appears instantly regardless of auth state. Signed-in users are still bounced to `/inbox` once auth resolves (a brief flash of the marketing page is acceptable and matches what most SaaS sites do).
+
+### 2. Add a hard timeout + bad-token recovery in `AuthProvider` (`src/hooks/useAuth.tsx`)
+
+- Wrap `getSession()` so that after ~3 seconds we force `loading = false` even if Supabase hasn't responded.
+- Listen for the `TOKEN_REFRESHED` failure path: if `getSession()` resolves with no session but `localStorage` still has Supabase auth keys, call `supabase.auth.signOut({ scope: 'local' })` to purge the stale tokens so the next page load is clean.
+
+```ts
+useEffect(() => {
+  let cancelled = false;
+  const timeout = setTimeout(() => {
+    if (!cancelled) setLoading(false);   // never hang the UI
+  }, 3000);
+
+  const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
+    setSession(session);
+    setUser(session?.user ?? null);
+    setLoading(false);
+  });
+
+  supabase.auth.getSession()
+    .then(({ data: { session }, error }) => {
+      if (cancelled) return;
+      setSession(session);
+      setUser(session?.user ?? null);
+      if (error || !session) {
+        // purge any stale tokens left in localStorage
+        supabase.auth.signOut({ scope: 'local' }).catch(() => {});
+      }
+    })
+    .finally(() => {
+      if (!cancelled) setLoading(false);
+    });
+
+  return () => {
+    cancelled = true;
+    clearTimeout(timeout);
+    subscription.unsubscribe();
+  };
+}, []);
+```
+
+### 3. Add a visible loading fallback to protected routes
+
+Right now `AuthPage` and the auth gate elsewhere return `null` while loading. For protected routes keep the existing spinner; for `AuthPage` (which also returns `null`) render the auth screen immediately and let it work — same pattern as marketing.
+
+## Files changed
 
 | File | Change |
 |------|--------|
-| `src/index.css` | Add animated orb keyframes, SVG noise texture class, dot-grid pattern, gradient button shimmer |
-| `src/components/marketing/HomeHeroSection.tsx` | Animated gradient orbs (CSS animation classes), noise overlay div, scale+fade headline animation |
-| `src/components/marketing/HowItWorksSection.tsx` | Per-card accent colors, alternating slide directions, gradient stripe on cards |
-| `src/components/marketing/ProductPhilosophySection.tsx` | Dark/inverted section bg, horizontal tab transitions, mockup scale animation |
-| `src/components/marketing/WeeklyReviewSection.tsx` | Dot-grid background, parallax-lite scroll effect on mockup |
-| `src/components/marketing/HomeCTASection.tsx` | Scale-in animation, gradient shimmer on CTA button |
+| `src/App.tsx` | `PublicRoute` and `AuthPage` no longer return `null` while loading; render children immediately, redirect after auth resolves |
+| `src/hooks/useAuth.tsx` | 3s timeout fallback, purge stale tokens via `signOut({ scope: 'local' })` when getSession returns no session/errors |
 
-## Technical Details
+## Why this fully fixes the symptom
 
-- **Noise texture**: Inline SVG `<filter>` with `feTurbulence` rendered as a fixed overlay at low opacity (~0.03). No external images needed.
-- **Animated orbs**: CSS `@keyframes` with `translate` and opacity changes over 8-12s, `infinite alternate`. Applied to existing gradient divs.
-- **Parallax-lite**: Framer Motion `useScroll({ target: ref })` + `useTransform(scrollYProgress, [0,1], [30, -30])` on the mockup container. Lightweight, no scroll listeners.
-- **Dark section**: Uses existing CSS variables (`--card`, `--card-foreground`) but overrides them locally with a Tailwind `dark` class variant or inline HSL values (e.g., `bg-[hsl(222,47%,8%)]` with `text-[hsl(210,40%,96%)]`).
-- **Card accent colors**: Array of HSL tuples mapped per card index, applied to icon container and a 2px top gradient strip.
-- No new dependencies required.
+- Even if Supabase's auth init is slow or hangs, the home page renders within one paint (no auth gate).
+- Even if a stale refresh token is sitting in localStorage, it gets cleaned up on the very next visit instead of accumulating until you manually clear site data.
+- The 3s timeout guarantees the protected-route spinner can't get stuck either; worst case the user sees a brief unauthenticated state and gets redirected to `/auth`.
 
+No backend / DB / RLS changes. No new dependencies.

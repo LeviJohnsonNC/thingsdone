@@ -334,7 +334,7 @@ export function ClarifySheet() {
           <div>
             <p className="text-xs text-muted-foreground mb-2">Checklist</p>
             <ChecklistEditor
-              checklist={(item.checklist as ChecklistItem[]) ?? []}
+              checklist={(item.checklist as unknown as ChecklistItem[]) ?? []}
               onChange={(cl) => saveField("checklist", cl)}
             />
           </div>

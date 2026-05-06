@@ -19,19 +19,42 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let cancelled = false;
+
+    // Hard timeout: never let the UI hang on a stalled auth init
+    // (e.g. invalid refresh token + slow network retries).
+    const timeout = setTimeout(() => {
+      if (!cancelled) setLoading(false);
+    }, 3000);
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);
     });
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
+    supabase.auth.getSession()
+      .then(({ data: { session }, error }) => {
+        if (cancelled) return;
+        setSession(session);
+        setUser(session?.user ?? null);
+        // Purge stale tokens left in localStorage so the next visit is clean.
+        if (error || !session) {
+          supabase.auth.signOut({ scope: "local" }).catch(() => {});
+        }
+      })
+      .catch(() => {
+        if (!cancelled) supabase.auth.signOut({ scope: "local" }).catch(() => {});
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      cancelled = true;
+      clearTimeout(timeout);
+      subscription.unsubscribe();
+    };
   }, []);
 
   const signUp = async (email: string, password: string) => {

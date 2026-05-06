@@ -111,7 +111,7 @@ export function ItemRow({ item, showProject, dimmed, dragHandleProps, showSwipeH
   const isOverdue = item.due_date && item.due_date < todayStr;
   const isDueToday = item.due_date === todayStr;
 
-  const checklist = item.checklist as ChecklistItem[] | null;
+  const checklist = item.checklist as unknown as ChecklistItem[] | null;
   const checklistTotal = checklist?.length ?? 0;
   const checklistDone = checklist?.filter(c => c.checked).length ?? 0;
   const hasRecurrence = !!item.recurrence_rule;

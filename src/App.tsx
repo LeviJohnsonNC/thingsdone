@@ -81,15 +81,14 @@ function ProtectedRoutes() {
 /** Redirect authenticated users away from marketing pages */
 function PublicRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
-  if (loading) return null;
-  if (user) return <Navigate to="/inbox" replace />;
+  // Render marketing content immediately; redirect signed-in users once auth resolves.
+  if (!loading && user) return <Navigate to="/inbox" replace />;
   return <>{children}</>;
 }
 
 function AuthPage() {
   const { user, loading } = useAuth();
-  if (loading) return null;
-  if (user) return <Navigate to="/inbox" replace />;
+  if (!loading && user) return <Navigate to="/inbox" replace />;
   return <Auth />;
 }
 

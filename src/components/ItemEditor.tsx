@@ -232,8 +232,8 @@ export function ItemEditor({ itemId }: ItemEditorProps) {
           {/* Checklist */}
           <div className="px-4 pl-[52px] pb-2">
             <ChecklistEditor
-              checklist={(item.checklist as ChecklistItem[]) ?? []}
-              onChange={(cl) => saveField("checklist", cl)}
+              checklist={(item.checklist as unknown as ChecklistItem[]) ?? []}
+              onChange={(cl) => saveField("checklist", cl as never)}
             />
           </div>
 
