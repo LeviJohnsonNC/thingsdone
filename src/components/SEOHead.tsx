@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useLayoutEffect } from "react";
 
 interface SEOHeadProps {
   title: string;
@@ -23,7 +23,7 @@ export function SEOHead({
   ogImage = DEFAULT_OG_IMAGE,
   jsonLd,
 }: SEOHeadProps) {
-  useEffect(() => {
+  useLayoutEffect(() => {
     // Title
     document.title = title;
 
