@@ -5,6 +5,7 @@ import { getArticleBySlug } from "@/lib/blogData";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft } from "lucide-react";
 import NotFound from "./NotFound";
+import { articleJsonLd, breadcrumbJsonLd } from "@/lib/jsonLd";
 
 /* ────────────────────────────────────────────
    Article content — rendered as JSX for rich
@@ -987,6 +988,8 @@ const ARTICLE_CONTENT: Record<string, React.FC> = {
   "the-two-minute-rule": TwoMinuteRuleArticle,
   "getting-things-done-method-beginners-guide": GtdBeginnersGuideArticle,
   "how-to-build-a-productivity-system": ProductivitySystemArticle,
+  "best-gtd-apps": BestGtdAppsArticle,
+  "how-to-do-a-weekly-review": WeeklyReviewArticle,
 };
 
 export default function BlogArticlePage() {
@@ -996,34 +999,35 @@ export default function BlogArticlePage() {
 
   if (!article || !Content) return <NotFound />;
 
-  const articleJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    headline: article.title,
-    description: article.description,
-    datePublished: article.date,
-    author: { "@type": "Organization", name: article.author },
-    publisher: { "@type": "Organization", name: "Things Done." },
-    url: `${SITE_URL}/blog/${article.slug}`,
-  };
+  const url = `${SITE_URL}/blog/${article.slug}`;
+  const imageUrl = article.heroImage.startsWith("http")
+    ? article.heroImage
+    : `${SITE_URL}${article.heroImage}`;
 
-  const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
-      { "@type": "ListItem", position: 2, name: "Blog", item: `${SITE_URL}/blog` },
-      { "@type": "ListItem", position: 3, name: article.title },
-    ],
-  };
+  const jsonLd = [
+    articleJsonLd({
+      headline: article.title,
+      description: article.description,
+      url,
+      image: imageUrl,
+      datePublished: article.date,
+      authorName: article.author,
+    }),
+    breadcrumbJsonLd([
+      { name: "Home", url: `${SITE_URL}/` },
+      { name: "Blog", url: `${SITE_URL}/blog` },
+      { name: article.title },
+    ]),
+  ];
 
   return (
     <>
       <SEOHead
         title={`${article.title} — Things Done.`}
         description={article.description}
-        canonical={`${SITE_URL}/blog/${article.slug}`}
-        jsonLd={[articleJsonLd, breadcrumbJsonLd]}
+        canonical={url}
+        ogImage={imageUrl}
+        jsonLd={jsonLd}
       />
 
       <article className="mx-auto max-w-2xl px-6 py-16 md:py-24">
