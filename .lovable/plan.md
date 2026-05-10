@@ -1,118 +1,98 @@
-# Diagnosis: "Loads forever until I clear browser data"
+# SEO Rebuild Plan — Get Things Done. ranking on Google
 
-## Root cause
+## Why we're invisible right now
 
-Two bugs combine to create exactly the symptom you described:
+I fetched the live HTML for `/blog/getting-things-done-method-beginners-guide` to see what Googlebot actually receives. The good news: Lovable prerenders the body content. The bad news, in order of impact:
 
-### Bug 1 — Marketing pages are blocked by auth loading state
+1. **The prerendered `<head>` is empty.** No `<title>`, no `<meta description>`, no canonical, no OG tags on any route except `/`. Our `SEOHead` component sets these via `useEffect` after JS runs — Googlebot's first pass sees the static `index.html` head (the home page title) on every URL. That single bug is enough to suppress rankings for every page except the homepage.
+2. **Thin topical footprint.** 6 blog posts, 1 product page, 1 features page. For competitive terms ("GTD app", "getting things done app", "best task manager for GTD"), Google needs more depth and more interlinking before it trusts us as an authority.
+3. **No JSON-LD on articles.** `Article`, `BreadcrumbList`, `FAQPage`, and `HowTo` schema are missing. These don't directly rank you but they win SERP real estate (rich snippets) and signal topical clarity.
+4. **One month is genuinely short.** New domains sit in a "sandbox" period. We can't shortcut that, but we can make sure that when Google does start crawling seriously, every page is technically clean and content-rich.
+5. **No backlink signals.** Nothing we ship in code fixes this — flagged at the bottom as off-platform work.
 
-In `src/App.tsx`, every public marketing route (including `/`, the home page) is wrapped in `PublicRoute`:
+## What we'll build
 
-```ts
-function PublicRoute({ children }) {
-  const { user, loading } = useAuth();
-  if (loading) return null;        // <-- renders NOTHING while auth resolves
-  if (user) return <Navigate to="/inbox" replace />;
-  return <>{children}</>;
-}
-```
+### Part 1 — Fix the head metadata problem (highest impact)
 
-While `loading === true`, the page renders **a blank white screen** — no spinner, no fallback, nothing. There is no good reason for the marketing/landing page to wait on auth at all (the redirect-if-signed-in is a nice-to-have, not a hard gate).
+The cleanest SPA fix without a build-time prerenderer is to **inline per-route SEO tags into `index.html` via a route-aware static fallback**, plus harden the runtime `SEOHead` so the `<head>` is never blank during the crawl window.
 
-### Bug 2 — Auth init can hang on a stale/invalid refresh token
+Concretely:
 
-Your console logs show:
-```
-POST /auth/v1/token?grant_type=refresh_token → 400
-"Invalid Refresh Token: Refresh Token Not Found"
-```
+- **Hoist a default route map into `index.html`**: a small inline `<script>` in `<head>` that reads `location.pathname`, looks up a static `{title, description, canonical}` from a JSON object literal, and writes the matching `<title>`/`<meta>`/`<link rel=canonical>` *synchronously before paint*. This runs before React hydrates, so prerendered HTML snapshots (which Lovable hosting captures) include the right tags. Pages covered: `/`, `/features`, `/pricing`, `/blog`, `/about`, `/legal`, plus each `/blog/<slug>`.
+- **Keep `SEOHead`** for runtime updates and JSON-LD, but make it idempotent (replace, don't append duplicates) and run it in a `useLayoutEffect` so the swap happens before the next paint instead of after.
+- **Add `<meta name="robots" content="index,follow">`** as a static tag in `index.html` (currently only injected at runtime).
+- **Per-route `og:image`**: blog posts already have hero images — pass each article's `heroImage` URL into `SEOHead` as `ogImage` so social/Google previews aren't all the same generic graphic.
 
-`AuthProvider` does:
-```ts
-supabase.auth.getSession().then(({ data: { session } }) => {
-  setLoading(false);
-});
-```
+### Part 2 — Structured data (rich results)
 
-When the refresh token in `localStorage` is invalid/expired, the Supabase client retries the refresh internally. In some cases (slow network, retry backoff, browser throttling background tabs), `getSession()` and the `INITIAL_SESSION` event both stall for a long time before resolving. There is **no timeout** and **no fallback** — `loading` stays `true` indefinitely.
+Add JSON-LD to every meaningful page via the existing `SEOHead` `jsonLd` prop:
 
-Combine the two: blank page that "loads forever" until you clear site data (which deletes the bad refresh token from localStorage, so the next load skips the refresh attempt and resolves instantly).
+- **Blog index (`/blog`)**: `Blog` + `BreadcrumbList`.
+- **Blog articles**: `Article` (with `author`, `datePublished`, `dateModified`, `image`, `headline`, `wordCount`) + `BreadcrumbList` + `FAQPage` for the 2-3 articles that already contain Q&A-shaped content (the GTD beginner's guide, the productivity-system post).
+- **Pricing page**: `Product` with `Offer`s for Free + Pro tiers.
+- **Features page**: `SoftwareApplication` with `featureList`.
+- **Home**: extend the existing JSON-LD with `aggregateRating` placeholder (commented; only enable when we have real reviews — fake ratings get manual-action penalties).
 
-This is also why the bug is intermittent: it only triggers when the cached session is stale. After a successful sign-in or right after clearing data, it works fine — until the refresh token expires or gets invalidated server-side again.
+### Part 3 — Content depth (topical authority)
 
-## The fix
+Ship 5 new SEO-targeted blog posts aimed at high-intent, lower-competition queries. Each ≥1,500 words, with internal links to existing posts and to `/features`:
 
-Three small, surgical changes — all in frontend code:
+1. **"Best GTD Apps in 2026: How to Pick One That Actually Fits the Method"** — keyword: *best gtd app*. Comparative framing; honest about Things Done's positioning.
+2. **"How to Do a Weekly Review (The David Allen Way) — A 30-Minute Walkthrough"** — keyword: *weekly review gtd*. Step-by-step with screenshots of our review wizard.
+3. **"GTD Contexts in 2026: Why @Phone is Dead and What Replaced It"** — keyword: *gtd contexts*. Modernizes a classic concept, links to our tag system.
+4. **"Inbox Zero vs GTD: They're Not the Same Thing"** — keyword: *inbox zero vs gtd*. High-volume comparison query.
+5. **"Sequential vs Parallel Projects in GTD: A Practical Guide"** — keyword: *sequential projects gtd*. Showcases a feature only we do well natively.
 
-### 1. Don't block marketing pages on auth loading (`src/App.tsx`)
+Each post gets a hero image (use existing `imagegen` skill, premium tier), correct `Article` JSON-LD, and 3-5 contextual internal links.
 
-Change `PublicRoute` so it renders children immediately and only redirects once auth has resolved AND a user is present:
+### Part 4 — On-page hygiene
 
-```ts
-function PublicRoute({ children }) {
-  const { user, loading } = useAuth();
-  if (!loading && user) return <Navigate to="/inbox" replace />;
-  return <>{children}</>;
-}
-```
+- **Single H1 per page audit**: home and a few marketing sections currently use `font-display` styled `<h2>`s that read as headlines visually. Verify each route has exactly one `<h1>` matching the SEO title's primary keyword.
+- **Image alt text**: blog hero images use the article title as alt text — fine. The "hidden SEO images" block in `HomeHeroSection.tsx` currently points all three to `/og-image.png`. Either replace with real screenshots when we have them or remove the block (it currently risks looking like cloaking).
+- **Internal link density**: blog posts link out well; marketing pages don't link to blog. Add a 3-card "Read more" strip to `/features` and `/pricing` pulling from the most relevant blog posts.
+- **Sitemap regen**: add the 5 new posts to `public/sitemap.xml` and bump `lastmod` on existing entries.
+- **`hreflang` self-reference**: add `<link rel="alternate" hreflang="en" href="...">` and `hreflang="x-default"` so we're explicit about language targeting.
 
-The home page now appears instantly regardless of auth state. Signed-in users are still bounced to `/inbox` once auth resolves (a brief flash of the marketing page is acceptable and matches what most SaaS sites do).
+### Part 5 — Crawl-rate signals
 
-### 2. Add a hard timeout + bad-token recovery in `AuthProvider` (`src/hooks/useAuth.tsx`)
+- **Submit updated sitemap to Google Search Console** (manual user step — flagged below).
+- **Add a `lastmod` to the sitemap entry for `/`** that we bump on each marketing release. Google revisits more often when `lastmod` moves.
+- **Add `<link rel="me">` and an `Organization` JSON-LD** with `sameAs` pointing to any social profiles (X, GitHub, LinkedIn) we have. Even one or two `sameAs` entries help disambiguate the brand entity.
 
-- Wrap `getSession()` so that after ~3 seconds we force `loading = false` even if Supabase hasn't responded.
-- Listen for the `TOKEN_REFRESHED` failure path: if `getSession()` resolves with no session but `localStorage` still has Supabase auth keys, call `supabase.auth.signOut({ scope: 'local' })` to purge the stale tokens so the next page load is clean.
+## Technical details
 
-```ts
-useEffect(() => {
-  let cancelled = false;
-  const timeout = setTimeout(() => {
-    if (!cancelled) setLoading(false);   // never hang the UI
-  }, 3000);
+- **Inline route metadata in `index.html`**: a ~2 KB script literal mapping pathnames to `{title, description}`. Blog slugs are matched via `startsWith('/blog/')` then a lookup into a flat object generated at build time. We don't need build tooling — we'll generate it once and check it in, and add a comment reminding to update when adding posts. (A future improvement is a Vite plugin that reads `blogData.ts` and templates `index.html`, but that's out of scope here.)
+- **`SEOHead` changes**: switch to `useLayoutEffect`, dedupe meta tags by `[name|property]` selector before insert (it already does this — verify), and accept `ogImage` per route so blog posts pass their hero.
+- **JSON-LD helpers**: add `src/lib/jsonLd.ts` with typed builders (`articleJsonLd`, `breadcrumbJsonLd`, `faqJsonLd`, `productJsonLd`) so pages stay clean.
+- **New blog posts**: extend `BLOG_ARTICLES` in `src/lib/blogData.ts`, render their JSX in `BlogArticlePage.tsx` following the existing pattern, generate hero images into `src/assets/blog/`.
+- **Sitemap**: hand-edited `public/sitemap.xml`; no build step needed.
+- **No new dependencies.**
 
-  const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
-    setSession(session);
-    setUser(session?.user ?? null);
-    setLoading(false);
-  });
+## Files touched (estimate)
 
-  supabase.auth.getSession()
-    .then(({ data: { session }, error }) => {
-      if (cancelled) return;
-      setSession(session);
-      setUser(session?.user ?? null);
-      if (error || !session) {
-        // purge any stale tokens left in localStorage
-        supabase.auth.signOut({ scope: 'local' }).catch(() => {});
-      }
-    })
-    .finally(() => {
-      if (!cancelled) setLoading(false);
-    });
+- `index.html` — inline route metadata script + static robots/hreflang
+- `src/components/SEOHead.tsx` — `useLayoutEffect`, `ogImage` plumbing
+- `src/lib/jsonLd.ts` — new helpers
+- `src/pages/BlogPage.tsx`, `BlogArticlePage.tsx`, `FeaturesPage.tsx`, `PricingPage.tsx`, `HomePage.tsx`, `AboutPage.tsx` — pass JSON-LD + per-route ogImage
+- `src/lib/blogData.ts` — 5 new entries
+- `src/pages/BlogArticlePage.tsx` — 5 new article JSX components
+- `src/assets/blog/*.png` — 5 new hero images (premium tier)
+- `src/components/marketing/HomeHeroSection.tsx` — fix the suspicious hidden-image block
+- `public/sitemap.xml` — add 5 new URLs, bump lastmods
 
-  return () => {
-    cancelled = true;
-    clearTimeout(timeout);
-    subscription.unsubscribe();
-  };
-}, []);
-```
+## What this won't fix (manual / off-platform)
 
-### 3. Add a visible loading fallback to protected routes
+These I can't do from inside the codebase. Flagging so you can act:
 
-Right now `AuthPage` and the auth gate elsewhere return `null` while loading. For protected routes keep the existing spinner; for `AuthPage` (which also returns `null`) render the auth screen immediately and let it work — same pattern as marketing.
+1. **Google Search Console**: verify the domain (you may already have done this via the `googlea00c144ba59d80a3.html` file in `/public` — confirm it's verified), submit the updated sitemap, and use "Inspect URL → Request Indexing" for the 6 most important pages. This alone often unsticks new sites.
+2. **Backlinks**: the hardest part. Concrete options — submit to Product Hunt, list on alternativeto.net under "Things 3 alternatives" and "Todoist alternatives", post a launch story on Hacker News tied to the GTD-native angle, reach out to 3-5 GTD bloggers (Lifehacker, Cal Newport's audience, r/gtd) with the beginner's guide post.
+3. **Page Speed**: Google uses Core Web Vitals. Once shipped, run PageSpeed Insights on the homepage and a blog post; if LCP > 2.5s on mobile we'll need to revisit (likely the hero image / Framer Motion).
 
-## Files changed
+## Suggested rollout order
 
-| File | Change |
-|------|--------|
-| `src/App.tsx` | `PublicRoute` and `AuthPage` no longer return `null` while loading; render children immediately, redirect after auth resolves |
-| `src/hooks/useAuth.tsx` | 3s timeout fallback, purge stale tokens via `signOut({ scope: 'local' })` when getSession returns no session/errors |
+1. Part 1 (head metadata fix) — ship immediately, this is the unlock.
+2. Part 4 (on-page hygiene) + Part 2 (JSON-LD) — same PR if small.
+3. Part 3 (5 new posts) — ship in batches of 2-3 per week so the sitemap shows steady fresh `lastmod` values.
+4. Part 5 (Search Console resubmit) — after each batch.
 
-## Why this fully fixes the symptom
-
-- Even if Supabase's auth init is slow or hangs, the home page renders within one paint (no auth gate).
-- Even if a stale refresh token is sitting in localStorage, it gets cleaned up on the very next visit instead of accumulating until you manually clear site data.
-- The 3s timeout guarantees the protected-route spinner can't get stuck either; worst case the user sees a brief unauthenticated state and gets redirected to `/auth`.
-
-No backend / DB / RLS changes. No new dependencies.
+Expect 4-8 weeks before meaningful organic traffic shifts; SEO is slow.
