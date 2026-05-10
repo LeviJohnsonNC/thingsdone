@@ -4,6 +4,8 @@ import heroChaosToCalm from "@/assets/blog/hero-chaos-to-calm.jpg";
 import heroTwoMinuteRule from "@/assets/blog/hero-two-minute-rule.jpg";
 import heroGtdGuide from "@/assets/blog/hero-gtd-beginners-guide.png";
 import heroProductivitySystem from "@/assets/blog/hero-productivity-system.png";
+import heroBestGtdApps from "@/assets/blog/hero-best-gtd-apps.jpg";
+import heroWeeklyReview from "@/assets/blog/hero-weekly-review.jpg";
 
 export interface BlogArticle {
   slug: string;
@@ -82,6 +84,28 @@ export const BLOG_ARTICLES: BlogArticle[] = [
     author: "Things Done.",
     tags: ["Productivity", "Deep Dive", "Getting Started"],
     heroImage: heroProductivitySystem,
+  },
+  {
+    slug: "best-gtd-apps",
+    title: "Best GTD Apps in 2026: How to Pick One That Actually Fits the Method",
+    description:
+      "An honest comparison of the best GTD apps in 2026 — what to look for, what to avoid, and how to pick one that actually fits Getting Things Done.",
+    date: "2026-05-09",
+    readingTime: "11 min read",
+    author: "Things Done.",
+    tags: ["GTD®", "App Comparison", "Buying Guide"],
+    heroImage: heroBestGtdApps,
+  },
+  {
+    slug: "how-to-do-a-weekly-review",
+    title: "How to Do a Weekly Review (The David Allen Way) — A 30-Minute Walkthrough",
+    description:
+      "A step-by-step walkthrough of the GTD weekly review — the keystone habit that keeps your system trustworthy week after week.",
+    date: "2026-05-10",
+    readingTime: "9 min read",
+    author: "Things Done.",
+    tags: ["GTD®", "Weekly Review", "Habits"],
+    heroImage: heroWeeklyReview,
   },
 ];
 

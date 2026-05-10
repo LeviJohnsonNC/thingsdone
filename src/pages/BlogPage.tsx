@@ -4,14 +4,33 @@ import { SEOHead, SITE_URL } from "@/components/SEOHead";
 import { BLOG_ARTICLES } from "@/lib/blogData";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight } from "lucide-react";
+import { blogIndexJsonLd, breadcrumbJsonLd } from "@/lib/jsonLd";
 
 export default function BlogPage() {
+  const sorted = [...BLOG_ARTICLES].sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+  );
+  const jsonLd = [
+    blogIndexJsonLd(
+      sorted.map((a) => ({
+        title: a.title,
+        description: a.description,
+        url: `${SITE_URL}/blog/${a.slug}`,
+        date: a.date,
+      })),
+    ),
+    breadcrumbJsonLd([
+      { name: "Home", url: `${SITE_URL}/` },
+      { name: "Blog", url: `${SITE_URL}/blog` },
+    ]),
+  ];
   return (
     <>
       <SEOHead
         title="Blog — Things Done. | Productivity Tips & GTD® Guides"
         description="Practical guides on Getting Things Done®, task management, and building a productivity system you actually trust."
         canonical={`${SITE_URL}/blog`}
+        jsonLd={jsonLd}
       />
 
       {/* Hero */}
@@ -33,7 +52,7 @@ export default function BlogPage() {
       {/* Article grid */}
       <section className="mx-auto max-w-3xl px-6 py-16">
         <div className="grid gap-8">
-          {[...BLOG_ARTICLES].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).map((article, i) => (
+          {sorted.map((article, i) => (
             <motion.article
               key={article.slug}
               initial={{ opacity: 1, y: 0 }}

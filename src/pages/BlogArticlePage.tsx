@@ -5,6 +5,7 @@ import { getArticleBySlug } from "@/lib/blogData";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft } from "lucide-react";
 import NotFound from "./NotFound";
+import { articleJsonLd, breadcrumbJsonLd } from "@/lib/jsonLd";
 
 /* ────────────────────────────────────────────
    Article content — rendered as JSX for rich
@@ -978,6 +979,198 @@ function ProductivitySystemArticle() {
   );
 }
 
+/* Article 7: Best GTD Apps in 2026 */
+
+function BestGtdAppsArticle() {
+  return (
+    <div className="prose-custom">
+      <p className="lead">
+        Search "best GTD app" and you'll get a hundred listicles that recommend the same five apps and never explain <em>why</em>. Most of them aren't built for Getting Things Done at all — they're general task managers with a tag system, and they expect you to do the GTD plumbing yourself.
+      </p>
+      <p>
+        This is a more honest take. We'll cover what GTD actually requires of an app, the apps people most often consider, and how to pick one that fits the method instead of fighting it. (Full disclosure: we make one of the apps in this list. We're going to try to be useful anyway.)
+      </p>
+
+      <h2>What "GTD-native" actually means</h2>
+      <p>
+        Before comparing apps, it helps to be specific about what GTD asks of a tool. David Allen's <a href="https://gettingthingsdone.com" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">Getting Things Done</a> methodology has five steps — capture, clarify, organize, reflect, engage — and a small set of canonical lists that fall out of those steps:
+      </p>
+      <ul>
+        <li><strong>Inbox</strong> — a single place to capture anything, processed later.</li>
+        <li><strong>Next Actions</strong> — concrete, single-step actions you can do now.</li>
+        <li><strong>Waiting For</strong> — things you've delegated or are blocked on.</li>
+        <li><strong>Scheduled</strong> — actions tied to a specific date or time.</li>
+        <li><strong>Someday/Maybe</strong> — ideas you might pursue, but aren't committed to yet.</li>
+        <li><strong>Projects</strong> — outcomes that take more than one action.</li>
+        <li><strong>Reference</strong> — non-actionable material you might need later.</li>
+      </ul>
+      <p>
+        A GTD-native app treats these as first-class concepts — not labels you apply manually. It also makes the <Link to="/blog/how-to-do-a-weekly-review" className="text-primary hover:underline font-medium">weekly review</Link> a real workflow, not something you cobble together in a separate document. And it distinguishes between sequential and parallel projects, because in GTD a sequential project should only surface its very next step in your Next Actions list.
+      </p>
+      <p>With that yardstick in hand, the apps:</p>
+
+      <h2>Things 3 — beautiful, but not actually GTD</h2>
+      <p>
+        Cultured Code's Things 3 is the prettiest task manager on the App Store and it deserves the praise it gets for design. It has Today, Upcoming, Anytime, and Someday — superficially GTD-shaped, but missing critical pieces. There's no native Waiting For list, no notion of sequential projects, and no built-in weekly review. You can fake all of that with tags and rituals, but you're doing the work the app should do for you.
+      </p>
+      <p>Best for: people who want a beautiful general task app and are willing to bend GTD to fit it.</p>
+
+      <h2>Todoist — flexible enough to do anything, opinionated about nothing</h2>
+      <p>
+        Todoist is the Swiss Army knife of task managers. Labels, filters, projects, priorities — you can construct a GTD system inside it, and many people have. The trade-off is that <em>you</em> have to design the system, configure the filters, and remember the conventions. Six months in, you're maintaining your Todoist setup as much as you're using it.
+      </p>
+      <p>Best for: power users who like configuring tools and don't mind being the architect of their own workflow.</p>
+
+      <h2>OmniFocus — built for GTD, but heavy</h2>
+      <p>
+        OmniFocus is the closest classical match to GTD. It has explicit Inbox, Projects, Contexts (now called Tags), and a Forecast view. It's also Apple-only, expensive, and has a learning curve steep enough that many people abandon it before they get over it. If you've already done GTD on paper for years and you want a desktop power-tool, OmniFocus is the right shape. If you're starting out, it's a lot of app.
+      </p>
+      <p>Best for: long-time GTD practitioners on Apple devices who want maximum control.</p>
+
+      <h2>Notion / Obsidian — endlessly configurable, endlessly distracting</h2>
+      <p>
+        Both can host a GTD system. Both let you build databases and link notes. But neither is a task manager — they're document tools you turn into one. The risk is the same as with Todoist, amplified: you spend more time tweaking your template than capturing tasks. If you love the building, great. If you want to actually <em>do</em> GTD, you'll probably bounce off.
+      </p>
+
+      <h2>TickTick, Microsoft To Do, Apple Reminders</h2>
+      <p>
+        Each of these is a fine simple list manager. None of them is GTD-aware. You can use them, but the gap between what they offer and what GTD asks of a tool is wide enough that you'll be doing the methodology entirely in your head.
+      </p>
+
+      <h2>Things Done. — built around the method, not retrofitted to it</h2>
+      <p>
+        We built <Link to="/" className="text-primary hover:underline font-medium">Things Done.</Link> because we wanted a calm app where the GTD lists already exist as views, sequential projects work the way David Allen describes them (only the first incomplete step appears in Next Actions), and the weekly review is a guided wizard you actually finish. There's a free plan that's generous enough for most personal use, and a $4/month Pro tier that adds AI assistance and removes limits.
+      </p>
+      <p>
+        We're biased, obviously. The honest pitch: if you've tried Things 3, Todoist, or OmniFocus and felt like the tool wasn't speaking GTD back to you, we're worth a look. If you're happy with your current setup, stay there.
+      </p>
+
+      <h2>How to actually choose</h2>
+      <p>Before downloading anything, answer three questions:</p>
+      <ol>
+        <li><strong>How quickly can I capture?</strong> If adding a task takes more than two seconds, you won't do it when it counts. Open each app and time yourself adding ten tasks in a row. The fastest one wins a lot of points.</li>
+        <li><strong>Does the app know what GTD is?</strong> Look for native Waiting For, sequential projects, and a real weekly review. If you have to invent these with tags and saved searches, the app is fighting you.</li>
+        <li><strong>Is the app calm?</strong> GTD's whole point is reducing background noise. An app that nags you with notifications, gamification, or "engagement" features works against the methodology.</li>
+      </ol>
+      <p>
+        Once you've picked, commit to it for at least three weeks. Most people quit a productivity tool in week one because their old habits are stronger than the new system. That's not the app's fault — it's the universal cost of changing a workflow.
+      </p>
+
+      <h2>The harder truth</h2>
+      <p>
+        No app makes you a good GTD practitioner. The methodology is a set of habits — capture, clarify, review — and the app is just a place to keep the lists. The best GTD app is the one you'll <em>actually open</em> every day, do a weekly review in every Sunday, and trust completely.
+      </p>
+      <p>
+        If you're new to GTD, start with our <Link to="/blog/getting-things-done-method-beginners-guide" className="text-primary hover:underline font-medium">beginner's guide</Link> before you spend an hour comparing apps. The method matters more than the tool. Then, when you're ready, try one app for three weeks before reconsidering.
+      </p>
+
+      <blockquote>
+        <p>Pick the app you'll still open in week three. That's the only review that matters.</p>
+      </blockquote>
+
+      <p>
+        If you'd like to give Things Done a try, it's <Link to="/auth" className="text-primary hover:underline font-medium">free to start</Link> and built around the GTD lists from day one. See what it covers on the <Link to="/features" className="text-primary hover:underline font-medium">features page</Link>.
+      </p>
+    </div>
+  );
+}
+
+/* Article 8: How to Do a Weekly Review */
+
+function WeeklyReviewArticle() {
+  return (
+    <div className="prose-custom">
+      <p className="lead">
+        The weekly review is the keystone habit of Getting Things Done. Skip it and your system slowly stops being trustworthy — items go stale, projects drift, and the quiet anxiety of <Link to="/blog/the-hidden-cost-of-open-loops" className="text-primary hover:underline font-medium">open loops</Link> creeps back in. Do it consistently and your whole week feels lighter.
+      </p>
+      <p>
+        Most people don't skip the weekly review because it's hard. They skip it because they don't have a clear, repeatable process. Here's the one we use — adapted from David Allen's classic version, modernized slightly for digital tools, and timeboxed to 30 minutes.
+      </p>
+
+      <h2>Why the weekly review is non-negotiable</h2>
+      <p>
+        GTD works because you trust your system. You can only trust your system if you reset it regularly. The weekly review is that reset. It's where you:
+      </p>
+      <ul>
+        <li>Empty every inbox you have, not just the one in your task app.</li>
+        <li>Re-confirm a clear next action exists for every active project.</li>
+        <li>Catch waiting-for items that need a follow-up.</li>
+        <li>Look forward at your calendar so the coming week doesn't surprise you.</li>
+        <li>Reconnect with your someday/maybe list, which often holds the most important things.</li>
+      </ul>
+      <p>Thirty minutes a week is the price of mind-like-water. It's a bargain.</p>
+
+      <h2>Before you start: set the conditions</h2>
+      <p>
+        A successful weekly review depends on doing it the same time, same place, every week. Pick a slot — Sunday evening, Friday afternoon, Monday morning — and put it on your calendar as a recurring event. Treat it as inviolable as a meeting with your CEO.
+      </p>
+      <p>
+        Close email. Put your phone face down. Have your task app open and a notepad nearby. Brew something warm. The ritual matters more than you think — the more sacred it feels, the more likely you'll keep doing it.
+      </p>
+
+      <h2>Step 1 — Get clear (10 minutes)</h2>
+      <p>
+        Empty everything that's still floating. Process all the inputs that have been sitting unprocessed: email inbox, browser tabs, sticky notes, voice memos, things on the corner of your desk, the random Notion page you've been adding stray thoughts to.
+      </p>
+      <p>
+        For each item, apply the GTD clarify question: <em>Is this actionable?</em> If yes, identify the next physical action and put it in the right list. If no, it's reference, someday, or trash. If it'll take less than two minutes, just do it now — that's <Link to="/blog/the-two-minute-rule" className="text-primary hover:underline font-medium">the two-minute rule</Link> in action.
+      </p>
+      <p>
+        By the end of step 1, every external inbox should be at zero — including your task app's inbox. This is the part that feels the hardest the first few times. It gets faster.
+      </p>
+
+      <h2>Step 2 — Get current (15 minutes)</h2>
+      <p>Now walk through your active lists in the right order:</p>
+      <ol>
+        <li><strong>Review your calendar — last week.</strong> Anything trigger a follow-up, a thank-you, or a new task? Capture it.</li>
+        <li><strong>Review your calendar — next two weeks.</strong> What's coming up? Do you need to prepare anything? Capture those actions now while you're thinking about it.</li>
+        <li><strong>Review your Next Actions list.</strong> Are these still the right next steps? Mark anything done that you forgot to check off. Delete what's no longer relevant.</li>
+        <li><strong>Review your Waiting For list.</strong> For each item, ask: do I need to nudge someone? If yes, send the message now or schedule it.</li>
+        <li><strong>Review every active Project.</strong> This is the heart of the weekly review. For each project, the question is simple: <em>Is there a clear, defined next action?</em> If not, define one. If the project has stalled, decide whether to revive it, defer it to someday, or kill it.</li>
+      </ol>
+      <p>
+        If you're using a GTD-native app, this list-walk is built into the review wizard so you don't have to remember the order. If you're not, just keep the sequence above on a sticky note next to your screen.
+      </p>
+
+      <h2>Step 3 — Get creative (5 minutes)</h2>
+      <p>
+        End the review by looking at your Someday/Maybe list. This is the list of things you've decided not to commit to yet — book ideas, business concepts, trips, side projects. Anything spark for you this week? Promote it to an active project. Anything feel dead? Delete it without guilt.
+      </p>
+      <p>
+        Allen's original version also includes a quick scan of your Areas of Focus (career, health, relationships, etc.) to ask: <em>am I making progress in each of these?</em> If a whole area has been quiet for a month, that's a signal. Capture an action.
+      </p>
+
+      <h2>Common failure modes (and fixes)</h2>
+      <p>Three things derail most weekly reviews:</p>
+      <ul>
+        <li><strong>Doing it occasionally instead of weekly.</strong> Same calendar slot, every week. Treat it like brushing your teeth.</li>
+        <li><strong>Letting it sprawl past 45 minutes.</strong> A 30-minute timebox is a feature. If you can't finish, that's a sign your projects list has gotten too big — prune it during the review itself.</li>
+        <li><strong>Trying to do real work during the review.</strong> The weekly review is for organizing the system, not executing it. If you find yourself diving into a deep task, pull back. Capture a next action and move on.</li>
+      </ul>
+
+      <h2>Make the review effortless</h2>
+      <p>
+        We built the <Link to="/features" className="text-primary hover:underline font-medium">weekly review wizard</Link> in Things Done specifically to remove the willpower cost: it walks you through every step in order, surfaces stale projects automatically, and on the Pro plan an AI coach suggests next actions for projects you've been stuck on. The whole thing takes 25–30 minutes.
+      </p>
+      <p>
+        But you don't need our app to start. The simplest version is a recurring 30-minute calendar block on Sunday evening, a notepad, and the seven-step list above. Do that for a month. You'll feel the difference by week three.
+      </p>
+
+      <blockquote>
+        <p>
+          "You will only get out of GTD what you put into your weekly review."
+          <br />
+          <span className="text-sm">— David Allen</span>
+        </p>
+      </blockquote>
+
+      <p>
+        Ready to make the weekly review a real habit? <Link to="/auth" className="text-primary hover:underline font-medium">Try Things Done. free</Link> and let the wizard do the remembering for you.
+      </p>
+    </div>
+  );
+}
+
 /* ──────── Article page shell ──────── */
 
 const ARTICLE_CONTENT: Record<string, React.FC> = {
@@ -987,6 +1180,8 @@ const ARTICLE_CONTENT: Record<string, React.FC> = {
   "the-two-minute-rule": TwoMinuteRuleArticle,
   "getting-things-done-method-beginners-guide": GtdBeginnersGuideArticle,
   "how-to-build-a-productivity-system": ProductivitySystemArticle,
+  "best-gtd-apps": BestGtdAppsArticle,
+  "how-to-do-a-weekly-review": WeeklyReviewArticle,
 };
 
 export default function BlogArticlePage() {
@@ -996,34 +1191,35 @@ export default function BlogArticlePage() {
 
   if (!article || !Content) return <NotFound />;
 
-  const articleJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    headline: article.title,
-    description: article.description,
-    datePublished: article.date,
-    author: { "@type": "Organization", name: article.author },
-    publisher: { "@type": "Organization", name: "Things Done." },
-    url: `${SITE_URL}/blog/${article.slug}`,
-  };
+  const url = `${SITE_URL}/blog/${article.slug}`;
+  const imageUrl = article.heroImage.startsWith("http")
+    ? article.heroImage
+    : `${SITE_URL}${article.heroImage}`;
 
-  const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
-      { "@type": "ListItem", position: 2, name: "Blog", item: `${SITE_URL}/blog` },
-      { "@type": "ListItem", position: 3, name: article.title },
-    ],
-  };
+  const jsonLd = [
+    articleJsonLd({
+      headline: article.title,
+      description: article.description,
+      url,
+      image: imageUrl,
+      datePublished: article.date,
+      authorName: article.author,
+    }),
+    breadcrumbJsonLd([
+      { name: "Home", url: `${SITE_URL}/` },
+      { name: "Blog", url: `${SITE_URL}/blog` },
+      { name: article.title },
+    ]),
+  ];
 
   return (
     <>
       <SEOHead
         title={`${article.title} — Things Done.`}
         description={article.description}
-        canonical={`${SITE_URL}/blog/${article.slug}`}
-        jsonLd={[articleJsonLd, breadcrumbJsonLd]}
+        canonical={url}
+        ogImage={imageUrl}
+        jsonLd={jsonLd}
       />
 
       <article className="mx-auto max-w-2xl px-6 py-16 md:py-24">
