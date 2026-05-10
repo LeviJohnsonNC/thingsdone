@@ -6,8 +6,9 @@ import { WeeklyReviewSection } from "@/components/marketing/WeeklyReviewSection"
 import { ActiveDevelopmentSection } from "@/components/marketing/ActiveDevelopmentSection";
 import { HomeCTASection } from "@/components/marketing/HomeCTASection";
 import { SEOHead, SITE_URL } from "@/components/SEOHead";
+import { ORG_JSONLD } from "@/lib/jsonLd";
 
-const HOME_JSONLD = {
+const SOFTWARE_JSONLD = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
   name: "Things Done.",
@@ -16,22 +17,13 @@ const HOME_JSONLD = {
   description:
     "The GTD task manager built for practitioners. Native inbox, next actions, waiting for, sequential projects, guided weekly review, and an AI review coach. Free to start.",
   offers: [
-    {
-      "@type": "Offer",
-      price: "0",
-      priceCurrency: "USD",
-      name: "Free",
-    },
-    {
-      "@type": "Offer",
-      price: "4.00",
-      priceCurrency: "USD",
-      name: "Pro",
-      billingPeriod: "month",
-    },
+    { "@type": "Offer", price: "0", priceCurrency: "USD", name: "Free" },
+    { "@type": "Offer", price: "4.00", priceCurrency: "USD", name: "Pro", billingPeriod: "month" },
   ],
   url: SITE_URL,
 };
+
+const HOME_JSONLD = [SOFTWARE_JSONLD, ORG_JSONLD];
 
 export default function HomePage() {
   return (

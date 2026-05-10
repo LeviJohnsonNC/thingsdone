@@ -139,12 +139,9 @@ export function HomeHeroSection() {
         </motion.div>
       </div>
 
-      {/* Hidden real images for SEO */}
-      <div className="sr-only" aria-hidden="false">
-        <img src="/og-image.png" alt="Things Done inbox view showing quick task capture with keyboard shortcut support" width="1200" height="630" loading="lazy" />
-        <img src="/og-image.png" alt="Things Done task editor with energy level, time estimates, and project organization" width="1200" height="630" loading="lazy" />
-        <img src="/og-image.png" alt="Things Done weekly review wizard with AI-powered task suggestions and brain dump" width="1200" height="630" loading="lazy" />
-      </div>
+      {/* Real product screenshots can be added here later for SEO. The placeholder
+          block was removed to avoid pointing multiple alt-tagged images at the same
+          OG file (which can be misread as cloaking). */}
     </section>
   );
 }
