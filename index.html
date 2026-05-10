@@ -3,28 +3,156 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="index, follow" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <title>Things Done. — Capture everything. Know what to do next.</title>
-    <meta name="description" content="A calm, focused GTD task manager that helps you capture tasks, organize projects, and always know what to do next. Free to start.">
+
+    <!-- Default (home) — overridden per-route by the script below before paint -->
+    <title>Things Done. — The GTD Task Manager Built for Practitioners</title>
+    <meta name="description" content="The GTD task manager with native inbox, next actions, waiting for, sequential projects, a guided weekly review, and an AI review coach. Free to start." />
     <meta name="author" content="Things Done." />
     <link rel="canonical" href="https://www.things-done.app/" />
+    <link rel="alternate" hreflang="en" href="https://www.things-done.app/" />
+    <link rel="alternate" hreflang="x-default" href="https://www.things-done.app/" />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Things Done." />
-    <meta property="og:title" content="Things Done. — Capture everything. Know what to do next." />
-    <meta property="og:description" content="A calm, focused GTD task manager that helps you capture tasks, organize projects, and always know what to do next. Free to start." />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Things Done. — The GTD Task Manager Built for Practitioners" />
+    <meta property="og:description" content="The GTD task manager with native inbox, next actions, waiting for, sequential projects, a guided weekly review, and an AI review coach. Free to start." />
     <meta property="og:image" content="https://www.things-done.app/og-image.png" />
     <meta property="og:url" content="https://www.things-done.app/" />
-    <meta property="og:locale" content="en_US" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Things Done. — Capture everything. Know what to do next." />
-    <meta name="twitter:description" content="A calm, focused GTD task manager that helps you capture tasks, organize projects, and always know what to do next. Free to start." />
+    <meta name="twitter:title" content="Things Done. — The GTD Task Manager Built for Practitioners" />
+    <meta name="twitter:description" content="The GTD task manager with native inbox, next actions, waiting for, sequential projects, a guided weekly review, and an AI review coach. Free to start." />
     <meta name="twitter:image" content="https://www.things-done.app/og-image.png" />
+
+    <!--
+      Per-route SEO bootstrap. Runs synchronously before React hydrates so the
+      prerendered HTML snapshot Googlebot sees has the correct <title>, meta
+      description, canonical, OG and Twitter tags for every URL — not just the
+      home page. Keep ROUTE_META in sync with src/lib/blogData.ts when adding
+      new posts. Long-term we'll generate this at build time.
+    -->
+    <script>
+      (function () {
+        var SITE = "https://www.things-done.app";
+        var DEFAULT_OG = SITE + "/og-image.png";
+        var ROUTE_META = {
+          "/": {
+            title: "Things Done. — The GTD Task Manager Built for Practitioners",
+            description: "The GTD task manager with native inbox, next actions, waiting for, sequential projects, a guided weekly review, and an AI review coach. Free to start."
+          },
+          "/features": {
+            title: "Features — Things Done. | GTD Task Manager",
+            description: "Inbox capture, Next actions, Focus mode, Google Calendar sync, sequential projects, and AI-powered weekly reviews. Everything you need to stay on top of everything."
+          },
+          "/pricing": {
+            title: "Pricing — Things Done. | Free & Pro Plans",
+            description: "Start free with up to 30 tasks, 3 projects, and 3 AI reviews/month. Upgrade to Pro for $4/mo for unlimited items, AI reviews, and brain dump capture."
+          },
+          "/blog": {
+            title: "Blog — Things Done. | Productivity Tips & GTD Guides",
+            description: "Practical guides on Getting Things Done, task management, and building a productivity system you actually trust."
+          },
+          "/about": {
+            title: "About — Things Done. | Why We Built a GTD Task Manager",
+            description: "Things Done is an independent GTD task manager built to reduce cognitive load, not increase it. Learn why it exists and what we believe."
+          },
+          "/legal": {
+            title: "Terms & Privacy — Things Done.",
+            description: "Terms of service and privacy policy for Things Done."
+          },
+          "/auth": {
+            title: "Sign In — Things Done.",
+            description: "Sign in to your Things Done account."
+          }
+        };
+        var BLOG_META = {
+          "why-your-to-do-list-doesnt-work": {
+            title: "Why Your To-Do List Doesn't Work (And What to Do Instead) — Things Done.",
+            description: "Most productivity systems fail because they treat all tasks equally. Here's how the GTD method fixes that — and why your brain will thank you."
+          },
+          "the-hidden-cost-of-open-loops": {
+            title: "The Hidden Cost of Open Loops: Why Unfinished Tasks Drain You — Things Done.",
+            description: "That nagging feeling you can't shake? It's not anxiety — it's cognitive debt. The science behind why uncaptured tasks exhaust your brain."
+          },
+          "from-chaos-to-calm": {
+            title: "From Chaos to Calm: One Month of Actually Trusting My System — Things Done.",
+            description: "I was drowning in browser tabs, sticky notes, and guilt. Then I committed to GTD for 30 days. Here's what changed."
+          },
+          "the-two-minute-rule": {
+            title: "The Two-Minute Rule: The Smallest GTD Hack With the Biggest Impact — Things Done.",
+            description: "If it takes less than two minutes, do it now. The simple rule that clears more tasks than any app."
+          },
+          "getting-things-done-method-beginners-guide": {
+            title: "The Getting Things Done (GTD) Method: A Beginner's Guide — Things Done.",
+            description: "Learn the GTD method step by step. David Allen's 5-step productivity system explained simply."
+          },
+          "how-to-build-a-productivity-system": {
+            title: "How to Build a Productivity System That Actually Sticks — Things Done.",
+            description: "Overwhelmed by tasks? Build a simple productivity system that actually sticks — with practical steps you can use today."
+          },
+          "best-gtd-apps": {
+            title: "Best GTD Apps in 2026: How to Pick One That Fits the Method — Things Done.",
+            description: "An honest comparison of the best GTD apps in 2026 — what to look for, what to avoid, and how to pick one that actually fits Getting Things Done."
+          },
+          "how-to-do-a-weekly-review": {
+            title: "How to Do a Weekly Review (The David Allen Way) — Things Done.",
+            description: "A 30-minute walkthrough of the GTD weekly review — the keystone habit that keeps your system trustworthy week after week."
+          }
+        };
+
+        function path() {
+          try { return location.pathname.replace(/\/$/, "") || "/"; } catch (e) { return "/"; }
+        }
+        function lookup(p) {
+          if (ROUTE_META[p]) return { meta: ROUTE_META[p], canonical: SITE + (p === "/" ? "/" : p) };
+          if (p.indexOf("/blog/") === 0) {
+            var slug = p.slice(6);
+            if (BLOG_META[slug]) return { meta: BLOG_META[slug], canonical: SITE + p };
+          }
+          return null;
+        }
+        function setMeta(attr, key, value) {
+          var sel = "meta[" + attr + '="' + key + '"]';
+          var el = document.querySelector(sel);
+          if (!el) {
+            el = document.createElement("meta");
+            el.setAttribute(attr, key);
+            document.head.appendChild(el);
+          }
+          el.setAttribute("content", value);
+        }
+        function setLink(rel, href) {
+          var el = document.querySelector('link[rel="' + rel + '"]');
+          if (!el) {
+            el = document.createElement("link");
+            el.setAttribute("rel", rel);
+            document.head.appendChild(el);
+          }
+          el.setAttribute("href", href);
+        }
+
+        var hit = lookup(path());
+        if (!hit) return;
+        var t = hit.meta.title;
+        var d = hit.meta.description;
+        var c = hit.canonical;
+        document.title = t;
+        setMeta("name", "description", d);
+        setLink("canonical", c);
+        setMeta("property", "og:title", t);
+        setMeta("property", "og:description", d);
+        setMeta("property", "og:url", c);
+        setMeta("name", "twitter:title", t);
+        setMeta("name", "twitter:description", d);
+      })();
+    </script>
   </head>
 
   <body>
@@ -36,6 +164,8 @@
         <a href="https://www.things-done.app/blog">Blog</a>
         <a href="https://www.things-done.app/blog/getting-things-done-method-beginners-guide">GTD Beginner's Guide</a>
         <a href="https://www.things-done.app/blog/how-to-build-a-productivity-system">Build a Productivity System</a>
+        <a href="https://www.things-done.app/blog/best-gtd-apps">Best GTD Apps in 2026</a>
+        <a href="https://www.things-done.app/blog/how-to-do-a-weekly-review">How to Do a Weekly Review</a>
         <a href="https://www.things-done.app/about">About</a>
         <a href="https://www.things-done.app/legal">Terms &amp; Privacy</a>
         <a href="https://www.things-done.app/auth">Sign In</a>
