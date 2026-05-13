@@ -2,6 +2,27 @@ import { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { SEOHead, SITE_URL } from "@/components/SEOHead";
+import { breadcrumbJsonLd } from "@/lib/jsonLd";
+
+const FEATURES_JSONLD = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: "Features — Things Done.",
+    url: `${SITE_URL}/features`,
+    description:
+      "Inbox capture, Next actions, Focus mode, Google Calendar sync, sequential projects, and AI-powered weekly reviews.",
+    isPartOf: {
+      "@type": "WebSite",
+      name: "Things Done.",
+      url: SITE_URL,
+    },
+  },
+  breadcrumbJsonLd([
+    { name: "Home", url: `${SITE_URL}/` },
+    { name: "Features", url: `${SITE_URL}/features` },
+  ]),
+];
 import { ProductMockup } from "@/components/marketing/ProductMockup";
 import { Button } from "@/components/ui/button";
 import { HomeCTASection } from "@/components/marketing/HomeCTASection";
@@ -96,6 +117,7 @@ export default function FeaturesPage() {
         title="Features — Things Done. | GTD® Task Manager"
         description="Inbox capture, Next actions, Focus mode, Google Calendar sync, sequential projects, and AI-powered weekly reviews. Everything you need to stay on top of everything."
         canonical={`${SITE_URL}/features`}
+        jsonLd={FEATURES_JSONLD}
       />
       {/* Hero */}
       <section className="bg-hero-bg px-6 py-24 text-center">

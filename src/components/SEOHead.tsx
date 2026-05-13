@@ -5,6 +5,7 @@ interface SEOHeadProps {
   description: string;
   canonical: string;
   ogImage?: string;
+  ogType?: "website" | "article";
   jsonLd?: object | object[];
 }
 
@@ -21,6 +22,7 @@ export function SEOHead({
   description,
   canonical,
   ogImage = DEFAULT_OG_IMAGE,
+  ogType = "website",
   jsonLd,
 }: SEOHeadProps) {
   useLayoutEffect(() => {
@@ -59,7 +61,7 @@ export function SEOHead({
     setMeta("property", "og:description", description);
     setMeta("property", "og:url", canonical);
     setMeta("property", "og:image", ogImage);
-    setMeta("property", "og:type", "website");
+    setMeta("property", "og:type", ogType);
     setMeta("property", "og:site_name", SITE_NAME);
     setMeta("property", "og:locale", "en_US");
 
@@ -83,7 +85,7 @@ export function SEOHead({
     } else if (script) {
       script.remove();
     }
-  }, [title, description, canonical, ogImage, jsonLd]);
+  }, [title, description, canonical, ogImage, ogType, jsonLd]);
 
   return null;
 }

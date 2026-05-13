@@ -1,0 +1,29 @@
+# Things Done.
+
+> An independent GTD® task manager built for practitioners. Capture, clarify, organize, review, and do — without bending a generic to-do app into a GTD shape.
+
+Things Done. is a calm, mobile-first GTD task manager. It includes a native inbox, next actions, waiting for, sequential projects, a guided weekly review, and an AI review coach. Free to start; Pro is $4/month.
+
+## Pages
+
+- [Home](/): What Things Done. is and who it's for.
+- [Features](/features): Inbox capture, next actions, focus mode, sequential projects, Google Calendar sync, AI weekly review.
+- [Pricing](/pricing): Free plan (30 tasks, 3 projects, 3 AI reviews/mo) and Pro at $4/mo.
+- [About](/about): Why we built an independent GTD app and what we believe.
+- [Blog](/blog): Practical guides on GTD® and productivity systems.
+- [Terms & Privacy](/legal): Legal terms, privacy policy, data ownership.
+
+## Blog
+
+- [The GTD Method: A Beginner's Guide](/blog/getting-things-done-method-beginners-guide): David Allen's 5-step productivity system explained simply.
+- [How to Do a Weekly Review](/blog/how-to-do-a-weekly-review): The 30-minute keystone habit that keeps your system trustworthy.
+- [Best GTD Apps in 2026](/blog/best-gtd-apps): Honest comparison of GTD apps and how to pick one that fits the method.
+- [How to Build a Productivity System](/blog/how-to-build-a-productivity-system): Practical steps for a system that actually sticks.
+- [Why Your To-Do List Doesn't Work](/blog/why-your-to-do-list-doesnt-work): Why most lists fail and what GTD does differently.
+- [The Hidden Cost of Open Loops](/blog/the-hidden-cost-of-open-loops): The science behind why uncaptured tasks drain you.
+- [The Two-Minute Rule](/blog/the-two-minute-rule): The smallest GTD hack with the biggest impact.
+- [From Chaos to Calm](/blog/from-chaos-to-calm): One month of actually trusting a GTD system.
+
+## Optional
+
+- [Sign In](/auth): Account access for existing users.

@@ -21,7 +21,7 @@ export interface BlogArticle {
 export const BLOG_ARTICLES: BlogArticle[] = [
   {
     slug: "why-your-to-do-list-doesnt-work",
-    title: "Why Your To-Do List Doesn't Work (And What to Do Instead)",
+    title: "Why Your To-Do List Doesn't Work",
     description:
       "Most productivity systems fail because they treat all tasks equally. Here's how the GTD® method fixes that — and why your brain will thank you.",
     date: "2026-03-09",
@@ -32,7 +32,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
   },
   {
     slug: "the-hidden-cost-of-open-loops",
-    title: "The Hidden Cost of Open Loops: Why Unfinished Tasks Drain You",
+    title: "The Hidden Cost of Open Loops",
     description:
       "That nagging feeling you can't shake? It's not anxiety — it's cognitive debt. Here's the science behind why uncaptured tasks exhaust your brain.",
     date: "2026-03-08",
@@ -43,7 +43,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
   },
   {
     slug: "from-chaos-to-calm",
-    title: "From Chaos to Calm: One Month of Actually Trusting My System",
+    title: "From Chaos to Calm in 30 Days of GTD",
     description:
       "I was drowning in browser tabs, sticky notes, and guilt. Then I committed to GTD® for 30 days. Here's what changed — and what surprised me.",
     date: "2026-03-07",
@@ -54,7 +54,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
   },
   {
     slug: "the-two-minute-rule",
-    title: "The Two-Minute Rule: The Smallest GTD® Hack With the Biggest Impact",
+    title: "The Two-Minute Rule for GTD",
     description:
       "If it takes less than two minutes, do it now. This simple rule clears more tasks than any app ever could.",
     date: "2026-03-06",
@@ -65,7 +65,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
   },
   {
     slug: "getting-things-done-method-beginners-guide",
-    title: "The Getting Things Done (GTD) Method: A Beginner's Guide That Actually Makes Sense",
+    title: "The GTD Method: A Beginner's Guide",
     description:
       "Learn the Getting Things Done (GTD) method step by step. This beginner's guide breaks down David Allen's 5-step productivity system so you can stop forgetting tasks and start getting things done.",
     date: "2026-03-14",
@@ -76,7 +76,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
   },
   {
     slug: "how-to-build-a-productivity-system",
-    title: "How to Build a Productivity System That Actually Sticks",
+    title: "How to Build a Productivity System",
     description:
       "Overwhelmed by tasks and to-do lists? Learn how to build a simple productivity system that actually sticks — with practical steps you can start using today.",
     date: "2026-03-14",
@@ -87,7 +87,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
   },
   {
     slug: "best-gtd-apps",
-    title: "Best GTD Apps in 2026: How to Pick One That Actually Fits the Method",
+    title: "Best GTD Apps in 2026",
     description:
       "An honest comparison of the best GTD apps in 2026 — what to look for, what to avoid, and how to pick one that actually fits Getting Things Done.",
     date: "2026-05-09",
@@ -98,7 +98,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
   },
   {
     slug: "how-to-do-a-weekly-review",
-    title: "How to Do a Weekly Review (The David Allen Way) — A 30-Minute Walkthrough",
+    title: "How to Do a GTD Weekly Review",
     description:
       "A step-by-step walkthrough of the GTD weekly review — the keystone habit that keeps your system trustworthy week after week.",
     date: "2026-05-10",

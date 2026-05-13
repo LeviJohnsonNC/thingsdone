@@ -138,6 +138,8 @@ const PRICING_JSONLD = [
     "@type": "Product",
     name: "Things Done.",
     description: "A calm GTD task manager. Free plan available, Pro at $4/mo.",
+    image: "https://www.things-done.app/og-image.png",
+    brand: { "@type": "Brand", name: "Things Done." },
     offers: [
       { "@type": "Offer", price: "0", priceCurrency: "USD", name: "Free" },
       { "@type": "Offer", price: "4.00", priceCurrency: "USD", name: "Pro", billingPeriod: "month" },
