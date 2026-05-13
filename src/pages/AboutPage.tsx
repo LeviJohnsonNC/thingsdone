@@ -1,4 +1,21 @@
 import { SEOHead, SITE_URL } from "@/components/SEOHead";
+import { breadcrumbJsonLd, ORG_JSONLD } from "@/lib/jsonLd";
+
+const ABOUT_JSONLD = [
+  {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    name: "About Things Done.",
+    url: `${SITE_URL}/about`,
+    description:
+      "Things Done is an independent GTD® task manager built to reduce cognitive load. Learn why it exists and what we believe.",
+  },
+  ORG_JSONLD,
+  breadcrumbJsonLd([
+    { name: "Home", url: `${SITE_URL}/` },
+    { name: "About", url: `${SITE_URL}/about` },
+  ]),
+];
 
 export default function AboutPage() {
   return (
@@ -7,6 +24,7 @@ export default function AboutPage() {
         title="About — Things Done. | Why We Built a GTD® Task Manager"
         description="Things Done is an independent GTD® task manager built to reduce cognitive load, not increase it. Learn why it exists and what we believe."
         canonical={`${SITE_URL}/about`}
+        jsonLd={ABOUT_JSONLD}
       />
 
       <article className="mx-auto max-w-2xl px-6 py-16 md:py-24">
