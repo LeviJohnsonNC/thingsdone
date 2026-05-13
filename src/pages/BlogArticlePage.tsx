@@ -1219,6 +1219,7 @@ export default function BlogArticlePage() {
         description={article.description}
         canonical={url}
         ogImage={imageUrl}
+        ogType="article"
         jsonLd={jsonLd}
       />
 

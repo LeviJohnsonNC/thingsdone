@@ -30,7 +30,7 @@ export default function HomePage() {
     <>
       <SEOHead
         title="Things Done — The GTD Task Manager Built for Practitioners"
-        description="The GTD task manager with native inbox, next actions, waiting for, sequential projects, a guided weekly review, and an AI review coach. Free to start — no credit card required."
+        description="A GTD task manager with inbox, next actions, sequential projects, a guided weekly review, and an AI review coach. Free to start — no card required."
         canonical={`${SITE_URL}/`}
         jsonLd={HOME_JSONLD}
       />
