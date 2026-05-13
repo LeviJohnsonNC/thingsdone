@@ -98,7 +98,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
   },
   {
     slug: "how-to-do-a-weekly-review",
-    title: "How to Do a Weekly Review (The David Allen Way) — A 30-Minute Walkthrough",
+    title: "How to Do a GTD Weekly Review",
     description:
       "A step-by-step walkthrough of the GTD weekly review — the keystone habit that keeps your system trustworthy week after week.",
     date: "2026-05-10",
