@@ -12,4 +12,4 @@ Disallow: /settings
 Disallow: /review
 Disallow: /help
 
-Sitemap: https://things-done.app/sitemap.xml
+Sitemap: https://www.things-done.app/sitemap.xml
