@@ -66,12 +66,16 @@ export function HeroV2() {
           transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
           className="lg:col-span-5"
         >
-          <MarketingImagePlaceholder
-            label="Hero: Loose Thought to Next Action"
-            caption="Inbox → Clarify → Next Actions"
-            variant="tall"
-            accent="moss"
-          />
+          <figure className="group">
+            <div className="relative w-full overflow-hidden rounded-2xl border border-hairline bg-paper shadow-tactile">
+              <img
+                src={heroImage.url}
+                alt="GTD workflow: capture, clarify, and organize open loops into clear next actions"
+                className="h-full w-full object-cover"
+                loading="eager"
+              />
+            </div>
+          </figure>
         </motion.div>
       </div>
     </SectionShell>
