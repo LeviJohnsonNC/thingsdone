@@ -35,7 +35,6 @@ describe("Edge function authentication", () => {
     "push-item-to-calendar",
     "google-calendar-auth",
     "sync-calendar-events",
-    "google-calendar-refresh",
     "activate-scheduled-items",
   ];
 
