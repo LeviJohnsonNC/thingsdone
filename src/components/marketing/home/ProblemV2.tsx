@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { SectionShell } from "./SectionShell";
-import { MarketingImagePlaceholder } from "./MarketingImagePlaceholder";
+import problemImage from "@/assets/problem-image.png.asset.json";
 
 export function ProblemV2() {
   return (
@@ -40,12 +40,15 @@ export function ProblemV2() {
           transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
           className="lg:col-span-6"
         >
-          <MarketingImagePlaceholder
-            label="Generic Apps Make GTD Your Job"
-            caption="Scattered tags, filters, notes, reminders, and spreadsheets"
-            variant="module"
-            accent="clay"
-          />
+          <figure className="group rounded-2xl border border-hairline bg-paper shadow-tactile overflow-hidden">
+            <img
+              src={problemImage.url}
+              alt="Things Done: handwritten notes flowing into Inbox, Projects, Waiting, Someday, Review, and Next trays"
+              className="w-full h-auto select-none"
+              loading="lazy"
+              draggable={false}
+            />
+          </figure>
         </motion.div>
       </div>
     </SectionShell>
