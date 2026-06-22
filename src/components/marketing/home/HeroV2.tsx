@@ -67,14 +67,13 @@ export function HeroV2() {
           className="lg:col-span-5"
         >
           <figure className="group">
-            <div className="relative w-full overflow-hidden rounded-2xl border border-hairline bg-paper shadow-tactile">
-              <img
-                src={heroImage.url}
-                alt="GTD workflow: capture, clarify, and organize open loops into clear next actions"
-                className="h-full w-full object-cover"
-                loading="eager"
-              />
-            </div>
+            <img
+              src={heroImage.url}
+              alt="GTD workflow: capture loose thoughts, clarify the next action, and organize into Next, Project, Waiting, Someday, and Review"
+              className="w-full h-auto select-none"
+              loading="eager"
+              draggable={false}
+            />
           </figure>
         </motion.div>
       </div>
