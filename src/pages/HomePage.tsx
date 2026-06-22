@@ -30,7 +30,7 @@ export default function HomePage() {
   return (
     <>
       <SEOHead
-        title="Things Done — GTD-native task management"
+        title="Things Done - GTD-native task management"
         description="Your brain is not a storage unit. Capture every open loop, clarify the next action, and keep your system alive with a guided Weekly Review. Free to start."
         canonical={`${SITE_URL}/`}
         jsonLd={HOME_JSONLD}
