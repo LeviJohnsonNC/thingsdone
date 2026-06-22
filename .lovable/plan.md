@@ -1,98 +1,108 @@
-# SEO Rebuild Plan — Get Things Done. ranking on Google
+## Goal
 
-## Why we're invisible right now
+Replace the current homepage with a calm, premium, GTD-native landing page. Warm cream / sand / moss / clay / amber palette, large editorial typography, spacious composition, real product UI in the visuals (not abstract diagrams), and premium image placeholders that already look finished before final artwork lands.
 
-I fetched the live HTML for `/blog/getting-things-done-method-beginners-guide` to see what Googlebot actually receives. The good news: Lovable prerenders the body content. The bad news, in order of impact:
+Scope is **homepage only**. `/features`, `/pricing`, `/about`, `/blog`, marketing nav, and footer stay as they are for now (we can do those in a later pass).
 
-1. **The prerendered `<head>` is empty.** No `<title>`, no `<meta description>`, no canonical, no OG tags on any route except `/`. Our `SEOHead` component sets these via `useEffect` after JS runs — Googlebot's first pass sees the static `index.html` head (the home page title) on every URL. That single bug is enough to suppress rankings for every page except the homepage.
-2. **Thin topical footprint.** 6 blog posts, 1 product page, 1 features page. For competitive terms ("GTD app", "getting things done app", "best task manager for GTD"), Google needs more depth and more interlinking before it trusts us as an authority.
-3. **No JSON-LD on articles.** `Article`, `BreadcrumbList`, `FAQPage`, and `HowTo` schema are missing. These don't directly rank you but they win SERP real estate (rich snippets) and signal topical clarity.
-4. **One month is genuinely short.** New domains sit in a "sandbox" period. We can't shortcut that, but we can make sure that when Google does start crawling seriously, every page is technically clean and content-rich.
-5. **No backlink signals.** Nothing we ship in code fixes this — flagged at the bottom as off-platform work.
+## Section structure (7, down from 10)
 
-## What we'll build
+```text
+1. Hero               — "Your brain is not a storage unit."
+2. Problem            — Most task apps make you rebuild GTD by hand.
+3. GTD-native         — A real place for every open loop.
+                        (Capture → Clarify → Do flow folded in as the section spine,
+                         plus the 7 GTD module vignettes)
+4. Sequential         — Sequential projects only show the next move.
+5. Weekly Review +    — The Weekly Review is built in.
+   Coach                (AI Coach shown as the answer to "the part people abandon",
+                         not framed as a separate AI feature)
+6. Editorial vignette — "What changes in a week."
+                        (Replaces the four audience cards — one quiet before/after
+                         moment instead of a persona grid)
+7. Final CTA          — Start with a clear head.
 
-### Part 1 — Fix the head metadata problem (highest impact)
++ Active-development line: single sentence above the footer, not a section.
+```
 
-The cleanest SPA fix without a build-time prerenderer is to **inline per-route SEO tags into `index.html` via a route-aware static fallback**, plus harden the runtime `SEOHead` so the `<head>` is never blank during the crawl window.
+## Design system additions
 
-Concretely:
+Add a marketing token layer in `src/index.css` so the homepage can live in the warm palette without polluting the app's calm blue UI:
 
-- **Hoist a default route map into `index.html`**: a small inline `<script>` in `<head>` that reads `location.pathname`, looks up a static `{title, description, canonical}` from a JSON object literal, and writes the matching `<title>`/`<meta>`/`<link rel=canonical>` *synchronously before paint*. This runs before React hydrates, so prerendered HTML snapshots (which Lovable hosting captures) include the right tags. Pages covered: `/`, `/features`, `/pricing`, `/blog`, `/about`, `/legal`, plus each `/blog/<slug>`.
-- **Keep `SEOHead`** for runtime updates and JSON-LD, but make it idempotent (replace, don't append duplicates) and run it in a `useLayoutEffect` so the swap happens before the next paint instead of after.
-- **Add `<meta name="robots" content="index,follow">`** as a static tag in `index.html` (currently only injected at runtime).
-- **Per-route `og:image`**: blog posts already have hero images — pass each article's `heroImage` URL into `SEOHead` as `ogImage` so social/Google previews aren't all the same generic graphic.
+- `--warm-cream`, `--warm-sand`, `--warm-paper`, `--ink`, `--ink-soft`, `--moss`, `--moss-deep`, `--clay`, `--amber`, `--hairline` (HSL values, light + dark variants)
+- Marketing-only shadow + border tokens: `--shadow-tactile`, `--border-hairline`
+- New Tailwind utilities wired through `tailwind.config.ts` (e.g. `bg-cream`, `bg-sand`, `text-ink`, `border-hairline`)
+- Editorial type pair via `@fontsource`: **Instrument Serif** (display headlines) + **Inter** (body, already in use). Loaded in `src/main.tsx`, wired through `tailwind.config.ts` as `font-display` and `font-sans`.
 
-### Part 2 — Structured data (rich results)
+App UI (calm blue) is unchanged. The marketing tokens scope only to homepage components.
 
-Add JSON-LD to every meaningful page via the existing `SEOHead` `jsonLd` prop:
+## Image placeholders
 
-- **Blog index (`/blog`)**: `Blog` + `BreadcrumbList`.
-- **Blog articles**: `Article` (with `author`, `datePublished`, `dateModified`, `image`, `headline`, `wordCount`) + `BreadcrumbList` + `FAQPage` for the 2-3 articles that already contain Q&A-shaped content (the GTD beginner's guide, the productivity-system post).
-- **Pricing page**: `Product` with `Offer`s for Free + Pro tiers.
-- **Features page**: `SoftwareApplication` with `featureList`.
-- **Home**: extend the existing JSON-LD with `aggregateRating` placeholder (commented; only enable when we have real reviews — fake ratings get manual-action penalties).
+A single reusable `<MarketingImagePlaceholder>` component, used everywhere a real visual will eventually land:
 
-### Part 3 — Content depth (topical authority)
+- Warm sand surface, hairline border, soft tactile shadow, subtle paper-grain via a quiet SVG noise layer set very low opacity
+- Caption label (small caps, ink) and an internal label tag (e.g. `Hero — Loose Thought to Next Action`)
+- Variants for hero (large, ~16:10), module (square-ish vignette), wide (flow / sequential), card (audience-style)
+- Looks intentional empty — page will not feel "unfinished" before real artwork lands
 
-Ship 5 new SEO-targeted blog posts aimed at high-intent, lower-competition queries. Each ≥1,500 words, with internal links to existing posts and to `/features`:
+User will supply real images later; the placeholder receives an optional `src` prop and swaps in cleanly when provided.
 
-1. **"Best GTD Apps in 2026: How to Pick One That Actually Fits the Method"** — keyword: *best gtd app*. Comparative framing; honest about Things Done's positioning.
-2. **"How to Do a Weekly Review (The David Allen Way) — A 30-Minute Walkthrough"** — keyword: *weekly review gtd*. Step-by-step with screenshots of our review wizard.
-3. **"GTD Contexts in 2026: Why @Phone is Dead and What Replaced It"** — keyword: *gtd contexts*. Modernizes a classic concept, links to our tag system.
-4. **"Inbox Zero vs GTD: They're Not the Same Thing"** — keyword: *inbox zero vs gtd*. High-volume comparison query.
-5. **"Sequential vs Parallel Projects in GTD: A Practical Guide"** — keyword: *sequential projects gtd*. Showcases a feature only we do well natively.
+## New component files
 
-Each post gets a hero image (use existing `imagegen` skill, premium tier), correct `Article` JSON-LD, and 3-5 contextual internal links.
+Created under `src/components/marketing/home/` to keep clean separation from the existing v1 marketing components (which stay on disk in case we want to revert):
 
-### Part 4 — On-page hygiene
+- `HeroV2.tsx`
+- `ProblemV2.tsx`
+- `GtdNativeSection.tsx` (includes the Capture→Clarify→Do flow as its spine)
+- `SequentialProjectSection.tsx`
+- `WeeklyReviewCoachSection.tsx`
+- `EditorialVignetteSection.tsx`
+- `FinalCtaSection.tsx`
+- `ActiveDevelopmentLine.tsx` (one-line strip, not a section)
+- `MarketingImagePlaceholder.tsx` (shared)
+- `SectionShell.tsx` (shared spacing/container primitive so every section breathes consistently)
 
-- **Single H1 per page audit**: home and a few marketing sections currently use `font-display` styled `<h2>`s that read as headlines visually. Verify each route has exactly one `<h1>` matching the SEO title's primary keyword.
-- **Image alt text**: blog hero images use the article title as alt text — fine. The "hidden SEO images" block in `HomeHeroSection.tsx` currently points all three to `/og-image.png`. Either replace with real screenshots when we have them or remove the block (it currently risks looking like cloaking).
-- **Internal link density**: blog posts link out well; marketing pages don't link to blog. Add a 3-card "Read more" strip to `/features` and `/pricing` pulling from the most relevant blog posts.
-- **Sitemap regen**: add the 5 new posts to `public/sitemap.xml` and bump `lastmod` on existing entries.
-- **`hreflang` self-reference**: add `<link rel="alternate" hreflang="en" href="...">` and `hreflang="x-default"` so we're explicit about language targeting.
+`src/pages/HomePage.tsx` is rewritten to compose these. SEO metadata + JSON-LD stays; the H1 changes to the new hero headline.
 
-### Part 5 — Crawl-rate signals
+## Copy commitments
 
-- **Submit updated sitemap to Google Search Console** (manual user step — flagged below).
-- **Add a `lastmod` to the sitemap entry for `/`** that we bump on each marketing release. Google revisits more often when `lastmod` moves.
-- **Add `<link rel="me">` and an `Organization` JSON-LD** with `sameAs` pointing to any social profiles (X, GitHub, LinkedIn) we have. Even one or two `sameAs` entries help disambiguate the brand entity.
+- **Hero H1:** Your brain is not a storage unit.
+- **Hero sub:** GTD-native task management. Capture every open loop, clarify the next action, and keep your system alive with a guided Weekly Review.
+- **Hero CTAs:** Start free / See how it works
+- **Microcopy:** Free to start. No card. Built for real GTD practice.
+- All other section headlines as written in the brief, with Section 7 retitled **"The part of GTD people actually abandon."** so "AI" lives in body copy, not the H2.
+- Active-development line: one sentence in running prose, dated, no chip strip.
+
+## Mobile
+
+Not a stack of the desktop layout. Each section gets a deliberate small-screen composition: hero visual moves below headline and gets full-bleed, GTD module vignettes become a horizontally-scrollable rail (snap), sequential project becomes a vertical reveal, Weekly Review becomes a vertical numbered rail. Verified at 375 / 414 / 768.
+
+## Out of scope (deliberate, for later passes)
+
+- Marketing nav restyle, footer restyle, `/features`, `/pricing`, `/about`, blog
+- Real images (user will supply)
+- Active development chip section (replaced by single line)
+- Audience persona grid (replaced by editorial vignette)
+- Reference feature, calendar sync, contacts — not surfaced on the homepage per the brief
 
 ## Technical details
 
-- **Inline route metadata in `index.html`**: a ~2 KB script literal mapping pathnames to `{title, description}`. Blog slugs are matched via `startsWith('/blog/')` then a lookup into a flat object generated at build time. We don't need build tooling — we'll generate it once and check it in, and add a comment reminding to update when adding posts. (A future improvement is a Vite plugin that reads `blogData.ts` and templates `index.html`, but that's out of scope here.)
-- **`SEOHead` changes**: switch to `useLayoutEffect`, dedupe meta tags by `[name|property]` selector before insert (it already does this — verify), and accept `ogImage` per route so blog posts pass their hero.
-- **JSON-LD helpers**: add `src/lib/jsonLd.ts` with typed builders (`articleJsonLd`, `breadcrumbJsonLd`, `faqJsonLd`, `productJsonLd`) so pages stay clean.
-- **New blog posts**: extend `BLOG_ARTICLES` in `src/lib/blogData.ts`, render their JSX in `BlogArticlePage.tsx` following the existing pattern, generate hero images into `src/assets/blog/`.
-- **Sitemap**: hand-edited `public/sitemap.xml`; no build step needed.
-- **No new dependencies.**
+- Fonts: `bun add @fontsource/instrument-serif`; import `@fontsource/instrument-serif/400.css` and `/400-italic.css` in `src/main.tsx`. Map to `fontFamily.display` in `tailwind.config.ts`. Inter is already loaded.
+- Tokens: extend `:root` and `.dark` in `src/index.css` with the warm palette HSL triples; extend `theme.extend.colors` in `tailwind.config.ts` (cream, sand, paper, ink, ink-soft, moss, moss-deep, clay, amber, hairline).
+- Placeholders use an inline SVG `<filter id="grain"><feTurbulence/></filter>` referenced by `feImage` for the paper texture; opacity ~0.04 so it never reads as noise.
+- Sections use a shared `SectionShell` with vertical padding scale `py-24 md:py-32 lg:py-40` and a max-width-7xl container with generous gutters. This is the single biggest contributor to the "spacious" feel.
+- Motion: subtle only. Hero headline + sub fade up on mount, sections fade in once on scroll into view via Framer Motion (already in the project). No parallax, no marquee, no scroll-jacking. Respect `prefers-reduced-motion`.
+- The old marketing v1 components stay in `src/components/marketing/` untouched and unimported — easy revert.
 
-## Files touched (estimate)
+## Build / verify
 
-- `index.html` — inline route metadata script + static robots/hreflang
-- `src/components/SEOHead.tsx` — `useLayoutEffect`, `ogImage` plumbing
-- `src/lib/jsonLd.ts` — new helpers
-- `src/pages/BlogPage.tsx`, `BlogArticlePage.tsx`, `FeaturesPage.tsx`, `PricingPage.tsx`, `HomePage.tsx`, `AboutPage.tsx` — pass JSON-LD + per-route ogImage
-- `src/lib/blogData.ts` — 5 new entries
-- `src/pages/BlogArticlePage.tsx` — 5 new article JSX components
-- `src/assets/blog/*.png` — 5 new hero images (premium tier)
-- `src/components/marketing/HomeHeroSection.tsx` — fix the suspicious hidden-image block
-- `public/sitemap.xml` — add 5 new URLs, bump lastmods
+- Confirm the homepage renders top-to-bottom with no console errors
+- Verify type scale and color tokens render correctly in light + dark
+- Screenshot at 1440 desktop and 390 mobile via Playwright; confirm no overlap, no cut text, consistent breathing room across sections
+- Confirm placeholders look intentional (not "TODO")
+- Confirm app UI (`/inbox`, `/next`, settings) is visually unchanged — no token leakage
 
-## What this won't fix (manual / off-platform)
+## Follow-ups after you approve
 
-These I can't do from inside the codebase. Flagging so you can act:
-
-1. **Google Search Console**: verify the domain (you may already have done this via the `googlea00c144ba59d80a3.html` file in `/public` — confirm it's verified), submit the updated sitemap, and use "Inspect URL → Request Indexing" for the 6 most important pages. This alone often unsticks new sites.
-2. **Backlinks**: the hardest part. Concrete options — submit to Product Hunt, list on alternativeto.net under "Things 3 alternatives" and "Todoist alternatives", post a launch story on Hacker News tied to the GTD-native angle, reach out to 3-5 GTD bloggers (Lifehacker, Cal Newport's audience, r/gtd) with the beginner's guide post.
-3. **Page Speed**: Google uses Core Web Vitals. Once shipped, run PageSpeed Insights on the homepage and a blog post; if LCP > 2.5s on mobile we'll need to revisit (likely the hero image / Framer Motion).
-
-## Suggested rollout order
-
-1. Part 1 (head metadata fix) — ship immediately, this is the unlock.
-2. Part 4 (on-page hygiene) + Part 2 (JSON-LD) — same PR if small.
-3. Part 3 (5 new posts) — ship in batches of 2-3 per week so the sitemap shows steady fresh `lastmod` values.
-4. Part 5 (Search Console resubmit) — after each batch.
-
-Expect 4-8 weeks before meaningful organic traffic shifts; SEO is slow.
+1. I build the structure with placeholders.
+2. You supply images per placeholder label.
+3. I swap them in and do a polish pass.
