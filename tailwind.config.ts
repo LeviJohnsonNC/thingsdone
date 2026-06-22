@@ -64,6 +64,25 @@ export default {
         "hero-bg": "hsl(var(--hero-bg))",
         "pricing-highlight": "hsl(var(--pricing-highlight))",
         "feature-card-bg": "hsl(var(--feature-card-bg))",
+
+        /* Marketing — warm homepage palette */
+        cream: "hsl(var(--warm-cream))",
+        sand: "hsl(var(--warm-sand))",
+        paper: "hsl(var(--warm-paper))",
+        ink: {
+          DEFAULT: "hsl(var(--ink))",
+          soft: "hsl(var(--ink-soft))",
+        },
+        moss: {
+          DEFAULT: "hsl(var(--moss))",
+          deep: "hsl(var(--moss-deep))",
+        },
+        clay: "hsl(var(--clay))",
+        amber: "hsl(var(--amber))",
+        hairline: "hsl(var(--hairline))",
+      },
+      fontFamily: {
+        display: ["'Instrument Serif'", "Times New Roman", "serif"],
       },
       borderRadius: {
         lg: "var(--radius)",
