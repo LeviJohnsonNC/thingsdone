@@ -13,43 +13,43 @@ const modules: Array<{
   {
     title: "Inbox",
     copy: "One trusted place for every loose thought, before it becomes a task.",
-    label: "Inbox — capture without committing",
+    label: "Inbox: capture without committing",
     accent: "moss",
   },
   {
     title: "Next Actions",
-    copy: "The honest list of physical, doable actions — sorted by context and energy.",
-    label: "Next Actions — by context & energy",
+    copy: "The honest list of physical, doable actions, sorted by context and energy.",
+    label: "Next Actions: by context & energy",
     accent: "amber",
   },
   {
     title: "Projects",
-    copy: "Outcomes with multiple steps. Parallel or sequential — your call.",
-    label: "Projects — with next action surfaced",
+    copy: "Outcomes with multiple steps. Parallel or sequential. Your call.",
+    label: "Projects: with next action surfaced",
     accent: "moss",
   },
   {
     title: "Waiting For",
     copy: "Things you're owed. Tracked with who, what, and how long.",
-    label: "Waiting For — with follow-up timing",
+    label: "Waiting For: with follow-up timing",
     accent: "clay",
   },
   {
     title: "Someday / Maybe",
     copy: "Out of mind, not out of system. Reviewed weekly, never forgotten.",
-    label: "Someday / Maybe — quiet but alive",
+    label: "Someday / Maybe: quiet but alive",
     accent: "moss",
   },
   {
     title: "Scheduled",
     copy: "Date-specific actions that surface on the day they belong, not before.",
-    label: "Scheduled — surfaces on the day",
+    label: "Scheduled: surfaces on the day",
     accent: "amber",
   },
   {
     title: "Weekly Review",
     copy: "The keystone habit. Guided, structured, and impossible to skip by accident.",
-    label: "Weekly Review — guided, 7 steps",
+    label: "Weekly Review: guided, 7 steps",
     accent: "moss",
   },
 ];
@@ -103,7 +103,7 @@ export function GtdNativeSection() {
         </div>
       </motion.div>
 
-      {/* GTD module grid — large modules, not tight bento */}
+      {/* GTD module grid - large modules, not tight bento */}
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
         {modules.map((m, i) => (
           <motion.article

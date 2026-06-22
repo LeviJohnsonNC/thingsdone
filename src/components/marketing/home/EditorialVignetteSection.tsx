@@ -14,7 +14,7 @@ export function EditorialVignetteSection() {
           className="lg:col-span-6"
         >
           <MarketingImagePlaceholder
-            label="Before — open loops in the head"
+            label="Before: open loops in the head"
             caption="Day one"
             variant="card"
             accent="clay"

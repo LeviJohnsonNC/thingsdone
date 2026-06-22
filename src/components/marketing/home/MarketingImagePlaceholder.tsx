@@ -8,7 +8,7 @@ interface MarketingImagePlaceholderProps {
   /** Optional final image src; when present, the placeholder swaps out for the image */
   src?: string;
   alt?: string;
-  /** Aspect variant — controls the placeholder shape */
+  /** Aspect variant - controls the placeholder shape */
   variant?: "hero" | "wide" | "module" | "card" | "tall";
   className?: string;
   /** Accent dot color on the corner marker */

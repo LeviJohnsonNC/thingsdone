@@ -101,7 +101,7 @@ export function WeeklyReviewCoachSection() {
           <p className="mt-6 text-lg text-ink-soft leading-relaxed max-w-md">
             Pro plans include a reviewer that spots stale projects, vague
             actions, overdue Waiting Fors, and things that belong somewhere
-            else — so your system does not quietly decay.
+            else, so your system does not quietly decay.
           </p>
           <p className="mt-4 text-sm text-ink-soft/80">
             Suggestions, never noise. You decide what sticks.

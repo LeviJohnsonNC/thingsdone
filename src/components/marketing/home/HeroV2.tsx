@@ -35,7 +35,7 @@ export function HeroV2() {
 
           <p className="mt-8 max-w-xl text-lg md:text-xl text-ink-soft leading-relaxed">
             Capture every open loop, clarify the next action, and keep your
-            system alive with a guided Weekly Review — built the way David
+            system alive with a guided Weekly Review, built the way David
             Allen drew it.
           </p>
 
@@ -67,7 +67,7 @@ export function HeroV2() {
           className="lg:col-span-5"
         >
           <MarketingImagePlaceholder
-            label="Hero — Loose Thought to Next Action"
+            label="Hero: Loose Thought to Next Action"
             caption="Inbox → Clarify → Next Actions"
             variant="tall"
             accent="moss"
