@@ -98,9 +98,9 @@ Deno.serve(async (req) => {
       if (!delRes.ok && delRes.status !== 404 && delRes.status !== 410) {
         console.error("Delete event error:", await delRes.text());
       }
-      // Clear google_event_id on the item
+      // Clear google_event_id on the item — scope to owner
       if (item_id) {
-        await supabase.from("items").update({ google_event_id: null }).eq("id", item_id);
+        await supabase.from("items").update({ google_event_id: null }).eq("id", item_id).eq("user_id", user.id);
       }
       return new Response(JSON.stringify({ success: true }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
