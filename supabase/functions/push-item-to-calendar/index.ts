@@ -145,9 +145,9 @@ Deno.serve(async (req) => {
 
     const eventData = await res.json();
 
-    // Store google_event_id back on item
+    // Store google_event_id back on item — scope to owner
     if (item_id && eventData.id) {
-      await supabase.from("items").update({ google_event_id: eventData.id }).eq("id", item_id);
+      await supabase.from("items").update({ google_event_id: eventData.id }).eq("id", item_id).eq("user_id", user.id);
     }
 
     return new Response(JSON.stringify({ success: true, google_event_id: eventData.id }), {
