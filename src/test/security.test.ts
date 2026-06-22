@@ -151,7 +151,6 @@ describe("CORS and OPTIONS handling", () => {
     "push-item-to-calendar",
     "google-calendar-auth",
     "sync-calendar-events",
-    "google-calendar-refresh",
     "activate-scheduled-items",
   ];
 
