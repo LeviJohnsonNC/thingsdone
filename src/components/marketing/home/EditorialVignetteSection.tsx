@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { SectionShell } from "./SectionShell";
-import { MarketingImagePlaceholder } from "./MarketingImagePlaceholder";
+import mondaySundayImage from "@/assets/monday-sunday.png.asset.json";
 
 export function EditorialVignetteSection() {
   return (
@@ -13,12 +13,15 @@ export function EditorialVignetteSection() {
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           className="lg:col-span-6"
         >
-          <MarketingImagePlaceholder
-            label="Before: open loops in the head"
-            caption="Day one"
-            variant="card"
-            accent="clay"
-          />
+          <figure className="rounded-2xl border border-hairline bg-paper shadow-tactile overflow-hidden">
+            <img
+              src={mondaySundayImage.url}
+              alt="A week on the wall: Monday's scattered torn paper notes flow through Captured and Clarified into Next, Waiting, Scheduled, Reviewed, and Current cards by Sunday"
+              className="w-full h-auto select-none"
+              loading="lazy"
+              draggable={false}
+            />
+          </figure>
         </motion.div>
 
         <motion.div
