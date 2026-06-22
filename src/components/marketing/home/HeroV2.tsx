@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { SectionShell } from "./SectionShell";
-import { MarketingImagePlaceholder } from "./MarketingImagePlaceholder";
+import heroImage from "@/assets/hero-image.png.asset.json";
 
 export function HeroV2() {
   return (
