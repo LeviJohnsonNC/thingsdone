@@ -1,4 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { signState } from "../_shared/oauth-state.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -39,6 +40,7 @@ Deno.serve(async (req) => {
       "https://www.googleapis.com/auth/calendar.events",
     ].join(" ");
 
+    const state = await signState(userId, 600);
     const params = new URLSearchParams({
       client_id: clientId,
       redirect_uri: redirectUri,
@@ -46,7 +48,7 @@ Deno.serve(async (req) => {
       scope: scopes,
       access_type: "offline",
       prompt: "consent",
-      state: userId,
+      state,
     });
 
     const url = `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
@@ -55,7 +57,8 @@ Deno.serve(async (req) => {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (err) {
-    return new Response(JSON.stringify({ error: err.message }), {
+    console.error("google-calendar-auth error:", err);
+    return new Response(JSON.stringify({ error: "Internal server error" }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

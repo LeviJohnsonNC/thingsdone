@@ -1,14 +1,21 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { verifyState } from "../_shared/oauth-state.ts";
 
 Deno.serve(async (req) => {
   try {
     const url = new URL(req.url);
     const code = url.searchParams.get("code");
-    const userId = url.searchParams.get("state");
+    const state = url.searchParams.get("state");
 
-    if (!code || !userId) {
+    if (!code || !state) {
       return new Response("Missing code or state", { status: 400 });
     }
+
+    const verified = await verifyState(state);
+    if (!verified) {
+      return new Response("Invalid or expired state", { status: 400 });
+    }
+    const userId = verified.userId;
 
     const clientId = Deno.env.get("GOOGLE_CLIENT_ID")!;
     const clientSecret = Deno.env.get("GOOGLE_CLIENT_SECRET")!;

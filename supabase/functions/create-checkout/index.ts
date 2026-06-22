@@ -43,7 +43,14 @@ serve(async (req) => {
       customerId = customers.data[0].id;
     }
 
-    const origin = req.headers.get("origin") || "https://things-done.app";
+    const ALLOWED_ORIGINS = [
+      "https://things-done.app",
+      "https://www.things-done.app",
+      "https://thingsdone.lovable.app",
+      "https://kmwptjxsvsyvacmkupfu.lovable.app",
+    ];
+    const requestOrigin = req.headers.get("origin") || "";
+    const origin = ALLOWED_ORIGINS.includes(requestOrigin) ? requestOrigin : "https://www.things-done.app";
 
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
@@ -60,8 +67,8 @@ serve(async (req) => {
       status: 200,
     });
   } catch (error) {
-    const msg = error instanceof Error ? error.message : String(error);
-    return new Response(JSON.stringify({ error: msg }), {
+    console.error("create-checkout error:", error);
+    return new Response(JSON.stringify({ error: "Internal server error" }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 500,
     });

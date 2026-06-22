@@ -71,9 +71,17 @@ Deno.serve(async (req) => {
     // Parse the request body
     const body = await req.json();
     const title = body.title?.trim();
+    const notes = body.notes?.trim() || "";
 
-    if (!title) {
-      return new Response(JSON.stringify({ error: "title is required" }), {
+    if (!title || title.length > 500) {
+      return new Response(JSON.stringify({ error: "title must be 1-500 characters" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    if (notes.length > 10000) {
+      return new Response(JSON.stringify({ error: "notes must be at most 10000 characters" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -86,7 +94,7 @@ Deno.serve(async (req) => {
         title,
         state: "inbox",
         user_id: keyRecord.user_id,
-        notes: body.notes?.trim() || "",
+        notes,
       })
       .select("id, title, state, created_at")
       .single();

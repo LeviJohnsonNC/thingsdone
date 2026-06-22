@@ -38,6 +38,22 @@ Deno.serve(async (req) => {
     const body = await req.json();
     const { action, item_id, title, date, notes, google_event_id } = body;
 
+    // Verify item_id ownership before any calendar/db side effects
+    if (item_id) {
+      const { data: ownedItem, error: ownerErr } = await supabase
+        .from("items")
+        .select("id")
+        .eq("id", item_id)
+        .eq("user_id", user.id)
+        .maybeSingle();
+      if (ownerErr || !ownedItem) {
+        return new Response(JSON.stringify({ error: "Item not found" }), {
+          status: 404,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+    }
+
     // Get tokens
     const { data: tokenRow } = await supabase
       .from("google_calendar_tokens")
@@ -98,9 +114,9 @@ Deno.serve(async (req) => {
       if (!delRes.ok && delRes.status !== 404 && delRes.status !== 410) {
         console.error("Delete event error:", await delRes.text());
       }
-      // Clear google_event_id on the item
+      // Clear google_event_id on the item — scope to owner
       if (item_id) {
-        await supabase.from("items").update({ google_event_id: null }).eq("id", item_id);
+        await supabase.from("items").update({ google_event_id: null }).eq("id", item_id).eq("user_id", user.id);
       }
       return new Response(JSON.stringify({ success: true }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -145,9 +161,9 @@ Deno.serve(async (req) => {
 
     const eventData = await res.json();
 
-    // Store google_event_id back on item
+    // Store google_event_id back on item — scope to owner
     if (item_id && eventData.id) {
-      await supabase.from("items").update({ google_event_id: eventData.id }).eq("id", item_id);
+      await supabase.from("items").update({ google_event_id: eventData.id }).eq("id", item_id).eq("user_id", user.id);
     }
 
     return new Response(JSON.stringify({ success: true, google_event_id: eventData.id }), {

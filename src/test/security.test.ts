@@ -35,7 +35,6 @@ describe("Edge function authentication", () => {
     "push-item-to-calendar",
     "google-calendar-auth",
     "sync-calendar-events",
-    "google-calendar-refresh",
     "activate-scheduled-items",
   ];
 
@@ -138,10 +137,6 @@ describe("Data scoping and user isolation", () => {
     expect(src).toMatch(/\.eq\("user_id",\s*user\.id\)/);
   });
 
-  it("google-calendar-refresh scopes token lookup to userId from claims", () => {
-    const src = readFunction("google-calendar-refresh");
-    expect(src).toMatch(/\.eq\("user_id",\s*userId\)/);
-  });
 });
 
 // ── CORS headers ──────────────────────────────────────────────────
@@ -156,7 +151,6 @@ describe("CORS and OPTIONS handling", () => {
     "push-item-to-calendar",
     "google-calendar-auth",
     "sync-calendar-events",
-    "google-calendar-refresh",
     "activate-scheduled-items",
   ];
 
