@@ -53,6 +53,20 @@
     --accent-gradient-start: 213 58% 57%;
     --accent-gradient-end: 220 65% 48%;
     --feature-card-bg: 210 20% 99%;
+
+    /* ── Marketing (homepage) warm palette ────────────────── */
+    /* Used only by /src/components/marketing/home/* — does not
+       affect app UI (Inbox, Next, Settings, etc.). */
+    --warm-cream: 38 38% 95%;        /* page background */
+    --warm-sand:  34 30% 90%;        /* panel surface */
+    --warm-paper: 36 36% 97%;        /* highest surface */
+    --ink:        30 14% 14%;        /* primary text */
+    --ink-soft:   30 10% 32%;        /* secondary text */
+    --moss:       110 16% 38%;       /* moss green */
+    --moss-deep:  120 18% 22%;       /* charcoal green */
+    --clay:       16  38% 50%;       /* muted clay */
+    --amber:      32  72% 52%;       /* warm amber accent */
+    --hairline:   30 14% 14% / 0.10; /* subtle borders */
   }
 
   .dark {
