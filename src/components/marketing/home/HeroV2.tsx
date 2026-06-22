@@ -66,7 +66,7 @@ export function HeroV2() {
           transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
           className="lg:col-span-5"
         >
-          <figure className="group">
+          <figure className="group rounded-2xl border border-hairline bg-paper shadow-tactile overflow-hidden">
             <img
               src={heroImage.url}
               alt="GTD workflow: capture loose thoughts, clarify the next action, and organize into Next, Project, Waiting, Someday, and Review"
