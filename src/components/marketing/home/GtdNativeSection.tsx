@@ -1,6 +1,13 @@
 import { motion } from "framer-motion";
 import { SectionShell } from "./SectionShell";
 import { MarketingImagePlaceholder } from "./MarketingImagePlaceholder";
+import inboxImage from "@/assets/feature-inbox.png.asset.json";
+import nextImage from "@/assets/feature-next.png.asset.json";
+import projectsImage from "@/assets/feature-projects.png.asset.json";
+import waitingImage from "@/assets/feature-waiting.png.asset.json";
+import somedayImage from "@/assets/feature-someday.png.asset.json";
+import scheduledImage from "@/assets/feature-scheduled.png.asset.json";
+import weeklyReviewImage from "@/assets/feature-weekly-review.png.asset.json";
 
 const flow = ["Capture", "Clarify", "Organize", "Do", "Review"];
 
@@ -9,48 +16,64 @@ const modules: Array<{
   copy: string;
   label: string;
   accent: "moss" | "clay" | "amber";
+  src: string;
+  alt: string;
 }> = [
   {
     title: "Inbox",
     copy: "One trusted place for every loose thought, before it becomes a task.",
     label: "Inbox: capture without committing",
     accent: "moss",
+    src: inboxImage.url,
+    alt: "Inbox feature artwork showing loose notes captured into an inbox tray",
   },
   {
     title: "Next Actions",
     copy: "The honest list of physical, doable actions, sorted by context and energy.",
     label: "Next Actions: by context & energy",
     accent: "amber",
+    src: nextImage.url,
+    alt: "Next Actions feature artwork showing clarified actions arranged on a page by context and energy",
   },
   {
     title: "Projects",
     copy: "Outcomes with multiple steps. Parallel or sequential. Your call.",
     label: "Projects: with next action surfaced",
     accent: "moss",
+    src: projectsImage.url,
+    alt: "Projects feature artwork showing a project folder with the next action surfaced in front",
   },
   {
     title: "Waiting For",
     copy: "Things you're owed. Tracked with who, what, and how long.",
     label: "Waiting For: with follow-up timing",
     accent: "clay",
+    src: waitingImage.url,
+    alt: "Waiting For feature artwork showing delegated items tracked for later follow-up",
   },
   {
     title: "Someday / Maybe",
     copy: "Out of mind, not out of system. Reviewed weekly, never forgotten.",
     label: "Someday / Maybe: quiet but alive",
     accent: "moss",
+    src: somedayImage.url,
+    alt: "Someday Maybe feature artwork showing ideas and future projects stored in a tray",
   },
   {
     title: "Scheduled",
     copy: "Date-specific actions that surface on the day they belong, not before.",
     label: "Scheduled: surfaces on the day",
     accent: "amber",
+    src: scheduledImage.url,
+    alt: "Scheduled feature artwork showing tasks placed on a calendar during the week they belong",
   },
   {
     title: "Weekly Review",
     copy: "The keystone habit. Guided, structured, and impossible to skip by accident.",
     label: "Weekly Review: guided, 7 steps",
     accent: "moss",
+    src: weeklyReviewImage.url,
+    alt: "Weekly Review feature artwork showing the full GTD system pulled together around a review card",
   },
 ];
 
@@ -120,6 +143,8 @@ export function GtdNativeSection() {
           >
             <MarketingImagePlaceholder
               label={m.label}
+              src={m.src}
+              alt={m.alt}
               variant="module"
               accent={m.accent}
             />
@@ -137,3 +162,4 @@ export function GtdNativeSection() {
     </SectionShell>
   );
 }
+
