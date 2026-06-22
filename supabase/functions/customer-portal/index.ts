@@ -43,7 +43,14 @@ serve(async (req) => {
       throw new Error("No Stripe customer found for this user");
     }
 
-    const origin = req.headers.get("origin") || "https://things-done.app";
+    const ALLOWED_ORIGINS = [
+      "https://things-done.app",
+      "https://www.things-done.app",
+      "https://thingsdone.lovable.app",
+      "https://kmwptjxsvsyvacmkupfu.lovable.app",
+    ];
+    const requestOrigin = req.headers.get("origin") || "";
+    const origin = ALLOWED_ORIGINS.includes(requestOrigin) ? requestOrigin : "https://www.things-done.app";
     const portalSession = await stripe.billingPortal.sessions.create({
       customer: customers.data[0].id,
       return_url: `${origin}/settings`,
