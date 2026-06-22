@@ -40,6 +40,7 @@ Deno.serve(async (req) => {
       "https://www.googleapis.com/auth/calendar.events",
     ].join(" ");
 
+    const state = await signState(userId, 600);
     const params = new URLSearchParams({
       client_id: clientId,
       redirect_uri: redirectUri,
@@ -47,7 +48,7 @@ Deno.serve(async (req) => {
       scope: scopes,
       access_type: "offline",
       prompt: "consent",
-      state: userId,
+      state,
     });
 
     const url = `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
