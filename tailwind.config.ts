@@ -83,6 +83,7 @@ export default {
       },
       fontFamily: {
         display: ["'Instrument Serif'", "Times New Roman", "serif"],
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
